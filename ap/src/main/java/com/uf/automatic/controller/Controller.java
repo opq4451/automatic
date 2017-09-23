@@ -1,5 +1,8 @@
 package com.uf.automatic.controller;
 
+import java.net.URLEncoder;
+import java.time.Instant;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -13,13 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 @RestController
 public class Controller {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
 	@RequestMapping("/getUid")
-	public String index(@RequestParam("user") String user, @RequestParam("pwd") String pwd) {
+	public String getUid(@RequestParam("user") String user, @RequestParam("pwd") String pwd) {
 		String Step1 = "http://203.160.143.110/www_new/app/login/chk_data.php?active=newlogin&" + "username=" + user
 				+ "" + "&passwd=" + pwd + "" + "&langx=zh-cn";
 		try {
@@ -31,6 +37,37 @@ public class Controller {
 		}
 
 		return "null";
+	}
+
+	@RequestMapping("/getTodayWin")
+	public String getTodayWin(@RequestParam("uid") String uid) {
+		long unixTimestamp = Instant.now().getEpochSecond();
+		String timestamp = Long.toString(unixTimestamp) + "000";
+		String url = "http://203.160.143.110/www_new/app/getData/reloadMem.php?";
+		String parameter = "smstime=" + timestamp + "" + "&allms=1117" + "&uid=" + convertUid(uid) + "&langx=zh-cn&gtype=CA";
+		try {
+			System.out.println(url + parameter);
+
+			String ret = httpClientGet(url + parameter);
+			System.out.println(ret);
+			JsonParser parser = new JsonParser();
+			JsonObject o = parser.parse(ret).getAsJsonObject();
+			JsonObject MemAry = o.getAsJsonObject("MemAry");
+			String todayWin = MemAry.get("todayWin").toString();
+			return todayWin;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "null";
+	}
+
+	public String convertUid(String uid) {
+		String u1 = uid.substring(0, 16);
+		String u2 = uid.substring(17, 33);
+
+		String encode = u1 + URLEncoder.encode("|") + u2;
+		return encode;
 	}
 
 	public String httpClientGet(String uri) throws Exception {
