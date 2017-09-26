@@ -24,19 +24,11 @@
 	 
 	
 	 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-     <div class="navbar-brand ">  
-      今日輸贏 <div style="align: left; color: #FFFFFF" class="toDayWin"></div>  
-     
-    
-	</div>
+     <div class="navbar-brand ">今日輸贏<div style="align: right; color: #FFFFFF" class="toDayWin">1</div></div>
 	
-	<div class="navbar-brand ">  
-       
-      目前期數 <div style="align: left; color: #FFFFFF" class="toPhase"></div>  
-    
-	</div>
+	 <div class="navbar-brand ">下次期數<div style="align: right; color: #FFFFFF" class="toPhase">2</div></div>
       
-    </nav>
+     </nav>
     
 	  <div class="container-fluid">
       <div class="row">
@@ -56,6 +48,7 @@
         </nav>
  			-->
         <main class="col-sm-9 ml-sm-auto col-md-10 pt-3" role="main">
+        <br>
           <h1>下注設定</h1>
 
           <section class="row text-center placeholders">
@@ -71,6 +64,11 @@
             
             <div class="col-6 col-sm-3 placeholder">
                		<div>下注參數<input type ="text" size=15/>
+					</div>
+            </div>
+            
+             <div class="col-6 col-sm-3 placeholder">
+               		<div>下注金額<input type ="text" size=15/>
 					</div>
             </div>
             
@@ -228,7 +226,7 @@
 <script src="utils.js"> </script>
 <script>
 	 
- 
+ 	const checkMinute = [4,9,14,19,24,29,34,39,44,49,54,,59]
 	$(document).ready(function(){
 		var u = getUrl();
 		var query = window.location.search.substring(1);
@@ -242,18 +240,37 @@
 	 
 		 var url =  u + '/getTodayWin?uid='+encodeURI(uid)  ;
 		   
-	     $.get(url, function( data ) {
+	    /* $.get(url, function( data ) {
 	    	 	$( "div.toDayWin" ).text(data)
-		 });
+		 });*/
 	     
 	  
 		 $.get( u + "/getPhase", function( data ) {
 	    	 	$( "div.toPhase" ).text(data)
-		 });
+		 }); 
+		
 		 
+		 
+		 
+		 timeout();
+		  
 	});
 	
-	
+ 	
+    function timeout() {
+    	
+    		var d = new Date();
+	    var n = d.getMinutes();
+		if(checkMinute.indexOf(n) != -1){ //bet time
+			 
+		}
+		
+	    setTimeout(function () {
+	    	    
+	        timeout();
+	    }, 60000);
+	}
+ 	 
 	function parse_query_string(query) {
 		  var vars = query.split("&");
 		  var query_string = {};

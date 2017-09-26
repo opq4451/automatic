@@ -5,7 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URLEncoder;
 import java.time.Instant;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Properties;
+import java.util.TreeSet;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -74,7 +77,12 @@ public class Utils {
         FileOutputStream fileOut = null;
         FileInputStream fileIn = null;
         try {
-            Properties configProperty = new Properties();
+            Properties configProperty = new Properties() {
+                @Override
+                public synchronized Enumeration<Object> keys() {
+                    return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+                }
+            };
             String path = System.getProperty("user.dir");
             String hisFile = path + "/history.properties";
             File file = new File(hisFile);

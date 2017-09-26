@@ -1,5 +1,6 @@
 package com.uf.automatic.ap;
 
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,7 +23,16 @@ public class App
     {
     		//Utils.writeHistory();
        SpringApplication.run(App.class, args);
-    	   //run();
+       
+       
+       String path = System.getProperty("user.dir");
+       String hisFile = path + "/history.properties";
+       File file = new File(hisFile);
+       if(file.exists()) {
+       		file.delete();
+       }
+       
+    	   run();
     }
     
     
@@ -30,7 +40,7 @@ public class App
         Timer timer = new Timer();  
         NewTimerTask timerTask = new NewTimerTask();  
         //程序运行后立刻执行任务，每隔100ms执行一次  
-        timer.schedule(timerTask, 0, 1000);  
+        timer.schedule(timerTask, 0, 60000);  
     }  
     
 }
@@ -40,7 +50,7 @@ class NewTimerTask extends TimerTask {
 	  
     @Override  
     public void run() {  
-        System.out.println("123");
+    		Utils.writeHistory();
     }  
    
 }  
