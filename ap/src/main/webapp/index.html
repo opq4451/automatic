@@ -45,9 +45,9 @@
 		    var user = document.getElementById("user").value;
  			var pwd = document.getElementById("pwd").value;
 		    var url = 'http://localhost:9999/getUid?user='+user+'&pwd='+pwd ; 
-		   
+	 
 		    $.get(url, function( data ) {
-			  
+			   
 			  var uid = ( data );
 			 
 			  window.location.href = "main.html?user="+user+"&pwd="+pwd+"&uid="+encodeURI(uid);
