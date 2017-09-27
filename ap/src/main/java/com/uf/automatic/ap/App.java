@@ -27,10 +27,10 @@ public class App
        
        String path = System.getProperty("user.dir");
        String hisFile = path + "/history.properties";
-       File file = new File(hisFile);
-       if(file.exists()) {
-       		file.delete();
-       }
+//       File file = new File(hisFile);
+//       if(file.exists()) {
+//       		file.delete();
+//       }
        
     	   run();
     }

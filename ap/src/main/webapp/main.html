@@ -24,9 +24,9 @@
 	 
 	
 	 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-     <div class="navbar-brand ">今日輸贏<div style="align: right; color: #FFFFFF" class="toDayWin">1</div></div>
+     <div class="navbar-brand ">今日輸贏<div style="align: right; color: #FFFFFF" class="toDayWin">loading...</div></div>
 	
-	 <div class="navbar-brand ">下次期數<div style="align: right; color: #FFFFFF" class="toPhase">2</div></div>
+	 <div class="navbar-brand " style="display:none" >下次期數<div style="align: right; color: #FFFFFF" class="toPhase">2</div></div>
       
      </nav>
     
@@ -53,7 +53,7 @@
 
           <section class="row text-center placeholders">
             <div class="col-6 col-sm-3 placeholder">
-               		<div>下注方式 <select>
+               		<div>下注方式 <select class="type">
 						  <option value="1">豆子-順打 </option>
 						  <option value="2">豆子-反打</option>
 						  <option value="3">順龍</option>
@@ -63,22 +63,19 @@
             </div>
             
             <div class="col-6 col-sm-3 placeholder">
-               		<div>下注參數<input type ="text" size=15/>
+               		<div>下注參數<input class="betlist" type ="text" size=15/>
 					</div>
             </div>
             
-             <div class="col-6 col-sm-3 placeholder">
-               		<div>下注金額<input type ="text" size=15/>
+             
+            
+            <div class="col-6 col-sm-3 placeholder">
+               		<div>停損<input class="stoplose" type ="text" size=15/>
 					</div>
             </div>
             
             <div class="col-6 col-sm-3 placeholder">
-               		<div>停損<input type ="text" size=15/>
-					</div>
-            </div>
-            
-            <div class="col-6 col-sm-3 placeholder">
-               		<div>停利<input type ="text" size=15/>
+               		<div>停利<input class="stopwin" type ="text" size=15/>
 					</div>
             </div>
               
@@ -217,6 +214,7 @@
     </div>
       
 	<input type="hidden" id="uid" />
+	<input type="hidden" id="user" />
 
 
 </body>
@@ -227,8 +225,9 @@
 <script>
 	 
  	const checkMinute = [4,9,14,19,24,29,34,39,44,49,54,,59]
+ 	var u = getUrl();
 	$(document).ready(function(){
-		var u = getUrl();
+		
 		var query = window.location.search.substring(1);
 		var parsed_qs = parse_query_string(query);
 		var uid = (parsed_qs.uid) ;
@@ -236,13 +235,19 @@
 		var user= (parsed_qs.user);
 		
 		document.getElementById("uid").value = uid;
-		
+		document.getElementById("user").value = user;
+
 	 
-		 var url =  u + '/getTodayWin?uid='+encodeURI(uid)  ;
+		 var url =  u + '/getTodayWin?user='+user+'&uid='+encodeURI(uid)  ;
 		   
-	    /* $.get(url, function( data ) {
-	    	 	$( "div.toDayWin" ).text(data)
-		 });*/
+	     $.get(url, function( data ) {
+	    	 const json = JSON.parse(data);
+	    	 	$( "div.toDayWin" ).text(json.todayWin);
+	    	 	$( ".type" ).val(json.type);
+	    	 	$( ".betlist" ).val(json.betlist) ;
+	    	 	$( ".stoplose" ).val(json.stoplose) ;
+	    	 	$( ".stopwin" ).val(json.stopwin);
+		 });
 	     
 	  
 		 $.get( u + "/getPhase", function( data ) {
@@ -250,13 +255,35 @@
 		 }); 
 		
 		 
+		 $( ".type" ).change(function() {
+			 saveParam();
+		 });
+		 $( ".betlist" ).change(function() {
+			 saveParam();
+		 });
+		 $( ".stoplose" ).change(function() {
+			 saveParam();
+		 });
+		 $( ".stopwin" ).change(function() {
+			 saveParam();
+		 });
 		 
 		 
 		 timeout();
 		  
 	});
 	
- 	
+ 	function saveParam(){
+ 		 
+ 		if($( ".type" ).val() && $( ".betlist" ).val() && $( ".stoplose" ).val() && $( ".stopwin" ).val()){
+ 			const url =  u + "/saveParam?" + "user="+document.getElementById("user").value+"&type="+$( ".type" ).val()+
+ 			"&betlist="+$( ".betlist" ).val()+"&stoplose="+$( ".stoplose" ).val()+"&stopwin="+$( ".stopwin" ).val() ;
+ 			$.get(url, function( data ) {
+	    	 	 
+		 	}); 
+ 		}
+ 		
+ 	}
     function timeout() {
     	
     		var d = new Date();

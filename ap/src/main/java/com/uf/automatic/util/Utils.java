@@ -63,7 +63,7 @@ public class Utils {
 			    JsonObject paymentObj = pa.getAsJsonObject();
 			    String     preDrawCode     = paymentObj.get("preDrawCode").getAsString(); //開獎
 			    String     preDrawIssue = paymentObj.get("preDrawIssue").getAsString(); //期數
-			    WritePropertiesFile(preDrawIssue,preDrawCode);
+			    WritePropertiesFile("history",preDrawIssue,preDrawCode);
 
 			}
  		}catch(Exception e) {
@@ -73,7 +73,7 @@ public class Utils {
 		
 	}
 	
-	public static void WritePropertiesFile(String key, String data) {
+	public static void WritePropertiesFile(String fileName,String key, String data) {
         FileOutputStream fileOut = null;
         FileInputStream fileIn = null;
         try {
@@ -84,7 +84,7 @@ public class Utils {
                 }
             };
             String path = System.getProperty("user.dir");
-            String hisFile = path + "/history.properties";
+            String hisFile = path + "/"+fileName+".properties";
             File file = new File(hisFile);
             if(!file.exists()) {
             		file.createNewFile();
