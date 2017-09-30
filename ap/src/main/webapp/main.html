@@ -26,7 +26,7 @@
 	 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
      <div class="navbar-brand ">今日輸贏<div style="align: right; color: #FFFFFF" class="toDayWin">loading...</div></div>
 	
-	 <div class="navbar-brand " style="display:none" >下次期數<div style="align: right; color: #FFFFFF" class="toPhase">2</div></div>
+	 <div class="navbar-brand "   >下次期數<div style="align: right; color: #FFFFFF" class="toPhase">2</div></div>
       
      </nav>
     
@@ -81,7 +81,7 @@
               
           </section>
 
-          <h2>下注記錄</h2>
+          <h2>下注記錄</h2> <!-- 
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -209,6 +209,9 @@
               </tbody>
             </table>
           </div>
+          -->
+          
+          
         </main>
       </div>
     </div>
@@ -224,9 +227,27 @@
 <script src="utils.js"> </script>
 <script>
 	 
- 	const checkMinute = [4,9,14,19,24,29,34,39,44,49,54,,59]
+ 	const checkMinute = [4,9,14,19,24,29,34,39,44,49,54,,59];
  	var u = getUrl();
-	$(document).ready(function(){
+    var stoplose = "";
+    var stopwin = "";
+    var todayWin = "";
+    var betarray = [];
+    var betIndex = 0 ;
+ 	const rangeExist = {
+ 			'01' : ['09','10','01','02','03'] ,
+ 			'02' : ['10','01','02','03','04'] ,
+ 			'03' : ['01','02','03','04','05'] ,
+ 			'04' : ['02','03','04','05','06'] ,
+ 			'05' : ['03','04','05','06','07'] ,
+ 			'06' : ['04','05','06','07','08'] ,
+ 			'07' : ['05','06','07','08','09'] ,
+ 			'08' : ['06','07','08','09','10'] ,
+ 			'09' : ['07','08','09','10','01'] ,
+ 			'10' : ['08','09','10','01','02'] ,
+
+ 	};
+    $(document).ready(function(){
 		
 		var query = window.location.search.substring(1);
 		var parsed_qs = parse_query_string(query);
@@ -237,24 +258,12 @@
 		document.getElementById("uid").value = uid;
 		document.getElementById("user").value = user;
 
-	 
-		 var url =  u + '/getTodayWin?user='+user+'&uid='+encodeURI(uid)  ;
-		   
-	     $.get(url, function( data ) {
-	    	 const json = JSON.parse(data);
-	    	 	$( "div.toDayWin" ).text(json.todayWin);
-	    	 	$( ".type" ).val(json.type);
-	    	 	$( ".betlist" ).val(json.betlist) ;
-	    	 	$( ".stoplose" ).val(json.stoplose) ;
-	    	 	$( ".stopwin" ).val(json.stopwin);
-		 });
+		getWinFun();
+		
 	     
 	  
-		 $.get( u + "/getPhase", function( data ) {
-	    	 	$( "div.toPhase" ).text(data)
-		 }); 
 		
-		 
+		  
 		 $( ".type" ).change(function() {
 			 saveParam();
 		 });
@@ -267,12 +276,113 @@
 		 $( ".stopwin" ).change(function() {
 			 saveParam();
 		 });
-		 
+		  
 		 
 		 timeout();
-		  
+		 
 	});
 	
+    function pad2(n) { return n < 10 ? '0' + n : n }
+    function getYYYYMMDDSS(){
+   	 var date = new Date();
+	
+	 return ( date.getFullYear().toString() + '/' + pad2(date.getMonth() + 1)+ '/'  + pad2( date.getDate())+ '/' + pad2( date.getHours() )+ ':'  + pad2( date.getMinutes() )+ ':'  + pad2( date.getSeconds() ) );
+
+    	
+    }
+    
+    
+    function getWinFun(){
+    	 var url =  u + '/getTodayWin?user='+document.getElementById("user").value+'&uid='+encodeURI(document.getElementById("uid").value)  ;
+		   
+    	 $.ajax({ url:  url, 
+	         async: false,
+	         success: function(data) {
+	        	 const json = JSON.parse(data);
+		    	 	$( "div.toDayWin" ).text(json.todayWin);
+		    	 	$( ".type" ).val(json.type);
+		    	 	$( ".betlist" ).val(json.betlist) ;
+		    	 	$( ".stoplose" ).val(json.stoplose) ;
+		    	 	$( ".stopwin" ).val(json.stopwin);
+		    	 	stoplose = json.stoplose;
+		    	 	stopwin = json.stopwin;
+		    	 	todayWin = json.todayWin;
+		    	 	betarray = json.betlist.split(',');
+	         	 }
+	        });
+    	 
+	     
+    	
+    }
+	function compareByType1(phase_before,phase_now,phase_before4){
+		   
+		const code_b = getCodeByPhase(phase_before); 
+		const code_n = getCodeByPhase(phase_now);
+		const code_before4 = getCodeByPhase(phase_before4);
+
+		const array_b = code_b.split(',');
+		const array_n = code_n.split(',');
+		const array_before4 = code_before4.split(',');
+
+		const bet_b = array_b[0];
+		const bet_n = array_n[0];
+		const bet_before4 = array_before4[0];
+
+	 	var d = getYYYYMMDDSS();
+	  
+	    if(rangeExist[bet_b].indexOf(bet_n) != -1){ //預測到、關卡歸零
+	    	 
+	    	var log =  "此期" + phase_now  + "(開獎:"+code_n+")," +  " 前5期"+phase_before + "預測("+rangeExist[bet_b]+") ,有預測到，下一關，此注不下注" ;
+ 
+	    	saveLog(document.getElementById("user").value,encodeURI(log));
+
+	    	betIndex = 0;
+		}else { //未預測到、投注
+			//取前四期的號碼來預測投注
+		 
+	    	var log =  "此期" + phase_now  + "(開獎:"+code_n+")," + " 前5期"+phase_before + "預測("+rangeExist[bet_b]+") ,沒有預測到 ,下注" ;
+	    	log+= "， 參考前四期"+  phase_before4 + "("+code_before4+"), 下注號碼"+ rangeExist[bet_before4];
+			
+	    	log+= ",下注金額:"+betarray[betIndex]
+	    	 
+	    	saveLog(document.getElementById("user").value,encodeURI(log));
+			betIndex++;
+		}
+	}
+	 
+	
+	function saveLog(user,log){
+		 $.ajax({ url:  u + "/saveLog?user="+user +"&log="+log, 
+	         async: false,
+	         success: function(data) {
+	        	 
+	         	 }
+	        });
+		
+	}
+	function getCodeByPhase(phase){ //取得號碼
+		 let code=""; 
+		 $.ajax({ url:  u + "/getCode?phase="+phase, 
+	         async: false,
+	         success: function(data) {
+	        	 code = data;
+	         	 }
+	        });
+		 return code ;
+	}
+	
+	
+	function getPhase(count){ //取得期數
+		 let period=""; 
+		 $.ajax({ url:  u + "/getPhase", 
+	         async: false,
+	         success: function(data) {
+	               period = data;
+	           	   $( "div.toPhase" ).text(data);
+	         	 }
+	        });
+		 return period*1 - count ;
+	}
  	function saveParam(){
  		 
  		if($( ".type" ).val() && $( ".betlist" ).val() && $( ".stoplose" ).val() && $( ".stopwin" ).val()){
@@ -284,11 +394,26 @@
  		}
  		
  	}
+ 	
+ 	function checkWin(){
+ 		if((stoplose*-1 < todayWin*1) && (todayWin*1 < stopwin*1))
+ 			return true;
+ 		
+ 		return false;
+ 	}
     function timeout() {
     	
-    		var d = new Date();
+   		var d = new Date();
 	    var n = d.getMinutes();
-		if(checkMinute.indexOf(n) != -1){ //bet time
+		if(checkMinute.indexOf(n) != -1 && checkWin()){ //bet time每5分鐘下注一次
+			getWinFun();
+		
+			 const n = getPhase(1);
+			 const b = getPhase(5);
+			 const fourTh = getPhase(4);
+
+			 
+			 compareByType1(b,n,fourTh);
 			 
 		}
 		

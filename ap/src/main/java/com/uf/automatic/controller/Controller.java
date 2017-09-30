@@ -3,8 +3,13 @@ package com.uf.automatic.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Properties;
 
 import org.apache.http.HttpEntity;
@@ -45,7 +50,7 @@ public class Controller {
 	}
 
 	@RequestMapping("/getTodayWin")
-	public String getTodayWin(@RequestParam("uid") String uid,@RequestParam("user") String user) {
+	public String getTodayWin(@RequestParam("uid") String uid, @RequestParam("user") String user) {
 		long unixTimestamp = Instant.now().getEpochSecond();
 		String timestamp = Long.toString(unixTimestamp) + "000";
 		String url = "http://203.160.143.110/www_new/app/getData/reloadMem.php?";
@@ -60,27 +65,25 @@ public class Controller {
 			JsonObject o = parser.parse(ret).getAsJsonObject();
 			JsonObject MemAry = o.getAsJsonObject("MemAry");
 			String todayWin = MemAry.get("todayWin").toString();
-			
-			
+
 			JsonObject j = new JsonObject();
 			j.addProperty("todayWin", todayWin);
-			
-			
+
 			FileInputStream fileIn = null;
 			try {
 				Properties configProperty = new Properties();
 				String path = System.getProperty("user.dir");
-				String hisFile = path + "/"+user+".properties";
+				String hisFile = path + "/" + user + ".properties";
 				File file = new File(hisFile);
 				if (!file.exists()) {
 					file.createNewFile();
 				}
 				fileIn = new FileInputStream(file);
 				configProperty.load(fileIn);
-			    String type = configProperty.getProperty("type");
-			    String betlist = configProperty.getProperty("betlist");
-			    String stoplose = configProperty.getProperty("stoplose");
-			    String stopwin = configProperty.getProperty("stopwin");
+				String type = configProperty.getProperty("type");
+				String betlist = configProperty.getProperty("betlist");
+				String stoplose = configProperty.getProperty("stoplose");
+				String stopwin = configProperty.getProperty("stopwin");
 				j.addProperty("type", type);
 				j.addProperty("betlist", betlist);
 				j.addProperty("stoplose", stoplose);
@@ -90,14 +93,12 @@ public class Controller {
 				e.printStackTrace();
 			} finally {
 
-	            try {
-	            	fileIn.close();
-	            } catch (Exception ex) {
-	            }
-	        }
-			
-			
-			
+				try {
+					fileIn.close();
+				} catch (Exception ex) {
+				}
+			}
+
 			return j.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -153,40 +154,76 @@ public class Controller {
 
 		return "null";
 	}
-	
+
 	@RequestMapping("/saveParam")
-	public String saveParam(@RequestParam("user") String user,@RequestParam("type") String type,
-			@RequestParam("betlist") String betlist , @RequestParam("stoplose") String stoplose, @RequestParam("stopwin") String stopwin) {
+	public String saveParam(@RequestParam("user") String user, @RequestParam("type") String type,
+			@RequestParam("betlist") String betlist, @RequestParam("stoplose") String stoplose,
+			@RequestParam("stopwin") String stopwin) {
 		FileInputStream fileIn = null;
-        FileOutputStream fileOut = null;
+		FileOutputStream fileOut = null;
 
 		try {
 			Properties configProperty = new Properties();
 			String path = System.getProperty("user.dir");
-			String hisFile = path + "/"+user+".properties";
+			String hisFile = path + "/" + user + ".properties";
 			File file = new File(hisFile);
 			if (!file.exists()) {
 				file.createNewFile();
 			}
 			fileIn = new FileInputStream(file);
 			configProperty.load(fileIn);
-		 
+
 			configProperty.setProperty("type", type);
 			configProperty.setProperty("betlist", betlist);
 			configProperty.setProperty("stoplose", stoplose);
 			configProperty.setProperty("stopwin", stopwin);
 
-            fileOut = new FileOutputStream(file);
-            configProperty.store(fileOut, "sample properties");  
+			fileOut = new FileOutputStream(file);
+			configProperty.store(fileOut, "sample properties");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 
-            try {
-                fileOut.close();
-            } catch (Exception ex) {
-            }
-        }
+			try {
+				fileOut.close();
+			} catch (Exception ex) {
+			}
+		}
+
+		return "null";
+	}
+
+	@RequestMapping("/saveLog")
+	public String saveParam(@RequestParam("user") String user, @RequestParam("log") String log) {
+		FileInputStream fileIn = null;
+		FileOutputStream fileOut = null;
+
+		try {
+			Properties configProperty = new Properties();
+			String path = System.getProperty("user.dir");
+			String hisFile = path + "/" + user + "_log.properties";
+			File file = new File(hisFile);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			fileIn = new FileInputStream(file);
+			configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
+
+  			String d = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
+  			String result = java.net.URLDecoder.decode(log, "UTF-8");
+			configProperty.setProperty(d, result);
+
+			fileOut = new FileOutputStream(file);
+			configProperty.store(new OutputStreamWriter(fileOut, "UTF-8"), "sample properties");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+				fileOut.close();
+			} catch (Exception ex) {
+			}
+		}
 
 		return "null";
 	}
