@@ -26,7 +26,7 @@
 	 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
      <div class="navbar-brand ">今日輸贏<div style="align: right; color: #FFFFFF" class="toDayWin">loading...</div></div>
 	
-	 <div class="navbar-brand "   >下次期數<div style="align: right; color: #FFFFFF" class="toPhase">2</div></div>
+	 <div class="navbar-brand "   style="display:none">下次期數<div style="align: right; color: #FFFFFF" class="toPhase">2</div></div>
       
      </nav>
     
@@ -227,13 +227,25 @@
 <script src="utils.js"> </script>
 <script>
 	 
- 	const checkMinute = [4,9,14,19,24,29,34,39,44,49,54,,59];
+ 	const checkMinute = [4,9,14,19,24,29,34,39,44,49,54,59];
  	var u = getUrl();
     var stoplose = "";
     var stopwin = "";
     var todayWin = "";
     var betarray = [];
-    var betIndex = 0 ;
+    var betIndex = {
+ 			'1' : 0,
+ 			'2' : 0,
+ 			'3' : 0,
+ 			'4' : 0,
+ 			'5' : 0,
+ 			'6' : 0,
+ 			'7' : 0,
+ 			'8' : 0,
+ 			'9' : 0,
+ 			'10' : 0,
+
+ 	};
  	const rangeExist = {
  			'01' : ['09','10','01','02','03'] ,
  			'02' : ['10','01','02','03','04'] ,
@@ -298,7 +310,12 @@
     	 $.ajax({ url:  url, 
 	         async: false,
 	         success: function(data) {
+	        	 if(data == 'null'){
+	        		 alert('已被其它登入者登入!')
+	        		 window.location.href="/index.html";
+	        	 }
 	        	 const json = JSON.parse(data);
+	        	  
 		    	 	$( "div.toDayWin" ).text(json.todayWin);
 		    	 	$( ".type" ).val(json.type);
 		    	 	$( ".betlist" ).val(json.betlist) ;
@@ -308,7 +325,8 @@
 		    	 	stopwin = json.stopwin;
 		    	 	todayWin = json.todayWin;
 		    	 	betarray = json.betlist.split(',');
-	         	 }
+	         	 } 
+	         	 
 	        });
     	 
 	     
@@ -323,31 +341,37 @@
 		const array_b = code_b.split(',');
 		const array_n = code_n.split(',');
 		const array_before4 = code_before4.split(',');
+		
+		for(var i=0;i<10;i++){
+			const bet_b = array_b[i];
+			const bet_n = array_n[i];
+			const bet_before4 = array_before4[i];
 
-		const bet_b = array_b[0];
-		const bet_n = array_n[0];
-		const bet_before4 = array_before4[0];
+		 	var d = getYYYYMMDDSS();
+			var z = i+1;
+		    if(rangeExist[bet_b].indexOf(bet_n) != -1){ //預測到、關卡歸零
+		    	 
+		    
+		    	var log =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," +  " 前5期"+phase_before + "預測("+rangeExist[bet_b]+") ,有預測到，下一關，此注不下注" ;
+	 
+		    	saveLog(document.getElementById("user").value,encodeURI(log));
 
-	 	var d = getYYYYMMDDSS();
-	  
-	    if(rangeExist[bet_b].indexOf(bet_n) != -1){ //預測到、關卡歸零
-	    	 
-	    	var log =  "此期" + phase_now  + "(開獎:"+code_n+")," +  " 前5期"+phase_before + "預測("+rangeExist[bet_b]+") ,有預測到，下一關，此注不下注" ;
- 
-	    	saveLog(document.getElementById("user").value,encodeURI(log));
-
-	    	betIndex = 0;
-		}else { //未預測到、投注
-			//取前四期的號碼來預測投注
-		 
-	    	var log =  "此期" + phase_now  + "(開獎:"+code_n+")," + " 前5期"+phase_before + "預測("+rangeExist[bet_b]+") ,沒有預測到 ,下注" ;
-	    	log+= "， 參考前四期"+  phase_before4 + "("+code_before4+"), 下注號碼"+ rangeExist[bet_before4];
+		    	betIndex[z] = 0;
+			}else { //未預測到、投注
+				//取前四期的號碼來預測投注
+			 
+		    	var log =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," + " 前5期"+phase_before + "預測("+rangeExist[bet_b]+") ,沒有預測到 ,下注" ;
+		    	log+= "， 參考前四期"+  phase_before4 + "("+code_before4+"), 下注號碼"+ rangeExist[bet_before4];
+				
+		    	log+= ",下注金額:"+betarray[betIndex[z]]
+		    	 
+		    	saveLog(document.getElementById("user").value,encodeURI(log));
+		    		betIndex[z]++;
+			}
 			
-	    	log+= ",下注金額:"+betarray[betIndex]
-	    	 
-	    	saveLog(document.getElementById("user").value,encodeURI(log));
-			betIndex++;
+			
 		}
+		
 	}
 	 
 	
