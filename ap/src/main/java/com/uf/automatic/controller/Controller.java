@@ -33,7 +33,8 @@ import com.uf.automatic.util.Utils;
 public class Controller {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-
+    
+	int i = 0 ;
 	@RequestMapping("/getUid")
 	public String getUid(@RequestParam("user") String user, @RequestParam("pwd") String pwd) {
 		String Step1 = "http://203.160.143.110/www_new/app/login/chk_data.php?active=newlogin&" + "username=" + user
@@ -211,7 +212,8 @@ public class Controller {
 
   			String d = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
   			String result = java.net.URLDecoder.decode(log, "UTF-8");
-			configProperty.setProperty(d, result);
+  			i++;
+			configProperty.setProperty(fillZero(Integer.toString(i)), result);
 
 			fileOut = new FileOutputStream(file);
 			configProperty.store(new OutputStreamWriter(fileOut, "UTF-8"), "sample properties");
@@ -234,6 +236,14 @@ public class Controller {
 
 		String encode = u1 + URLEncoder.encode("|") + u2;
 		return encode;
+	}
+	
+	public String fillZero(String str) {
+		if(str.length()==1)
+			return "00"+str;
+		else if(str.length()==2)
+			return "0"+str;
+		else return str;
 	}
 
 }
