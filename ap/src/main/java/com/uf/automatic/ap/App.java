@@ -15,7 +15,7 @@ import com.uf.automatic.util.Utils;
  *
  */
 @SpringBootApplication
-@ComponentScan({ "com.uf.automatic.controller" })
+@ComponentScan({ "com.uf.automatic.controller","com.uf.automatic.ap" })
 
 public class App 
 {
