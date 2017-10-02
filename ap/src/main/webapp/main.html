@@ -363,7 +363,7 @@
 		    	var log =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," + " 前5期"+phase_before + "預測("+rangeExist[bet_b]+") ,沒有預測到 ,下注" ;
 		    	log+= "， 參考前四期"+  phase_before4 + "("+code_before4+"), 下注號碼"+ rangeExist[bet_before4];
 				
-		    	log+= ",下注金額:"+betarray[betIndex[z]]
+		    	log+= ",下注金額:"+betarray[betIndex[z]%betarray.length]
 		    	 
 		    	saveLog(document.getElementById("user").value,encodeURI(log));
 		    		betIndex[z]++;
