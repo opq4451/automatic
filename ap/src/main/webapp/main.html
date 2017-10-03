@@ -312,7 +312,7 @@
 	         success: function(data) {
 	        	 if(data == 'null'){
 	        		 alert('已被其它登入者登入!')
-	        		 window.location.href="/index.html";
+	        		 window.location.href="/auto/index.html";
 	        	 }
 	        	 const json = JSON.parse(data);
 	        	  
@@ -396,7 +396,7 @@
 	}
 	
 	
-	function getPhase(count){ //取得期數
+	function getPhase(){ //取得期數
 		 let period=""; 
 		 $.ajax({ url:  u + "/getPhase", 
 	         async: false,
@@ -405,7 +405,7 @@
 	           	   $( "div.toPhase" ).text(data);
 	         	 }
 	        });
-		 return period*1 - count ;
+		 return period*1  ;
 	}
  	function saveParam(){
  		 
@@ -431,10 +431,10 @@
 	    var n = d.getMinutes();
 		if(checkMinute.indexOf(n) != -1 && checkWin()){ //bet time每5分鐘下注一次
 			getWinFun();
-		
-			 const n = getPhase(1);
-			 const b = getPhase(5);
-			 const fourTh = getPhase(4);
+			var nextPhase = getPhase();
+			 const n = nextPhase - 1 ;
+			 const b = nextPhase - 5 ;
+			 const fourTh = nextPhase - 4 ;
 
 			 
 			 compareByType1(b,n,fourTh);
