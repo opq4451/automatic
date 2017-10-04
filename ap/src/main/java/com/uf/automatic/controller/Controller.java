@@ -9,14 +9,18 @@ import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Properties;
+import java.util.TreeSet;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,6 +190,7 @@ public class Controller {
 		} finally {
 
 			try {
+				fileIn.close();
 				fileOut.close();
 			} catch (Exception ex) {
 			}
@@ -200,7 +205,12 @@ public class Controller {
 		FileOutputStream fileOut = null;
 
 		try {
-			Properties configProperty = new Properties();
+			Properties configProperty = new Properties() {
+                @Override
+                public synchronized Enumeration<Object> keys() {
+                    return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+                }
+            };
 			String path = System.getProperty("user.dir");
 			String hisFile = path + "/" + user + "_log.properties";
 			File file = new File(hisFile);
@@ -222,12 +232,53 @@ public class Controller {
 		} finally {
 
 			try {
+				fileIn.close();
 				fileOut.close();
 			} catch (Exception ex) {
 			}
 		}
 
 		return "null";
+	}
+	
+	//sn : 1~ 0 , code : 01~10
+	@RequestMapping("/bet")
+	public String bet(@RequestParam("user") String user, @RequestParam("uid") String uid, @RequestParam("gid") String gid,
+			@RequestParam("sn") String sn,@RequestParam("code") String code,@RequestParam("amount") String amount) {
+		
+		long unixTimestamp = Instant.now().getEpochSecond();
+        String timeStampe = Long.toString(unixTimestamp)+"000";
+         
+		String url = "http://203.160.143.110/www_new/app/CA/CA_bet.php?" ; 
+	    String parameter =  "smstime=" + timeStampe + ""
+				+ "&allms=1117" + "&uid=" +  convertUid(uid)  + "&langx=zh-cn&betStr="+sn+"SN"+code+",A,,9.918,"+amount+",1,"+amount+"" + "&gid=" + gid + ""
+				+ "&mid=2529&gtype=CA&active=bet&usertype=a&ltype=A&username="+user+"" + "&timestamp=" + timeStampe + "";
+		int phase = 554432 + Integer.parseInt(gid) ; 
+	    try {
+	    	//url += URLEncoder.encode(prameter, "UTF-8");
+	    	 
+	    	Utils.WritePropertiesFile(user+"bet", phase + "@" + sn + "@" + code + "@" + amount, url + parameter);
+			HttpGet httpget = new HttpGet(url + parameter);
+			//httpget.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
+			// 建立HttpPost对象
+			HttpResponse response = new DefaultHttpClient().execute(httpget);
+			// 发送GET,并返回一个HttpResponse对象，相对于POST，省去了添加NameValuePair数组作参数
+			if (response.getStatusLine().getStatusCode() == 200) {// 如果状态码为200,就是正常返回
+				String ret = EntityUtils.toString(response.getEntity());
+				  
+				Utils.WritePropertiesFile(user+"bet",  phase + "@" + sn + "@" + code + "@" + amount + "@response@" + ret, ret);
+ 
+				return ret;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+
+		}
+
+		return "";
 	}
 
 	public String convertUid(String uid) {

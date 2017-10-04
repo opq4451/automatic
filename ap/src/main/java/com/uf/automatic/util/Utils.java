@@ -100,6 +100,7 @@ public class Utils {
         } finally {
 
             try {
+            	fileIn.close();
                 fileOut.close();
             } catch (Exception ex) {
             }

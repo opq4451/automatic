@@ -332,7 +332,7 @@
 	     
     	
     }
-	function compareByType1(phase_before,phase_now,phase_before4){
+	function compareByType1(phase_before,phase_now,phase_before4, gid){
 		   
 		const code_b = getCodeByPhase(phase_before); 
 		const code_n = getCodeByPhase(phase_now);
@@ -365,12 +365,31 @@
 				
 		    	log+= ",下注金額:"+betarray[betIndex[z]%betarray.length]
 		    	 
+		    	var betList =  rangeExist[bet_before4].toString().split(',');
+		    	
+		    	for(var b=0;b<betList.length;b++){
+		    		var code = betList[b];
+		    		var sn = i==9 ? 0 : (i+1);
+		    		if(betarray[betIndex[z]%betarray.length] > 0 )
+		    			reallyBet(gid,sn,code,betarray[betIndex[z]%betarray.length]);
+		    	}
+    		    
 		    	saveLog(document.getElementById("user").value,encodeURI(log));
-		    		betIndex[z]++;
+		    	betIndex[z]++;
 			}
 			
 			
 		}
+		
+	}
+	
+	function reallyBet(gid,sn,code,amount){
+		$.ajax({ url:  u + "/bet?user="+document.getElementById("user").value +"&gid="+gid +"&uid="+encodeURI(document.getElementById("uid").value)+"&sn="+sn+"&code="+code+"&amount="+amount, 
+         async: false,
+         success: function(data) {
+        	 
+         	 }
+        });
 		
 	}
 	 
@@ -429,15 +448,15 @@
     	
    		var d = new Date();
 	    var n = d.getMinutes();
-		if(checkMinute.indexOf(n) != -1 && checkWin()){ //bet time每5分鐘下注一次
+        if(checkMinute.indexOf(n) != -1 && checkWin()){ //bet time每5分鐘下注一次
 			getWinFun();
 			var nextPhase = getPhase();
 			 const n = nextPhase - 1 ;
 			 const b = nextPhase - 5 ;
 			 const fourTh = nextPhase - 4 ;
-
+			 const gid = nextPhase - 554432 ;
 			 
-			 compareByType1(b,n,fourTh);
+			 compareByType1(b,n,fourTh,gid);
 			 
 		}
 		
