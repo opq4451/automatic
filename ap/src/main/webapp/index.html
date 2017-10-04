@@ -48,9 +48,10 @@
 	 
 		    $.get(url, function( data ) {
 			   
-			  var uid = ( data );
-			 
-			  window.location.href = "main.html?user="+user+"&pwd="+pwd+"&uid="+encodeURI(uid);
+			  var uid = ( data.split('@')[0] );
+			  var mid = ( data.split('@')[1] );
+			  //alert("main.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid))
+			  window.location.href = "main.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid);
 			});
 		});
 

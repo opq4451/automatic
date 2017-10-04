@@ -46,7 +46,9 @@ public class Controller {
 		try {
 			String ret = Utils.httpClientGet(Step1);
 			String uid = ret.substring(ret.indexOf("uid") + 4, ret.indexOf("uid") + 37);
-			return uid;
+			String mid = ret.substring(ret.indexOf("mid") + 4, ret.indexOf("mid") + 8);
+
+			return uid+"@"+mid;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -243,7 +245,7 @@ public class Controller {
 	
 	//sn : 1~ 0 , code : 01~10
 	@RequestMapping("/bet")
-	public String bet(@RequestParam("user") String user, @RequestParam("uid") String uid, @RequestParam("gid") String gid,
+	public String bet(@RequestParam("user") String user, @RequestParam("uid") String uid, @RequestParam("mid") String mid, @RequestParam("gid") String gid,
 			@RequestParam("sn") String sn,@RequestParam("code") String code,@RequestParam("amount") String amount) {
 		
 		long unixTimestamp = Instant.now().getEpochSecond();
@@ -252,12 +254,11 @@ public class Controller {
 		String url = "http://203.160.143.110/www_new/app/CA/CA_bet.php?" ; 
 	    String parameter =  "smstime=" + timeStampe + ""
 				+ "&allms=1117" + "&uid=" +  convertUid(uid)  + "&langx=zh-cn&betStr="+sn+"SN"+code+",A,,9.918,"+amount+",1,"+amount+"" + "&gid=" + gid + ""
-				+ "&mid=2529&gtype=CA&active=bet&usertype=a&ltype=A&username="+user+"" + "&timestamp=" + timeStampe + "";
+				+ "&mid="+mid+"&gtype=CA&active=bet&usertype=a&ltype=A&username="+user+"" + "&timestamp=" + timeStampe + "";
 		int phase = 554432 + Integer.parseInt(gid) ; 
 	    try {
 	    	//url += URLEncoder.encode(prameter, "UTF-8");
 	    	 
-	    	Utils.WritePropertiesFile(user+"bet", phase + "@" + sn + "@" + code + "@" + amount, url + parameter);
 			HttpGet httpget = new HttpGet(url + parameter);
 			//httpget.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
 			// 建立HttpPost对象
@@ -266,7 +267,7 @@ public class Controller {
 			if (response.getStatusLine().getStatusCode() == 200) {// 如果状态码为200,就是正常返回
 				String ret = EntityUtils.toString(response.getEntity());
 				  
-				Utils.WritePropertiesFile(user+"bet",  phase + "@" + sn + "@" + code + "@" + amount + "@response@" + ret, ret);
+				Utils.WritePropertiesFile(user+"bet",  "第"+phase + "期，第" + sn + "名，號碼(" + code + ")，金額(" + amount + ")" , ret);
  
 				return ret;
 			}

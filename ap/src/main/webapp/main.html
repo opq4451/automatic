@@ -218,6 +218,7 @@
       
 	<input type="hidden" id="uid" />
 	<input type="hidden" id="user" />
+	<input type="hidden" id="mid" />
 
 
 </body>
@@ -266,9 +267,11 @@
 		var uid = (parsed_qs.uid) ;
 		var pwd = (parsed_qs.pwd) ;
 		var user= (parsed_qs.user);
-		
+		var mid = (parsed_qs.mid) ;
+
 		document.getElementById("uid").value = uid;
 		document.getElementById("user").value = user;
+		document.getElementById("mid").value = mid;
 
 		getWinFun();
 		
@@ -384,7 +387,7 @@
 	}
 	
 	function reallyBet(gid,sn,code,amount){
-		$.ajax({ url:  u + "/bet?user="+document.getElementById("user").value +"&gid="+gid +"&uid="+encodeURI(document.getElementById("uid").value)+"&sn="+sn+"&code="+code+"&amount="+amount, 
+		$.ajax({ url:  u + "/bet?user="+document.getElementById("user").value +"&gid="+gid +"&uid="+encodeURI(document.getElementById("uid").value)+"&mid="+ document.getElementById("mid").value +"&sn="+sn+"&code="+code+"&amount="+amount, 
          async: false,
          success: function(data) {
         	 
