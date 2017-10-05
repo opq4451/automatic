@@ -423,6 +423,10 @@
 		 $.ajax({ url:  u + "/getPhase", 
 	         async: false,
 	         success: function(data) {
+			        	 if(data == 'null'){
+			        		 alert('已被其它登入者登入!')
+			        		 window.location.href="/auto/index.html";
+			        	 }
 	               period = data;
 	           	   $( "div.toPhase" ).text(data);
 	         	 }

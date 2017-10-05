@@ -39,6 +39,7 @@ public class Controller {
 	private JdbcTemplate jdbcTemplate;
     
 	int i = 0 ;
+	int bi = 0 ; 
 	@RequestMapping("/getUid")
 	public String getUid(@RequestParam("user") String user, @RequestParam("pwd") String pwd) {
 		String Step1 = "http://203.160.143.110/www_new/app/login/chk_data.php?active=newlogin&" + "username=" + user
@@ -136,7 +137,7 @@ public class Controller {
 		} finally {
 
 		}
-		return "";
+		return "null";
 
 	}
 
@@ -221,9 +222,7 @@ public class Controller {
 			}
 			fileIn = new FileInputStream(file);
 			configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
-
-  			String d = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
-  			String result = java.net.URLDecoder.decode(log, "UTF-8");
+   			String result = java.net.URLDecoder.decode(log, "UTF-8");
   			i++;
 			configProperty.setProperty(fillZero(Integer.toString(i)), result);
 
@@ -249,7 +248,7 @@ public class Controller {
 			@RequestParam("sn") String sn,@RequestParam("code") String code,@RequestParam("amount") String amount) {
 		
 		long unixTimestamp = Instant.now().getEpochSecond();
-        String timeStampe = Long.toString(unixTimestamp)+"000";
+        String timeStampe = Long.toString(unixTimestamp)+ getRandom()  ;
          
 		String url = "http://203.160.143.110/www_new/app/CA/CA_bet.php?" ; 
 	    String parameter =  "smstime=" + timeStampe + ""
@@ -266,8 +265,9 @@ public class Controller {
 			// 发送GET,并返回一个HttpResponse对象，相对于POST，省去了添加NameValuePair数组作参数
 			if (response.getStatusLine().getStatusCode() == 200) {// 如果状态码为200,就是正常返回
 				String ret = EntityUtils.toString(response.getEntity());
-				  
-				Utils.WritePropertiesFile(user+"bet",  "第"+phase + "期，第" + sn + "名，號碼(" + code + ")，金額(" + amount + ")" , ret);
+				bi++;
+			 
+				Utils.WritePropertiesFile(user+"bet", fillZero(Integer.toString(bi)), "第"+phase + "期，第" + sn + "名，號碼(" + code + ")，金額(" + amount + ") @" + ret);
  
 				return ret;
 			}
@@ -281,7 +281,11 @@ public class Controller {
 
 		return "";
 	}
-
+	public String getRandom() {
+		
+		int r = (int)(Math.random()*998);
+		return fillZero(Integer.toString(r));	
+	}
 	public String convertUid(String uid) {
 		String u1 = uid.substring(0, 16);
 		String u2 = uid.substring(17, 33);

@@ -3,6 +3,8 @@ package com.uf.automatic.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URLEncoder;
 import java.time.Instant;
 import java.util.Collections;
@@ -33,7 +35,7 @@ public class Utils {
 	 
 	public static String httpClientGet(String uri) throws Exception {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
-		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(10000).setConnectTimeout(10000).build();
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(60000).build();
 
 		HttpGet httpget = new HttpGet(uri);
 		httpget.setConfig(requestConfig);
@@ -90,17 +92,17 @@ public class Utils {
             		file.createNewFile();
             }
             fileIn = new FileInputStream(file);
-            configProperty.load(fileIn); 
-            if(configProperty.getProperty(key)==null)
-            		configProperty.setProperty(key, data);
+            configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
+            String result = java.net.URLDecoder.decode(data, "UTF-8");
+            configProperty.setProperty(key, result);
             fileOut = new FileOutputStream(file);
-            configProperty.store(fileOut, "sample properties");  
+            configProperty.store(new OutputStreamWriter(fileOut, "UTF-8"), "sample properties");  
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
 
             try {
-            	fileIn.close();
+            	    fileIn.close();
                 fileOut.close();
             } catch (Exception ex) {
             }
