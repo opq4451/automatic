@@ -75,7 +75,7 @@
 		  <h3>停利: <input class="stopwin" type ="text" size=15/></h3>				 
 	   
 
-          <h3>下注記錄<div style="align: left;" class="logHtml">loading...</div></h3> 
+          <h3><button onclick="clearLog()">清空記錄</button>下注記錄<div style="align: left;" class="logHtml">loading...</div></h3> 
           
           
           
@@ -140,7 +140,7 @@
 		document.getElementById("uid").value = uid;
 		document.getElementById("user").value = user;
 		document.getElementById("mid").value = mid;
-	
+	 
 		getWinFun();
 		getlogHtml();
 	     
@@ -182,13 +182,13 @@
     
     function getWinFun(){
     	 var url =  u + '/getTodayWin?user='+document.getElementById("user").value+'&uid='+encodeURI(document.getElementById("uid").value)  ;
-		   
+		 var flag = true;  
     	 $.ajax({ url:  url, 
 	         async: false,
 	         success: function(data) {
 	        	 if(data == 'null'){
-	        		 alert('已被其它登入者登入!')
-	        		 window.location.href="/auto/index.html";
+	        		  flag = false;
+	        		  return;
 	        	 }
 	        	 const json = JSON.parse(data);
 	        	  
@@ -207,7 +207,7 @@
 	         	 } 
 	         	 
 	        });
-    	 
+    	 return flag;
 	     
     	
     }
@@ -336,11 +336,13 @@
 	         async: false,
 	         success: function(data) {
 			        	 if(data == 'null'){
-			        		 alert('已被其它登入者登入!')
-			        		 window.location.href="/auto/index.html";
+			        		 period = 0 ;
+			        		 
+			        	 }else {
+			        		   period = data;
+				           	   $( "div.toPhase" ).text(data);
 			        	 }
-	               period = data;
-	           	   $( "div.toPhase" ).text(data);
+	              
 	         	 }
 	        });
 		 return period*1  ;
@@ -368,26 +370,43 @@
    		
 		
 	    setTimeout(function () {
-	    	        getWinFun();
+	    	        var winFlag = getWinFun();
 	    	        getlogHtml();
 			    var nextPhase = getPhase();
-	   	 	    var d = new Date();
-			    var n = d.getMinutes();
-		        if(checkMinute.indexOf(n) != -1 && checkWin()){ //bet time每5分鐘下注一次
-					
-					 const n = nextPhase - 1 ;
-					 const b = nextPhase - 5 ;
-					 const fourTh = nextPhase - 4 ;
-					 const gid = nextPhase - 554432 ;
-					 if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
-					 	compareByType1(b,n,fourTh,gid);
-					 }
-				 
-				}
+			    if(nextPhase !=0 && winFlag){
+			    	var d = new Date();
+				    var n = d.getMinutes();
+			        if(checkMinute.indexOf(n) != -1 && checkWin()){ //bet time每5分鐘下注一次
+						
+						 const n = nextPhase - 1 ;
+						 const b = nextPhase - 5 ;
+						 const fourTh = nextPhase - 4 ;
+						 const gid = nextPhase - 554432 ;
+						 if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
+						 	compareByType1(b,n,fourTh,gid);
+						 }
+					 
+					}
+			    	
+			    }
+	   	 	    
 		        
 	        timeout();
 	    }, 60000);
 	}
+    
+    
+    function clearLog(){
+	
+    	 $.ajax({ url:  u + "/clearLog?user="+document.getElementById("user").value+"bet", 
+	         async: false,
+	         success: function(data) {
+	        	 $( "div.logHtml" ).html('');
+	        	 alert("清空成功!");
+	         	 }
+	        });
+ 		
+ 	}
     
     function isNumber(n) {
     	  return !isNaN(parseFloat(n)) && isFinite(n);

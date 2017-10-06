@@ -142,7 +142,8 @@ public class Controller {
 				String path = System.getProperty("user.dir");
 				String hisFile = path + "/" + user + "_log.properties";
 				File file = new File(hisFile);
-			 
+				if(!file.exists())
+					file.createNewFile();
 				fileIn = new FileInputStream(file);
 				configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
 				
@@ -179,17 +180,32 @@ public class Controller {
 	@RequestMapping("/getPhase")
 	public String getPhase() {
 		try {
-			String url = "http://api.1680210.com/pks/getLotteryPksInfo.do?issue=&lotCode=10001";
+//			String url = "http://api.1680210.com/pks/getLotteryPksInfo.do?issue=&lotCode=10001";
+//			String ret = Utils.httpClientGet(url);
+//			// 发送GET,并返回一个HttpResponse对象，相对于POST，省去了添加NameValuePair数组作参数
+//
+//			JsonParser parser = new JsonParser();
+//			JsonObject o = parser.parse(ret).getAsJsonObject();
+//			JsonObject result = o.getAsJsonObject("result");
+//
+//			JsonObject data = result.getAsJsonObject("data");
+//
+//			String drawIssue = data.get("drawIssue").toString();
+//			return drawIssue;
+			
+			//彩世界
+			long unixTimestamp = Instant.now().getEpochSecond();
+			String url = "https://www.1399p.com/pk10/getawarddata?r="+unixTimestamp+"";
 			String ret = Utils.httpClientGet(url);
 			// 发送GET,并返回一个HttpResponse对象，相对于POST，省去了添加NameValuePair数组作参数
 
 			JsonParser parser = new JsonParser();
 			JsonObject o = parser.parse(ret).getAsJsonObject();
-			JsonObject result = o.getAsJsonObject("result");
+			JsonObject result = o.getAsJsonObject("next");
 
-			JsonObject data = result.getAsJsonObject("data");
+			//JsonObject data = result.getAsJsonObject("period");
 
-			String drawIssue = data.get("drawIssue").toString();
+			String drawIssue = result.get("period").toString();
 			return drawIssue;
 
 		} catch (Exception e) {
@@ -298,6 +314,32 @@ public class Controller {
 				fileOut.close();
 			} catch (Exception ex) {
 			}
+		}
+
+		return "null";
+	}
+	
+	@RequestMapping("/clearLog")
+	public String clearLog(@RequestParam("user") String user ) {
+		 
+
+		try {
+			 
+			String path = System.getProperty("user.dir");
+			String hisFile = path + "/" + user + "_log.properties";
+			File file = new File(hisFile);
+			System.out.println(hisFile);
+			System.out.println(file.exists());
+
+			if(file.exists()){
+				file.delete();
+				System.out.println("delete suc");
+			}
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+ 
 		}
 
 		return "null";
