@@ -60,15 +60,17 @@ public class Controller {
 	@RequestMapping("/getTodayWin")
 	public String getTodayWin(@RequestParam("uid") String uid, @RequestParam("user") String user) {
 		long unixTimestamp = Instant.now().getEpochSecond();
-		String timestamp = Long.toString(unixTimestamp) + "000";
+		String timestamp = Long.toString(unixTimestamp) + getRandom();
 		String url = "http://203.160.143.110/www_new/app/getData/reloadMem.php?";
 		String parameter = "smstime=" + timestamp + "" + "&allms=1117" + "&uid=" + convertUid(uid)
 				+ "&langx=zh-cn&gtype=CA";
 		try {
 			System.out.println(url + parameter);
-
+			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			String ret = Utils.httpClientGet(url + parameter);
 			System.out.println(ret);
+			System.out.println("*****************");
+
 			JsonParser parser = new JsonParser();
 			JsonObject o = parser.parse(ret).getAsJsonObject();
 			JsonObject MemAry = o.getAsJsonObject("MemAry");

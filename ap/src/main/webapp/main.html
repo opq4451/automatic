@@ -340,11 +340,13 @@
 		const code_b = getCodeByPhase(phase_before); 
 		const code_n = getCodeByPhase(phase_now);
 		const code_before4 = getCodeByPhase(phase_before4);
-
+		
 		const array_b = code_b.split(',');
 		const array_n = code_n.split(',');
 		const array_before4 = code_before4.split(',');
-		
+		if(array_b.length==0 || array_n.length==0 || array_before4.length==0  ){
+			return;
+		}
 		for(var i=0;i<10;i++){
 			const bet_b = array_b[i];
 			const bet_n = array_n[i];
@@ -439,7 +441,7 @@
  			const url =  u + "/saveParam?" + "user="+document.getElementById("user").value+"&type="+$( ".type" ).val()+
  			"&betlist="+$( ".betlist" ).val()+"&stoplose="+$( ".stoplose" ).val()+"&stopwin="+$( ".stopwin" ).val() ;
  			$.get(url, function( data ) {
-	    	 	 
+	    	 	 	alert("設定完成!")
 		 	}); 
  		}
  		
@@ -453,25 +455,32 @@
  	}
     function timeout() {
     	
-   		var d = new Date();
-	    var n = d.getMinutes();
-        if(checkMinute.indexOf(n) != -1 && checkWin()){ //bet time每5分鐘下注一次
-			getWinFun();
-			var nextPhase = getPhase();
-			 const n = nextPhase - 1 ;
-			 const b = nextPhase - 5 ;
-			 const fourTh = nextPhase - 4 ;
-			 const gid = nextPhase - 554432 ;
-			 
-			 compareByType1(b,n,fourTh,gid);
-			 
-		}
+   		
 		
 	    setTimeout(function () {
-	    	    
+	    	        getWinFun();
+			    var nextPhase = getPhase();
+	   	 	    var d = new Date();
+			    var n = d.getMinutes();
+		        if(checkMinute.indexOf(n) != -1 && checkWin()){ //bet time每5分鐘下注一次
+					
+					 const n = nextPhase - 1 ;
+					 const b = nextPhase - 5 ;
+					 const fourTh = nextPhase - 4 ;
+					 const gid = nextPhase - 554432 ;
+					 if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
+					 	compareByType1(b,n,fourTh,gid);
+					 }
+				 
+				}
+		        
 	        timeout();
 	    }, 60000);
 	}
+    
+    function isNumber(n) {
+    	  return !isNaN(parseFloat(n)) && isFinite(n);
+    	}
  	 
 	function parse_query_string(query) {
 		  var vars = query.split("&");
