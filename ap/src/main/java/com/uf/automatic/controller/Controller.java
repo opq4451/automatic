@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.Properties;
 import java.util.TreeSet;
 
@@ -94,10 +95,13 @@ public class Controller {
 				String betlist = configProperty.getProperty("betlist");
 				String stoplose = configProperty.getProperty("stoplose");
 				String stopwin = configProperty.getProperty("stopwin");
+				String startstatus = configProperty.getProperty("startstatus");
+				
 				j.addProperty("type", type);
 				j.addProperty("betlist", betlist);
 				j.addProperty("stoplose", stoplose);
 				j.addProperty("stopwin", stopwin);
+				j.addProperty("startstatus", startstatus);
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -116,6 +120,61 @@ public class Controller {
 
 		return "null";
 	}
+	
+	
+	@RequestMapping("/getPredictLog")
+	public String getPredictLog(  @RequestParam("user") String user) {
+		 
+		 
+		try {
+			  
+			JsonObject j = new JsonObject();
+		 
+
+			FileInputStream fileIn = null;
+			try {
+				Properties configProperty = new Properties() {
+	                @Override
+	                public synchronized Enumeration<Object> keys() {
+	                    return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+	                }
+	            };
+				String path = System.getProperty("user.dir");
+				String hisFile = path + "/" + user + "_log.properties";
+				File file = new File(hisFile);
+			 
+				fileIn = new FileInputStream(file);
+				configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
+				
+				//String logHtml="";
+				StringBuilder logHtml = new StringBuilder();
+				for (Map.Entry<Object, Object> e : configProperty.entrySet()) {
+					  String key = (String) e.getKey();
+					  String value = (String) e.getValue();
+					  logHtml.insert(0, "<tr><td style=\"border: 1px solid black\">"+value+"</td></tr>");
+					  //logHtml+="<tr><td style=\"border: 1px solid black\">"+value+"</td></tr>";
+				}
+				
+				 j.addProperty("logHtml", "<table style=\"border-collapse: collapse;\">"+logHtml+"</table>");
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+
+				try {
+					fileIn.close();
+				} catch (Exception ex) {
+				}
+			}
+
+			return j.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "null";
+	}
+	
 
 	@RequestMapping("/getPhase")
 	public String getPhase() {
@@ -168,7 +227,7 @@ public class Controller {
 	@RequestMapping("/saveParam")
 	public String saveParam(@RequestParam("user") String user, @RequestParam("type") String type,
 			@RequestParam("betlist") String betlist, @RequestParam("stoplose") String stoplose,
-			@RequestParam("stopwin") String stopwin) {
+			@RequestParam("stopwin") String stopwin,  @RequestParam("startstatus") String startstatus) {
 		FileInputStream fileIn = null;
 		FileOutputStream fileOut = null;
 
@@ -187,7 +246,7 @@ public class Controller {
 			configProperty.setProperty("betlist", betlist);
 			configProperty.setProperty("stoplose", stoplose);
 			configProperty.setProperty("stopwin", stopwin);
-
+			configProperty.setProperty("startstatus", startstatus);
 			fileOut = new FileOutputStream(file);
 			configProperty.store(fileOut, "sample properties");
 		} catch (Exception e) {

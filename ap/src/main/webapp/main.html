@@ -49,167 +49,35 @@
  			-->
         <main class="col-sm-9 ml-sm-auto col-md-10 pt-3" role="main">
         <br>
+          <h3> <button onclick="logout()">登出</button></h3>
+          <h3>帳號: <input type="text" id="user" readonly /></h3>
+           <br>
+          <h3>程式啟動:<div><select class="startstatus">
+						  <option value="0">停用 </option>
+						  <option value="1">啟用 </option>
+						  
+						</select></div></h3>
+						 <br>
           <h1>下注設定</h1>
-
-          <section class="row text-center placeholders">
-            <div class="col-6 col-sm-3 placeholder">
-               		<div>下注方式 <select class="type">
+          
+          <h3>下注方式:<div> <select class="type">
 						  <option value="1">豆子-順打 </option>
 						  <option value="2">豆子-反打</option>
 						  <option value="3">順龍</option>
 						  <option value="4">斬龍</option>
 						</select>
-					</div>
-            </div>
-            
-            <div class="col-6 col-sm-3 placeholder">
-               		<div>下注參數<input class="betlist" type ="text" size=15/>
-					</div>
-            </div>
-            
-             
-            
-            <div class="col-6 col-sm-3 placeholder">
-               		<div>停損<input class="stoplose" type ="text" size=15/>
-					</div>
-            </div>
-            
-            <div class="col-6 col-sm-3 placeholder">
-               		<div>停利<input class="stopwin" type ="text" size=15/>
-					</div>
-            </div>
-              
-          </section>
+					</div></h3>
+						 <br>
+		  <h3>下注參數:<div><input class="betlist" type ="text" size=35/>
+					</div></h3>
+						 <br>
+		  <h3>停損: <input class="stoplose" type ="text" size=15/></h3>
+		  <h3>停利: <input class="stopwin" type ="text" size=15/></h3>				 
+	   
 
-          <h2>下注記錄</h2> <!-- 
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1,001</td>
-                  <td>Lorem</td>
-                  <td>ipsum</td>
-                  <td>dolor</td>
-                  <td>sit</td>
-                </tr>
-                <tr>
-                  <td>1,002</td>
-                  <td>amet</td>
-                  <td>consectetur</td>
-                  <td>adipiscing</td>
-                  <td>elit</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>Integer</td>
-                  <td>nec</td>
-                  <td>odio</td>
-                  <td>Praesent</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>libero</td>
-                  <td>Sed</td>
-                  <td>cursus</td>
-                  <td>ante</td>
-                </tr>
-                <tr>
-                  <td>1,004</td>
-                  <td>dapibus</td>
-                  <td>diam</td>
-                  <td>Sed</td>
-                  <td>nisi</td>
-                </tr>
-                <tr>
-                  <td>1,005</td>
-                  <td>Nulla</td>
-                  <td>quis</td>
-                  <td>sem</td>
-                  <td>at</td>
-                </tr>
-                <tr>
-                  <td>1,006</td>
-                  <td>nibh</td>
-                  <td>elementum</td>
-                  <td>imperdiet</td>
-                  <td>Duis</td>
-                </tr>
-                <tr>
-                  <td>1,007</td>
-                  <td>sagittis</td>
-                  <td>ipsum</td>
-                  <td>Praesent</td>
-                  <td>mauris</td>
-                </tr>
-                <tr>
-                  <td>1,008</td>
-                  <td>Fusce</td>
-                  <td>nec</td>
-                  <td>tellus</td>
-                  <td>sed</td>
-                </tr>
-                <tr>
-                  <td>1,009</td>
-                  <td>augue</td>
-                  <td>semper</td>
-                  <td>porta</td>
-                  <td>Mauris</td>
-                </tr>
-                <tr>
-                  <td>1,010</td>
-                  <td>massa</td>
-                  <td>Vestibulum</td>
-                  <td>lacinia</td>
-                  <td>arcu</td>
-                </tr>
-                <tr>
-                  <td>1,011</td>
-                  <td>eget</td>
-                  <td>nulla</td>
-                  <td>Class</td>
-                  <td>aptent</td>
-                </tr>
-                <tr>
-                  <td>1,012</td>
-                  <td>taciti</td>
-                  <td>sociosqu</td>
-                  <td>ad</td>
-                  <td>litora</td>
-                </tr>
-                <tr>
-                  <td>1,013</td>
-                  <td>torquent</td>
-                  <td>per</td>
-                  <td>conubia</td>
-                  <td>nostra</td>
-                </tr>
-                <tr>
-                  <td>1,014</td>
-                  <td>per</td>
-                  <td>inceptos</td>
-                  <td>himenaeos</td>
-                  <td>Curabitur</td>
-                </tr>
-                <tr>
-                  <td>1,015</td>
-                  <td>sodales</td>
-                  <td>ligula</td>
-                  <td>in</td>
-                  <td>libero</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          -->
+          <h3>下注記錄<div style="align: left;" class="logHtml">loading...</div></h3> 
+          
+          
           
           
         </main>
@@ -217,7 +85,7 @@
     </div>
       
 	<input type="hidden" id="uid" />
-	<input type="hidden" id="user" />
+	
 	<input type="hidden" id="mid" />
 
 
@@ -272,12 +140,15 @@
 		document.getElementById("uid").value = uid;
 		document.getElementById("user").value = user;
 		document.getElementById("mid").value = mid;
-
+	
 		getWinFun();
-		
+		getlogHtml();
 	     
-	  
+	    //return;
 		
+		 $( ".startstatus" ).change(function() {
+			 saveParam();
+		 });
 		  
 		 $( ".type" ).change(function() {
 			 saveParam();
@@ -307,6 +178,8 @@
     }
     
     
+    
+    
     function getWinFun(){
     	 var url =  u + '/getTodayWin?user='+document.getElementById("user").value+'&uid='+encodeURI(document.getElementById("uid").value)  ;
 		   
@@ -324,6 +197,9 @@
 		    	 	$( ".betlist" ).val(json.betlist) ;
 		    	 	$( ".stoplose" ).val(json.stoplose) ;
 		    	 	$( ".stopwin" ).val(json.stopwin);
+		    	 	$( ".startstatus" ).val(json.startstatus);
+
+		    	 	
 		    	 	stoplose = json.stoplose;
 		    	 	stopwin = json.stopwin;
 		    	 	todayWin = json.todayWin;
@@ -335,6 +211,27 @@
 	     
     	
     }
+    
+    function getlogHtml(){
+   	 var url =  u + '/getPredictLog?user='+document.getElementById("user").value+"bet";
+		   
+   	 $.ajax({ url:  url, 
+	         async: true,
+	         success: function(data) {
+	        	  
+	        	 const json = JSON.parse(data);
+	        	  
+		    	 	$( "div.logHtml" ).html(json.logHtml);
+		    	 	 
+ 
+	         	 } 
+	         	 
+	        });
+   	 
+	     
+   	
+   }
+    
 	function compareByType1(phase_before,phase_now,phase_before4, gid){
 		   
 		const code_b = getCodeByPhase(phase_before); 
@@ -368,8 +265,11 @@
 		    	var log =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," + " 前5期"+phase_before + "預測("+rangeExist[bet_b]+") ,沒有預測到 ,下注" ;
 		    	log+= "， 參考前四期"+  phase_before4 + "("+code_before4+"), 下注號碼"+ rangeExist[bet_before4];
 				
-		    	log+= ",下注金額:"+betarray[betIndex[z]%betarray.length]
-		    	 
+		    	log+= ",下注金額:"+betarray[betIndex[z]%betarray.length];
+		    	var c = betarray[betIndex[z]%betarray.length] == 0 ? '0' : computeCase(betIndex[z]%betarray.length);
+		    	var suc = betarray[betIndex[z]%betarray.length] > 1 ? "成功" : "失敗" ;
+		    	var betlog =  "第"+phase_now+"期"+ "，第"+z+"名，號碼("+rangeExist[bet_before4]+")"+ "，第"+c+"關"+"下注金額("+betarray[betIndex[z]%betarray.length]+")"+"("+suc+")";
+		    	
 		    	var betList =  rangeExist[bet_before4].toString().split(',');
 		    	
 		    	for(var b=0;b<betList.length;b++){
@@ -378,7 +278,7 @@
 		    		if(betarray[betIndex[z]%betarray.length] > 0 )
 		    			reallyBet(gid,sn,code,betarray[betIndex[z]%betarray.length]);
 		    	}
-    		    
+		    	saveLog(document.getElementById("user").value+"bet",encodeURI(betlog));
 		    	saveLog(document.getElementById("user").value,encodeURI(log));
 		    	betIndex[z]++;
 			}
@@ -387,7 +287,17 @@
 		}
 		
 	}
-	
+	function computeCase(betIndex){
+		var index = betarray.indexOf(betIndex);
+		var c = 0;
+		for(var i=0;i<index;i++){
+			if(betarray[i]>0){
+				c++;
+			}
+		}
+		
+		return c + 1 ;
+	}
 	function reallyBet(gid,sn,code,amount){
 		$.ajax({ url:  u + "/bet?user="+document.getElementById("user").value +"&gid="+gid +"&uid="+encodeURI(document.getElementById("uid").value)+"&mid="+ document.getElementById("mid").value +"&sn="+sn+"&code="+code+"&amount="+amount, 
          async: false,
@@ -437,9 +347,9 @@
 	}
  	function saveParam(){
  		 
- 		if($( ".type" ).val() && $( ".betlist" ).val() && $( ".stoplose" ).val() && $( ".stopwin" ).val()){
+ 		if($( ".type" ).val() && $( ".betlist" ).val() && $( ".stoplose" ).val() && $( ".stopwin" ).val() && $( ".startstatus" ).val() ){
  			const url =  u + "/saveParam?" + "user="+document.getElementById("user").value+"&type="+$( ".type" ).val()+
- 			"&betlist="+$( ".betlist" ).val()+"&stoplose="+$( ".stoplose" ).val()+"&stopwin="+$( ".stopwin" ).val() ;
+ 			"&betlist="+$( ".betlist" ).val()+"&stoplose="+$( ".stoplose" ).val()+"&stopwin="+$( ".stopwin" ).val()+"&startstatus="+$( ".startstatus" ).val()  ;
  			$.get(url, function( data ) {
 	    	 	 	alert("設定完成!")
 		 	}); 
@@ -448,7 +358,7 @@
  	}
  	
  	function checkWin(){
- 		if((stoplose*-1 < todayWin*1) && (todayWin*1 < stopwin*1))
+ 		if((stoplose*-1 < todayWin*1) && (todayWin*1 < stopwin*1) && ( $( ".startstatus" ).val() == '1'))
  			return true;
  		
  		return false;
@@ -459,6 +369,7 @@
 		
 	    setTimeout(function () {
 	    	        getWinFun();
+	    	        getlogHtml();
 			    var nextPhase = getPhase();
 	   	 	    var d = new Date();
 			    var n = d.getMinutes();
@@ -500,6 +411,10 @@
 		    }
 		  }
 		  return query_string;
+	}
+	
+	function logout(){
+		 window.location.href="/auto/index.html";
 	}
 
 </script>
