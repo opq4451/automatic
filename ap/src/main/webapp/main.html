@@ -101,6 +101,7 @@
     var stoplose = "";
     var stopwin = "";
     var todayWin = "";
+    var ltype = "";
     var betarray = [];
     var betIndex = {
  			'1' : 0,
@@ -199,11 +200,12 @@
 		    	 	$( ".stopwin" ).val(json.stopwin);
 		    	 	$( ".startstatus" ).val(json.startstatus);
 
-		    	 	
+		    	  
 		    	 	stoplose = json.stoplose;
 		    	 	stopwin = json.stopwin;
 		    	 	todayWin = json.todayWin;
 		    	 	betarray = json.betlist.split(',');
+		    	 	ltype = json.ltype;
 	         	 } 
 	         	 
 	        });
@@ -275,10 +277,13 @@
 		    	for(var b=0;b<betList.length;b++){
 		    		var code = betList[b];
 		    		var sn = i==9 ? 0 : (i+1);
-		    		if(betarray[betIndex[z]%betarray.length] > 0 )
+		    		if(betarray[betIndex[z]%betarray.length] > 0 ){
 		    			reallyBet(gid,sn,code,betarray[betIndex[z]%betarray.length]);
+		    			saveLog(document.getElementById("user").value+"bet",encodeURI(betlog)); //只寫下注成功的log
+		    		}
+		    			
 		    	}
-		    	saveLog(document.getElementById("user").value+"bet",encodeURI(betlog));
+		    	
 		    	saveLog(document.getElementById("user").value,encodeURI(log));
 		    	betIndex[z]++;
 			}
@@ -299,7 +304,8 @@
 		return c + 1 ;
 	}
 	function reallyBet(gid,sn,code,amount){
-		$.ajax({ url:  u + "/bet?user="+document.getElementById("user").value +"&gid="+gid +"&uid="+encodeURI(document.getElementById("uid").value)+"&mid="+ document.getElementById("mid").value +"&sn="+sn+"&code="+code+"&amount="+amount, 
+		$.ajax({ url:  u + "/bet?user="+document.getElementById("user").value +"&gid="+gid +"&uid="+encodeURI(document.getElementById("uid").value)+"&mid="+ document.getElementById("mid").value+
+				"&sn="+sn+"&code="+code+"&amount="+amount+"&ltype="+ltype,  
          async: false,
          success: function(data) {
         	 

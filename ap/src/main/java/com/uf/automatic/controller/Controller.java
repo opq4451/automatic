@@ -76,9 +76,11 @@ public class Controller {
 			JsonObject o = parser.parse(ret).getAsJsonObject();
 			JsonObject MemAry = o.getAsJsonObject("MemAry");
 			String todayWin = MemAry.get("todayWin").toString();
+			String ltype = MemAry.get("ltype").toString();
 
 			JsonObject j = new JsonObject();
 			j.addProperty("todayWin", todayWin);
+			j.addProperty("ltype", ltype.substring(1, 2));
 
 			FileInputStream fileIn = null;
 			try {
@@ -348,20 +350,23 @@ public class Controller {
 	//sn : 1~ 0 , code : 01~10
 	@RequestMapping("/bet")
 	public String bet(@RequestParam("user") String user, @RequestParam("uid") String uid, @RequestParam("mid") String mid, @RequestParam("gid") String gid,
-			@RequestParam("sn") String sn,@RequestParam("code") String code,@RequestParam("amount") String amount) {
+			@RequestParam("sn") String sn,@RequestParam("code") String code,@RequestParam("amount") String amount
+			,@RequestParam("ltype") String ltype
+			) {
 		
 		long unixTimestamp = Instant.now().getEpochSecond();
         String timeStampe = Long.toString(unixTimestamp)+ getRandom()  ;
-         
+        String rate = getRate(ltype);
 		String url = "http://203.160.143.110/www_new/app/CA/CA_bet.php?" ; 
 	    String parameter =  "smstime=" + timeStampe + ""
-				+ "&allms=1117" + "&uid=" +  convertUid(uid)  + "&langx=zh-cn&betStr="+sn+"SN"+code+",A,,9.918,"+amount+",1,"+amount+"" + "&gid=" + gid + ""
-				+ "&mid="+mid+"&gtype=CA&active=bet&usertype=a&ltype=A&username="+user+"" + "&timestamp=" + timeStampe + "";
+				+ "&allms=1117" + "&uid=" +  convertUid(uid)  + "&langx=zh-cn&betStr="+sn+"SN"+code+","+ltype+",,"+rate+","+amount+",1,"+amount+"" + "&gid=" + gid + ""
+				+ "&mid="+mid+"&gtype=CA&active=bet&usertype=a&ltype="+ltype+"&username="+user+"" + "&timestamp=" + timeStampe + "";
 		int phase = 554432 + Integer.parseInt(gid) ; 
 	    try {
 	    	//url += URLEncoder.encode(prameter, "UTF-8");
 	    	 
 			HttpGet httpget = new HttpGet(url + parameter);
+			System.out.println(url + parameter);
 			//httpget.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
 			// 建立HttpPost对象
 			HttpResponse response = new DefaultHttpClient().execute(httpget);
@@ -383,6 +388,13 @@ public class Controller {
 		}
 
 		return "";
+	}
+	
+	public String getRate(String latter){
+		if(latter.equals("A"))
+			return "9.918";
+		else 
+			return "9.818";
 	}
 	public String getRandom() {
 		
