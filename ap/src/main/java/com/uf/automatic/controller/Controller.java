@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.uf.automatic.ap.OrderedProperties;
 import com.uf.automatic.util.Utils;
 
 @RestController
@@ -135,12 +136,7 @@ public class Controller {
 
 			FileInputStream fileIn = null;
 			try {
-				Properties configProperty = new Properties() {
-	                @Override
-	                public synchronized Enumeration<Object> keys() {
-	                    return Collections.enumeration(new TreeSet<Object>(super.keySet()));
-	                }
-	            };
+				Properties configProperty = new OrderedProperties();
 				String path = System.getProperty("user.dir");
 				String hisFile = path + "/" + user + "_log.properties";
 				File file = new File(hisFile);
@@ -151,12 +147,18 @@ public class Controller {
 				
 				//String logHtml="";
 				StringBuilder logHtml = new StringBuilder();
-				for (Map.Entry<Object, Object> e : configProperty.entrySet()) {
-					  String key = (String) e.getKey();
-					  String value = (String) e.getValue();
-					  logHtml.insert(0, "<tr><td style=\"border: 1px solid black\">"+value+"</td></tr>");
-					  //logHtml+="<tr><td style=\"border: 1px solid black\">"+value+"</td></tr>";
+//				for (Map.Entry<Object, Object> e : configProperty.entrySet()) {
+//					  String key = (String) e.getKey();
+//					  String value = (String) e.getValue();
+//					  System.out.println(value);
+//					  logHtml.insert(0, "<tr><td style=\"border: 1px solid black\">"+value+"</td></tr>");
+//					  //logHtml+="<tr><td style=\"border: 1px solid black\">"+value+"</td></tr>";
+//				}
+				for (Enumeration e = configProperty.propertyNames(); e.hasMoreElements();) { 
+					  String v = configProperty.getProperty(e.nextElement().toString()) ; 
+					  logHtml.insert(0, "<tr><td style=\"border: 1px solid black\">"+v+"</td></tr>");
 				}
+				
 				
 				 j.addProperty("logHtml", "<table style=\"border-collapse: collapse;\">"+logHtml+"</table>");
 
@@ -411,8 +413,12 @@ public class Controller {
 	
 	public String fillZero(String str) {
 		if(str.length()==1)
-			return "00"+str;
+			return "0000"+str;
 		else if(str.length()==2)
+			return "000"+str;
+		else if(str.length()==3)
+			return "00"+str;
+		else if(str.length()==4)
 			return "0"+str;
 		else return str;
 	}

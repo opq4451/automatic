@@ -189,6 +189,11 @@
 	         success: function(data) {
 	        	 if(data == 'null'){
 	        		  flag = false;
+	                  if(data == 'null'){
+	                      alert('網路已斷線!')
+	                      window.location.href="/auto/index.html";
+	                  }
+
 	        		  return;
 	        	 }
 	        	 const json = JSON.parse(data);
@@ -268,22 +273,27 @@
 		    	log+= "， 參考前四期"+  phase_before4 + "("+code_before4+"), 下注號碼"+ rangeExist[bet_before4];
 				
 		    	log+= ",下注金額:"+betarray[betIndex[z]%betarray.length];
-		    	var c = betarray[betIndex[z]%betarray.length] == 0 ? '0' : computeCase(betIndex[z]%betarray.length);
+		    	var c = betarray[betIndex[z]%betarray.length] == 0 ? '0' : computeCase(betarray[betIndex[z]%betarray.length]);
 		    	var suc = betarray[betIndex[z]%betarray.length] > 1 ? "成功" : "失敗" ;
-		    	var betlog =  "第"+phase_now+"期"+ "，第"+z+"名，號碼("+rangeExist[bet_before4]+")"+ "，第"+c+"關"+"下注金額("+betarray[betIndex[z]%betarray.length]+")"+"("+suc+")";
+		    	var betlog =  "預測第"+ (phase_now+1) +"期"+ "，第"+z+"名，號碼("+rangeExist[bet_before4]+")"+ "，第"+c+"關"+"下注金額("+betarray[betIndex[z]%betarray.length]+")"+"("+suc+")";
 		    	
 		    	var betList =  rangeExist[bet_before4].toString().split(',');
 		    	
+		    	var writeFlag = false;
 		    	for(var b=0;b<betList.length;b++){
 		    		var code = betList[b];
 		    		var sn = i==9 ? 0 : (i+1);
 		    		if(betarray[betIndex[z]%betarray.length] > 0 ){
 		    			reallyBet(gid,sn,code,betarray[betIndex[z]%betarray.length]);
-		    			saveLog(document.getElementById("user").value+"bet",encodeURI(betlog)); //只寫下注成功的log
+		    			writeFlag = true;
+		    			
 		    		}
 		    			
 		    	}
-		    	
+		    	if(writeFlag)
+		    		saveLog(document.getElementById("user").value+"bet",encodeURI(betlog)); //只寫下注成功的log
+		    		
+		    		
 		    	saveLog(document.getElementById("user").value,encodeURI(log));
 		    	betIndex[z]++;
 			}
@@ -343,7 +353,20 @@
 	         success: function(data) {
 			        	 if(data == 'null'){
 			        		 period = 0 ;
-			        		 
+			        		 //解決跳號問題
+			        		 betIndex = {
+			      		 			'1' : 0,
+			      		 			'2' : 0,
+			      		 			'3' : 0,
+			      		 			'4' : 0,
+			      		 			'5' : 0,
+			      		 			'6' : 0,
+			      		 			'7' : 0,
+			      		 			'8' : 0,
+			      		 			'9' : 0,
+			      		 			'10' : 0,
+
+			      		 	};
 			        	 }else {
 			        		   period = data;
 				           	   $( "div.toPhase" ).text(data);
@@ -371,6 +394,30 @@
  		
  		return false;
  	}
+ 	
+ 	function checkTime(h){
+ 		
+ 		var flag = false;
+ 		if(h*1 > 8 && h*1 < 24) {
+ 			flag = true;
+ 		}else {
+ 			betIndex = {
+ 		 			'1' : 0,
+ 		 			'2' : 0,
+ 		 			'3' : 0,
+ 		 			'4' : 0,
+ 		 			'5' : 0,
+ 		 			'6' : 0,
+ 		 			'7' : 0,
+ 		 			'8' : 0,
+ 		 			'9' : 0,
+ 		 			'10' : 0,
+
+ 		 	};
+ 		}
+ 		return flag;
+ 	    
+ 	}
     function timeout() {
     	
    		
@@ -382,7 +429,9 @@
 			    if(nextPhase !=0 && winFlag){
 			    	var d = new Date();
 				    var n = d.getMinutes();
-			        if(checkMinute.indexOf(n) != -1 && checkWin()){ //bet time每5分鐘下注一次
+				    var h = d.getHours();
+				    
+			        if(checkMinute.indexOf(n) != -1 && checkWin() && checkTime(h)){ //bet time每5分鐘下注一次
 						
 						 const n = nextPhase - 1 ;
 						 const b = nextPhase - 5 ;
