@@ -395,6 +395,10 @@ public class Controller {
 	public String getRate(String latter){
 		if(latter.equals("A"))
 			return "9.918";
+		else if(latter.equals("B"))
+			return "9.818";
+		else if(latter.equals("C"))
+			return "9.718";
 		else 
 			return "9.818";
 	}

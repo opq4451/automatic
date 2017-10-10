@@ -261,12 +261,14 @@
 		    if(rangeExist[bet_b].indexOf(bet_n) != -1){ //預測到、關卡歸零
 		    	 
 		    
-		    	var log =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," +  " 前5期"+phase_before + "預測("+rangeExist[bet_b]+") ,有預測到，下一關，此注不下注" ;
+		    	var suclog =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," +  " 前5期"+phase_before + "預測("+rangeExist[bet_b]+") ,有預測到，下一關，此注不下注" ;
 	 
-		    	saveLog(document.getElementById("user").value,encodeURI(log));
+		    	saveLog(document.getElementById("user").value,encodeURI(suclog));
 
 		    	betIndex[z] = 0;
-			}else { //未預測到、投注
+			}
+
+		    	//未預測到、投注
 				//取前四期的號碼來預測投注
 			 
 		    	var log =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," + " 前5期"+phase_before + "預測("+rangeExist[bet_b]+") ,沒有預測到 ,下注" ;
@@ -296,7 +298,7 @@
 		    		
 		    	saveLog(document.getElementById("user").value,encodeURI(log));
 		    	betIndex[z]++;
-			}
+		 
 			
 			
 		}
