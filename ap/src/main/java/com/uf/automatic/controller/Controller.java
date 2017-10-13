@@ -96,12 +96,21 @@ public class Controller {
 				configProperty.load(fileIn);
 				String type = configProperty.getProperty("type");
 				String betlist = configProperty.getProperty("betlist");
+				String betlist2 = configProperty.getProperty("betlist2");
+				String betlist3 = configProperty.getProperty("betlist3");
+				String betlist4 = configProperty.getProperty("betlist4");
+				String betlist5 = configProperty.getProperty("betlist5");
 				String stoplose = configProperty.getProperty("stoplose");
 				String stopwin = configProperty.getProperty("stopwin");
 				String startstatus = configProperty.getProperty("startstatus");
 				
 				j.addProperty("type", type);
 				j.addProperty("betlist", betlist);
+				j.addProperty("betlist2", betlist2);
+				j.addProperty("betlist3", betlist3);
+				j.addProperty("betlist4", betlist4);
+				j.addProperty("betlist5", betlist5);
+
 				j.addProperty("stoplose", stoplose);
 				j.addProperty("stopwin", stopwin);
 				j.addProperty("startstatus", startstatus);
@@ -246,7 +255,11 @@ public class Controller {
 
 	@RequestMapping("/saveParam")
 	public String saveParam(@RequestParam("user") String user, @RequestParam("type") String type,
-			@RequestParam("betlist") String betlist, @RequestParam("stoplose") String stoplose,
+			@RequestParam("betlist") String betlist,
+			@RequestParam("betlist2") String betlist2,
+			@RequestParam("betlist3") String betlist3,
+			@RequestParam("betlist4") String betlist4,
+			@RequestParam("betlist5") String betlist5,@RequestParam("stoplose") String stoplose,
 			@RequestParam("stopwin") String stopwin,  @RequestParam("startstatus") String startstatus) {
 		FileInputStream fileIn = null;
 		FileOutputStream fileOut = null;
@@ -264,6 +277,10 @@ public class Controller {
 
 			configProperty.setProperty("type", type);
 			configProperty.setProperty("betlist", betlist);
+			configProperty.setProperty("betlist2", betlist2);
+			configProperty.setProperty("betlist3", betlist3);
+			configProperty.setProperty("betlist4", betlist4);
+			configProperty.setProperty("betlist5", betlist5);
 			configProperty.setProperty("stoplose", stoplose);
 			configProperty.setProperty("stopwin", stopwin);
 			configProperty.setProperty("startstatus", startstatus);

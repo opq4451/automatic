@@ -74,30 +74,30 @@
 			
 			  <tr>
 				<td rowspan="5">下注方式</td>
-					<td> <input type="checkbox" name="c1" value="1" onclick="return chk(this);">金星-公式1 </td> 
+					<td> <input type="checkbox" name="c1" id="c1" value="1" onclick="return chk(this);">金星-公式1 </td> 
 					<td>下注參數</td> 
 					<td> <input class="betlist" type ="text" size=35/></td> 
 		  </tr>
 		  <tr> 
- 		         <td> <input type="checkbox" name="c1" value="2" onclick="return chk(this);">金星-公式2</td> 
+ 		         <td> <input type="checkbox" name="c1" id="c2" value="2" onclick="return chk(this);">金星-公式2</td> 
 				 <td>下注參數</td> 
-					<td> <input class="betlist" type ="text" size=35/></td> 
+					<td> <input class="betlist2" type ="text" size=35/></td> 
 		  </tr>
 		  <tr>
-			<td> <input type="checkbox" name="c1" value="3" onclick="return chk(this);">金星-公式3</td>
+			<td> <input type="checkbox" name="c1" id="c3" value="3" onclick="return chk(this);">金星-公式3</td>
 			<td>下注參數</td> 
-					<td> <input class="betlist" type ="text" size=35/></td> 
+					<td> <input class="betlist3" type ="text" size=35/></td> 
 			 
 		  </tr>
 		  <tr> 
-			 <td> <input type="checkbox" name="c1" value="4" onclick="return chk(this);">金星-大小</td>
+			 <td> <input type="checkbox" name="c1" id="c4" value="4" onclick="return chk(this);">金星-大小</td>
 			 <td>下注參數</td> 
-					<td> <input class="betlist" type ="text" size=35/></td> 
+					<td> <input class="betlist4" type ="text" size=35/></td> 
 		  </tr>
 		   <tr>
-			<td> <input type="checkbox" name="c1" value="5" onclick="return chk(this);">金星-單雙</td>
+			<td> <input type="checkbox" name="c1" id="c5" value="5" onclick="return chk(this);">金星-單雙</td>
 			<td>下注參數</td> 
-					<td> <input class="betlist" type ="text" size=35/></td> 
+					<td> <input class="betlist5" type ="text" size=35/></td> 
 			 
 		  </tr> 
 		 
@@ -123,7 +123,7 @@
 		<div id="tabs">
 		  <ul>
 			<li><a href="#tabs-1">下注記錄</a></li>
-			<li><a href="#tabs-2">過關記錄</a></li>
+			  <!-- <li><a href="#tabs-2">過關記錄</a></li> -->
 			<li><a href="#tabs-3">資訊查詢</a></li>
 		  </ul>
 		  <div id="tabs-1">
@@ -132,9 +132,10 @@
 						  <div style="align: left;" class="logHtml">loading...</div>
 				 </table>
 		  </div>
+		  <!-- 
 		  <div id="tabs-2">
 			<p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
-		  </div>
+		  </div>  -->
 		  <div id="tabs-3">
 			    <iframe name="query_frame" id="query_frame" src="about:blank" frameborder="0" scrolling="yes" width="1333" height="768"></iframe>
 
@@ -153,7 +154,47 @@
     }
     
     input.checked = true;
+    saveParam();
+    
+    //clear
+    betIndex = {
+ 			'1' : 0,
+ 			'2' : 0,
+ 			'3' : 0,
+ 			'4' : 0,
+ 			'5' : 0,
+ 			'6' : 0,
+ 			'7' : 0,
+ 			'8' : 0,
+ 			'9' : 0,
+ 			'10' : 0,
+
+ 	};
+    betIndex2 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+	betIndex3 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+    betIndex4 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+    betIndex5 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
     return true;
+  }
+  
+  function getType(){
+	  let type = '';
+	  if(document.getElementById('c1').checked) { type+='1@'; }
+	  if(document.getElementById('c2').checked) { type+='2@'; }
+	  if(document.getElementById('c3').checked) { type+='3@'; }
+	  if(document.getElementById('c4').checked) { type+='4@'; }
+	  if(document.getElementById('c5').checked) { type+='5@'; }
+	  
+	  return type.substring(0,type.length-1);
+
+  }
+  
+  function setbetType(t){
+	  if(t.indexOf('1')!=-1){document.getElementById("c1").checked = true;}
+	  if(t.indexOf('2')!=-1){document.getElementById("c2").checked = true;}
+	  if(t.indexOf('3')!=-1){document.getElementById("c3").checked = true;}
+	  if(t.indexOf('4')!=-1){document.getElementById("c4").checked = true;}
+	  if(t.indexOf('5')!=-1){document.getElementById("c5").checked = true;}
   }
   </script>
   
@@ -169,7 +210,64 @@
     var todayWin = "";
     var ltype = "";
     var betarray = [];
-    var betIndex = {
+    var betarray2 = [];
+    var betarray3 = [];
+    var betarray4 = [];
+    var betarray5 = [];
+    
+    var betIndex  = {
+ 			'1' : 0,
+ 			'2' : 0,
+ 			'3' : 0,
+ 			'4' : 0,
+ 			'5' : 0,
+ 			'6' : 0,
+ 			'7' : 0,
+ 			'8' : 0,
+ 			'9' : 0,
+ 			'10' : 0,
+
+ 	};
+    var betIndex2  = {
+ 			'1' : 0,
+ 			'2' : 0,
+ 			'3' : 0,
+ 			'4' : 0,
+ 			'5' : 0,
+ 			'6' : 0,
+ 			'7' : 0,
+ 			'8' : 0,
+ 			'9' : 0,
+ 			'10' : 0,
+
+ 	};
+    var  betIndex3   = {
+ 			'1' : 0,
+ 			'2' : 0,
+ 			'3' : 0,
+ 			'4' : 0,
+ 			'5' : 0,
+ 			'6' : 0,
+ 			'7' : 0,
+ 			'8' : 0,
+ 			'9' : 0,
+ 			'10' : 0,
+
+ 	};
+    var  betIndex4   = {
+ 			'1' : 0,
+ 			'2' : 0,
+ 			'3' : 0,
+ 			'4' : 0,
+ 			'5' : 0,
+ 			'6' : 0,
+ 			'7' : 0,
+ 			'8' : 0,
+ 			'9' : 0,
+ 			'10' : 0,
+
+ 	};
+    var betIndex5  = {
  			'1' : 0,
  			'2' : 0,
  			'3' : 0,
@@ -210,7 +308,7 @@
 		document.getElementById("mid").value = mid;
 	 
 	 
-		var frameUrl = "http://203.160.143.110/www_new/index_new.php?username=yy8811&usertype=a&langx=zh-cn&mid=2520&uid=06ed9045ae5f4e27|1D8A966C470DF2B7&ltype=A,B,C,D&gtyp=MS";
+		var frameUrl = "http://203.160.143.110/www_new/index_new.php?username="+user+"&usertype=a&langx=zh-cn&mid=2520&uid="+uid+"";
 	     $('#query_frame').attr('src', frameUrl)
 
 		getWinFun();
@@ -221,11 +319,23 @@
 		 $( ".startstatus" ).change(function() {
 			 saveParam();
 		 });
-		  
-		 $( ".type" ).change(function() {
+		   
+		 /*$( ".type" ).change(function() {
+			 saveParam();
+		 });*/
+		 $( ".betlist" ).change(function() {
 			 saveParam();
 		 });
-		 $( ".betlist" ).change(function() {
+		 $( ".betlist2" ).change(function() {
+			 saveParam();
+		 });
+		 $( ".betlist3" ).change(function() {
+			 saveParam();
+		 });
+		 $( ".betlist4" ).change(function() {
+			 saveParam();
+		 });
+		 $( ".betlist5" ).change(function() {
 			 saveParam();
 		 });
 		 $( ".stoplose" ).change(function() {
@@ -270,8 +380,15 @@
 	        	 const json = JSON.parse(data);
 	        	  
 		    	 	$( "div.toDayWin" ).text(json.todayWin);
-		    	 	$( ".type" ).val(json.type);
+		    	 	let betType = json.type;
+		    	 	setbetType(betType);
+		    	 	
 		    	 	$( ".betlist" ).val(json.betlist) ;
+		    	 	$( ".betlist2" ).val(json.betlist2) ;
+		    	 	$( ".betlist3" ).val(json.betlist3) ;
+		    	 	$( ".betlist4" ).val(json.betlist4) ;
+		    	 	$( ".betlist5" ).val(json.betlist5) ;
+
 		    	 	$( ".stoplose" ).val(json.stoplose) ;
 		    	 	$( ".stopwin" ).val(json.stopwin);
 		    	 	$( ".startstatus" ).val(json.startstatus);
@@ -281,6 +398,11 @@
 		    	 	stopwin = json.stopwin;
 		    	 	todayWin = json.todayWin;
 		    	 	betarray = json.betlist.split(',');
+		    	 	betarray2 = json.betlist2.split(',');
+		    	 	betarray3 = json.betlist3.split(',');
+		    	 	betarray4 = json.betlist4.split(',');
+		    	 	betarray5 = json.betlist5.split(',');
+
 		    	 	ltype = json.ltype;
 	         	 } 
 	         	 
@@ -310,7 +432,7 @@
    	
    }
     
-	function compareByType1(phase_before,phase_now,phase_before4, gid){
+	function compareByType1(phase_before,phase_now,phase_before4, gid, bIndex, bArray){
 		   
 		const code_b = getCodeByPhase(phase_before); 
 		const code_n = getCodeByPhase(phase_now);
@@ -326,29 +448,29 @@
 			const bet_b = array_b[i];
 			const bet_n = array_n[i];
 			const bet_before4 = array_before4[i];
-
+ 
 		 	var d = getYYYYMMDDSS();
 			var z = i+1;
 		    if(rangeExist[bet_b].indexOf(bet_n) != -1){ //預測到、關卡歸零
 		    	 
 		    
-		    	var suclog =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," +  " 前5期"+phase_before + "預測("+rangeExist[bet_b]+") ,有預測到，下一關，此注不下注" ;
+		    	var suclog =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," +  " 預測期數 "+phase_before + "預測("+rangeExist[bet_b]+") ,有預測到，下一關，此注不下注" ;
 	 
 		    	saveLog(document.getElementById("user").value,encodeURI(suclog));
 
-		    	betIndex[z] = 0;
+		    	bIndex[z] = 0;
 			}
 
 		    	//未預測到、投注
 				//取前四期的號碼來預測投注
 			 
-		    	var log =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," + " 前5期"+phase_before + "預測("+rangeExist[bet_b]+") ,沒有預測到 ,下注" ;
-		    	log+= "， 參考前四期"+  phase_before4 + "("+code_before4+"), 下注號碼"+ rangeExist[bet_before4];
+		    	var log =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," + " 預測期數 "+phase_before + "預測("+rangeExist[bet_b]+") ,沒有預測到 ,下注" ;
+		    	log+= "， 參考期數"+  phase_before4 + "("+code_before4+"), 下注號碼"+ rangeExist[bet_before4];
 				
-		    	log+= ",下注金額:"+betarray[betIndex[z]%betarray.length];
-		    	var c = betarray[betIndex[z]%betarray.length] == 0 ? '0' : computeCase(betarray[betIndex[z]%betarray.length]);
-		    	var suc = betarray[betIndex[z]%betarray.length] > 1 ? "成功" : "失敗" ;
-		    	var betlog =  "預測第"+ (phase_now+1) +"期"+ "，第"+z+"名，號碼("+rangeExist[bet_before4]+")"+ "，第"+c+"關"+"下注金額("+betarray[betIndex[z]%betarray.length]+")"+"("+suc+")";
+		    	log+= ",下注金額:"+bArray[bIndex[z]%bArray.length];
+		    	var c = bArray[bIndex[z]%bArray.length] == 0 ? '0' : computeCase(bArray,bArray[bIndex[z]%bArray.length]);
+		    	var suc = bArray[bIndex[z]%bArray.length] > 1 ? "成功" : "失敗" ;
+		    	var betlog =  "預測第"+ (phase_now+1) +"期"+ "，第"+z+"名，號碼("+rangeExist[bet_before4]+")"+ "，第"+c+"關"+"下注金額("+bArray[bIndex[z]%bArray.length]+")"+"("+suc+")";
 		    	
 		    	var betList =  rangeExist[bet_before4].toString().split(',');
 		    	
@@ -356,8 +478,8 @@
 		    	for(var b=0;b<betList.length;b++){
 		    		var code = betList[b];
 		    		var sn = i==9 ? 0 : (i+1);
-		    		if(betarray[betIndex[z]%betarray.length] > 0 ){
-		    			reallyBet(gid,sn,code,betarray[betIndex[z]%betarray.length]);
+		    		if(bArray[bIndex[z]%bArray.length]  > 0 ){
+		    			reallyBet(gid,sn,code,bArray[bIndex[z]%bArray.length]);
 		    			writeFlag = true;
 		    			
 		    		}
@@ -368,18 +490,18 @@
 		    		
 		    		
 		    	saveLog(document.getElementById("user").value,encodeURI(log));
-		    	betIndex[z]++;
+		    	bIndex[z]++;
 		 
 			
 			
 		}
 		
 	}
-	function computeCase(betIndex){
-		var index = betarray.indexOf(betIndex);
+	function computeCase(f_barray,f_bIndex){
+		var index = f_barray.indexOf(f_bIndex);
 		var c = 0;
 		for(var i=0;i<index;i++){
-			if(betarray[i]>0){
+			if(f_barray[i]>0){
 				c++;
 			}
 		}
@@ -440,6 +562,10 @@
 			      		 			'10' : 0,
 
 			      		 	};
+			        		 	betIndex2 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+			      			betIndex3 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+			      			betIndex4 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+			      			betIndex5 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
 			        	 }else {
 			        		   period = data;
 				           	   $( "div.toPhase" ).text(data);
@@ -450,15 +576,26 @@
 		 return period*1  ;
 	}
  	function saveParam(){
- 		 
- 		if($( ".type" ).val() && $( ".betlist" ).val() && $( ".stoplose" ).val() && $( ".stopwin" ).val() && $( ".startstatus" ).val() ){
- 			const url =  u + "/saveParam?" + "user="+document.getElementById("user").value+"&type="+$( ".type" ).val()+
- 			"&betlist="+$( ".betlist" ).val()+"&stoplose="+$( ".stoplose" ).val()+"&stopwin="+$( ".stopwin" ).val()+"&startstatus="+$( ".startstatus" ).val()  ;
+ 		let type = getType();
+ 		let betParam = getBetListParam();
+ 		if($( ".stoplose" ).val() && $( ".stopwin" ).val() && $( ".startstatus" ).val() ){
+ 			const url =  u + "/saveParam?" + "user="+document.getElementById("user").value+"&type="+ type+
+ 			betParam
+ 			+"&stoplose="+$( ".stoplose" ).val()+"&stopwin="+$( ".stopwin" ).val()+"&startstatus="+$( ".startstatus" ).val()  ;
  			$.get(url, function( data ) {
 	    	 	 	alert("設定完成!")
 		 	}); 
  		}
  		
+ 	}
+ 	function getBetListParam(){
+ 		let p = "";
+ 		if($( ".betlist" ).val()){ p+= "&betlist="+$( ".betlist" ).val() ; } else {p+= "&betlist=0" ;}
+ 		if($( ".betlist2" ).val()){ p+= "&betlist2="+$( ".betlist2" ).val() ; }else {p+= "&betlist2=0" ;}
+ 		if($( ".betlist3" ).val()){ p+= "&betlist3="+$( ".betlist3" ).val() ; }else {p+= "&betlist3=0" ;}
+ 		if($( ".betlist4" ).val()){ p+= "&betlist4="+$( ".betlist4" ).val() ; }else {p+= "&betlist4=0" ;}
+ 		if($( ".betlist5" ).val()){ p+= "&betlist5="+$( ".betlist5" ).val() ; }else {p+= "&betlist5=0" ;}
+ 		return p;
  	}
  	
  	function checkWin(){
@@ -474,19 +611,12 @@
  		if(h*1 > 8 && h*1 < 24) {
  			flag = true;
  		}else {
- 			betIndex = {
- 		 			'1' : 0,
- 		 			'2' : 0,
- 		 			'3' : 0,
- 		 			'4' : 0,
- 		 			'5' : 0,
- 		 			'6' : 0,
- 		 			'7' : 0,
- 		 			'8' : 0,
- 		 			'9' : 0,
- 		 			'10' : 0,
+ 			betIndex = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+ 			betIndex2 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+ 			betIndex3 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+ 			betIndex4 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+ 			betIndex5 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
 
- 		 	};
  		}
  		return flag;
  	    
@@ -505,14 +635,7 @@
 				    var h = d.getHours();
 				    
 			        if(checkMinute.indexOf(n) != -1 && checkWin() && checkTime(h)){ //bet time每5分鐘下注一次
-						
-						 const n = nextPhase - 1 ;
-						 const b = nextPhase - 5 ;
-						 const fourTh = nextPhase - 4 ;
-						 const gid = nextPhase - 554432 ;
-						 if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
-						 	compareByType1(b,n,fourTh,gid);
-						 }
+						 let o = selectTypeToBet(nextPhase);  
 					 
 					}
 			    	
@@ -523,7 +646,43 @@
 	    }, 60000);
 	}
     
-    
+    function selectTypeToBet(nextPhase){
+    	  const n = nextPhase - 1 ;
+    	  const gid = nextPhase - 554432 ;
+    	  let obj = {} ; 
+    	 
+	    	  if(document.getElementById('c1').checked) { 
+	    		  obj.b = nextPhase - 5 ;
+	    		  obj.fourTh = nextPhase - 4 ;
+	    		  const b = obj.b ;
+			  const fourTh = obj.fourTh ;
+			  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
+				 	compareByType1(b,n,fourTh,gid,betIndex,betarray);
+			  }
+	    	  }
+		  if(document.getElementById('c2').checked) {
+			  obj.b = nextPhase - 6 ;
+			  obj.fourTh = nextPhase - 5 ; 
+			  const b = obj.b ;
+			  const fourTh = obj.fourTh ;
+			  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
+				  compareByType1(b,n,fourTh,gid,betIndex2,betarray2);
+			  }
+		  }
+		  
+	  	 if(document.getElementById('c3').checked) {
+		  obj.b = nextPhase - 7 ;
+		  obj.fourTh = nextPhase - 6 ;
+		  const b = obj.b ;
+		  const fourTh = obj.fourTh ;
+		  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
+			  compareByType1(b,n,fourTh,gid,betIndex3,betarray3);		  
+	 	  }
+	  
+		
+	    }
+	  	  return obj; 
+    }
     function clearLog(){
 	
     	 $.ajax({ url:  u + "/clearLog?user="+document.getElementById("user").value+"bet", 
