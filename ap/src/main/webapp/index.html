@@ -15,7 +15,7 @@
   </head>
  
 
-  <body>
+  <body onload="autoLogin()">
 
     <div class="container">
 
@@ -37,14 +37,15 @@
 </html>
 
 <script src="jquery.js" > </script>
+<script src="utils.js"> </script>
 <script>
 	 
 
 	$(document).ready(function(){
 		$( "#btn" ).click(function() {
-		    var user = document.getElementById("user").value;
- 			var pwd = document.getElementById("pwd").value;
-		    var url = 'http://localhost:9999/getUid?user='+user+'&pwd='+pwd ; 
+			let user = document.getElementById("user").value;
+		    let pwd = document.getElementById("pwd").value;
+		    let url = 'http://localhost:9999/getUid?user='+user+'&pwd='+pwd ; 
 	 
 		    $.get(url, function( data ) {
 			   
@@ -57,5 +58,24 @@
 
 	    
 	});
+	
+	function autoLogin(){
+		let query = window.location.search.substring(1);
+		let parsed_qs = parse_query_string(query);
+		let pwd = (parsed_qs.pwd) ;
+		let user= (parsed_qs.user); 
+		if(pwd && user){
+			let url = 'http://localhost:9999/getUid?user='+user+'&pwd='+pwd ; 
+			$.get(url, function( data ) {
+			   
+			  let uid = ( data.split('@')[0] );
+			  let mid = ( data.split('@')[1] );
+			  //alert("main.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid))
+			  window.location.href = "main1.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid);
+			});
+		}
+		
+	}
+	 
 
 </script>

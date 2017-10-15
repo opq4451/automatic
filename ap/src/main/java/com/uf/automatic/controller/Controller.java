@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeSet;
@@ -42,6 +43,8 @@ public class Controller {
     
 	int i = 0 ;
 	int bi = 0 ; 
+	int over_i = 0 ; 
+
 	@RequestMapping("/getUid")
 	public String getUid(@RequestParam("user") String user, @RequestParam("pwd") String pwd) {
 		String Step1 = "http://203.160.143.110/www_new/app/login/chk_data.php?active=newlogin&" + "username=" + user
@@ -340,6 +343,104 @@ public class Controller {
 		return "null";
 	}
 	
+	
+	@RequestMapping("/saveOverLog")
+	public String saveOverLog(@RequestParam("user") String user, @RequestParam("log") String log) {
+		FileInputStream fileIn = null;
+		FileOutputStream fileOut = null;
+
+		try {
+			Properties configProperty = new Properties() {
+                @Override
+                public synchronized Enumeration<Object> keys() {
+                    return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+                }
+            };
+			String path = System.getProperty("user.dir");
+			String hisFile = path + "/" + user + "_over_log.properties";
+			File file = new File(hisFile);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			fileIn = new FileInputStream(file);
+			configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
+   			String result = java.net.URLDecoder.decode(log, "UTF-8");
+  			 
+			configProperty.setProperty(log, "YES");
+
+			fileOut = new FileOutputStream(file);
+			configProperty.store(new OutputStreamWriter(fileOut, "UTF-8"), "sample properties");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+				fileIn.close();
+				fileOut.close();
+			} catch (Exception ex) {
+			}
+		}
+
+		return "null";
+	}
+	
+	
+	@RequestMapping("/checkOver")
+	public String checkOver(@RequestParam("user") String user,
+			@RequestParam("phase") String phase,
+			@RequestParam("code") String code) {
+		FileInputStream fileIn = null;
+		FileOutputStream fileOut = null;
+
+		try {
+			Properties configProperty = new Properties() {
+                @Override
+                public synchronized Enumeration<Object> keys() {
+                    return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+                }
+            };
+			String path = System.getProperty("user.dir");
+			String hisFile = path + "/" + user + "_over_log.properties";
+			File file = new File(hisFile);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			fileIn = new FileInputStream(file);
+			configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
+   			 
+			String c[] = code.split(",");
+			
+			JsonObject j = new JsonObject();
+			for(int i = 0 ;i <10 ;i++){
+				int sn = i+1 ;
+				if( i == 9) {
+					sn = 0 ;
+				}
+				String key = phase  + "@" + sn + "@" + c[i] ;
+				if(configProperty.getProperty(key) != null){
+					Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), "第"+phase + "期，第" + sn + "名，號碼(" + code + ") 已過關!");
+				 
+					j.addProperty(covertIntToLatter(sn), "Y");
+
+				}	
+			}
+			return j.toString();
+			 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+				fileIn.close();
+				fileOut.close();
+			} catch (Exception ex) {
+			}
+		}
+
+		return "null";
+	}
+	
 	@RequestMapping("/clearLog")
 	public String clearLog(@RequestParam("user") String user ) {
 		 
@@ -442,6 +543,22 @@ public class Controller {
 		else if(str.length()==4)
 			return "0"+str;
 		else return str;
+	}
+	
+	public String covertIntToLatter(int i) {
+		if(i==1) return "a";
+		if(i==2) return "b";
+		if(i==3) return "c";
+		if(i==4) return "d";
+		if(i==5) return "e";
+		if(i==6) return "f";
+		if(i==7) return "g";
+		if(i==8) return "h";
+		if(i==9) return "i";
+		if(i==0) return "j";
+
+		
+		return "";
 	}
 
 }

@@ -111,7 +111,7 @@
 					<td  colspan=3> <input class="stopwin" type ="text" size=15/> </td> 
 		  </tr>
 	 </table>
-	  
+	   
 	  
 	 
 	     
@@ -119,23 +119,27 @@
 	<input type="hidden" id="uid" />
 	
 	<input type="hidden" id="mid" />
+	<input type="hidden" id="pwd" />
+	
+	
 	
 		<div id="tabs">
 		  <ul>
 			<li><a href="#tabs-1">下注記錄</a></li>
-			  <!-- <li><a href="#tabs-2">過關記錄</a></li> -->
+		    <li><a href="#tabs-2">過關記錄</a></li> 
 			<li><a href="#tabs-3">資訊查詢</a></li>
 		  </ul>
 		  <div id="tabs-1">
-				<button onclick="clearLog()">清空記錄</button>
-				 <table>
-						  <div style="align: left;" class="logHtml">loading...</div>
-				 </table>
+				<div id="target">清空記錄</div>
+				<div   class="logHtml">loading...</div>
+				  
 		  </div>
-		  <!-- 
+		 
 		  <div id="tabs-2">
-			<p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
-		  </div>  -->
+					<div id="target2">清空記錄</div>
+				    <div   class="logOverHtml">loading...</div>
+					 	
+		 </div>	    
 		  <div id="tabs-3">
 			    <iframe name="query_frame" id="query_frame" src="about:blank" frameborder="0" scrolling="yes" width="1333" height="768"></iframe>
 
@@ -146,8 +150,8 @@
 </html>
 
 <script>
-  function chk(input)
-  {
+  function chk(input){
+
     for(var i=0;i<document.form1.c1.length;i++)
     {
       document.form1.c1[i].checked = false;
@@ -200,6 +204,7 @@
   
 <script src="jquery.js"> </script>
 <script src="utils.js"> </script>
+<script src="pro.js"> </script>
 <script src="jquery-ui-1.11.4/jquery-ui.js"> </script>
 <script>
 	 
@@ -295,7 +300,12 @@
  	};
     $(document).ready(function(){
 		 $( "#tabs" ).tabs();
-		  
+		 $( "#target" ).click(function() {
+			 clearLog();
+		 });
+		 $( "#target2" ).click(function() {
+			 clearOverLog();
+		 });
 		var query = window.location.search.substring(1);
 		var parsed_qs = parse_query_string(query);
 		var uid = (parsed_qs.uid) ;
@@ -306,14 +316,15 @@
 		document.getElementById("uid").value = uid;
 		document.getElementById("user").value = user;
 		document.getElementById("mid").value = mid;
+		document.getElementById("pwd").value = pwd;
+
 	 
-	 
-		var frameUrl = "http://203.160.143.110/www_new/index_new.php?username="+user+"&usertype=a&langx=zh-cn&mid=2520&uid="+uid+"";
-	     $('#query_frame').attr('src', frameUrl)
+		//var frameUrl = "http://203.160.143.110/www_new/index_new.php?username="+user+"&usertype=a&langx=zh-cn&mid=2520&uid="+uid+"";
+	    // $('#query_frame').attr('src', frameUrl)
 
 		getWinFun();
 		getlogHtml();
-	     
+		 
 	    //return;
 		
 		 $( ".startstatus" ).change(function() {
@@ -372,7 +383,7 @@
 	        		  flag = false;
 	                  if(data == 'null'){
 	                      alert('網路已斷線!')
-	                      window.location.href="/auto/index.html";
+	                      window.location.href='/auto/index.html?user='+document.getElementById("user").value+'&pwd='+document.getElementById("pwd").value ;
 	                  }
 
 	        		  return;
@@ -426,7 +437,23 @@
  
 	         	 } 
 	         	 
-	        });
+      });
+   	 
+   	 
+     url =  u + '/getPredictLog?user='+document.getElementById("user").value+"overLOGDIS";
+	   
+  	 $.ajax({ url:  url, 
+	         async: true,
+	         success: function(data) {
+	        	  
+	        	 const json = JSON.parse(data);
+	        	  
+		    	 	$( "div.logOverHtml" ).html(json.logHtml);
+		    	 	 
+
+	         	 } 
+	         	 
+     });
    	 
 	     
    	
@@ -474,6 +501,7 @@
 		    	
 		    	var betList =  rangeExist[bet_before4].toString().split(',');
 		    	
+		    	
 		    	var writeFlag = false;
 		    	for(var b=0;b<betList.length;b++){
 		    		var code = betList[b];
@@ -481,7 +509,9 @@
 		    		if(bArray[bIndex[z]%bArray.length]  > 0 ){
 		    			reallyBet(gid,sn,code,bArray[bIndex[z]%bArray.length]);
 		    			writeFlag = true;
-		    			
+		    			//處理過關的log
+		    			let overLog = (phase_now+1) + "@" + sn + "@" + code ; 
+		    			saveOverLog(document.getElementById("user").value,encodeURI(overLog));
 		    		}
 		    			
 		    	}
@@ -529,6 +559,16 @@
 	        });
 		
 	}
+	function saveOverLog(user,log){
+		 $.ajax({ url:  u + "/saveOverLog?user="+user +"&log="+log, 
+	         async: false,
+	         success: function(data) {
+	        	 
+	         	 }
+	        });
+		
+	}
+	
 	function getCodeByPhase(phase){ //取得號碼
 		 let code=""; 
 		 $.ajax({ url:  u + "/getCode?phase="+phase, 
@@ -562,7 +602,7 @@
 			      		 			'10' : 0,
 
 			      		 	};
-			        		 	betIndex2 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+			        	    betIndex2 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
 			      			betIndex3 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
 			      			betIndex4 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
 			      			betIndex5 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
@@ -602,6 +642,11 @@
  		if((stoplose*-1 < todayWin*1) && (todayWin*1 < stopwin*1) && ( $( ".startstatus" ).val() == '1'))
  			return true;
  		
+ 		if(!(stoplose*-1 < todayWin*1) || !(todayWin*1 < stopwin*1)){
+ 			$( ".startstatus" ).val(0) ;
+ 		}
+ 		
+ 		
  		return false;
  	}
  	
@@ -626,9 +671,10 @@
    		
 		
 	    setTimeout(function () {
-	    	        var winFlag = getWinFun();
-	    	        getlogHtml();
+    	        var winFlag = getWinFun();
+    	        getlogHtml();
 			    var nextPhase = getPhase();
+			    checkOver(nextPhase);
 			    if(nextPhase !=0 && winFlag){
 			    	var d = new Date();
 				    var n = d.getMinutes();
@@ -645,7 +691,43 @@
 	        timeout();
 	    }, 60000);
 	}
+    //檢查過關
+    function checkOver(nextPhase){
+    	let phase_now = nextPhase - 1 
+    	let code_n = getCodeByPhase(phase_now);
+    	let array  = code_n.split(',');
+    	if(array.length==0){
+    		clearIndex();
+			return;
+		} 
+	   	 $.ajax({ url:  u + "/checkOver?user="+document.getElementById("user").value+"&phase="+phase_now+"&code="+code_n, 
+	         async: false,
+	         success: function(data) {
+	        	 const json = JSON.parse(data);
+	        	 if(json.a){betIndex[1] = 0;betIndex2[1] = 0;betIndex3[1] = 0;betIndex4[1] = 0;betIndex5[1] = 0; }
+	        	 if(json.b){betIndex[2] = 0;betIndex2[2] = 0;betIndex3[2] = 0;betIndex4[2] = 0;betIndex5[2] = 0; }
+	        	 if(json.c){betIndex[3] = 0;betIndex2[3] = 0;betIndex3[3] = 0;betIndex4[3] = 0;betIndex5[3] = 0; }
+	        	 if(json.d){betIndex[4] = 0;betIndex2[4] = 0;betIndex3[4] = 0;betIndex4[4] = 0;betIndex5[4] = 0; }
+	        	 if(json.e){betIndex[5] = 0;betIndex2[5] = 0;betIndex3[5] = 0;betIndex4[5] = 0;betIndex5[5] = 0; }
+	        	 if(json.f){betIndex[6] = 0;betIndex2[6] = 0;betIndex3[6] = 0;betIndex4[6] = 0;betIndex5[6] = 0; }
+	        	 if(json.g){betIndex[7] = 0;betIndex2[7] = 0;betIndex3[7] = 0;betIndex4[7] = 0;betIndex5[7] = 0; }
+	        	 if(json.h){betIndex[8] = 0;betIndex2[8] = 0;betIndex3[8] = 0;betIndex4[8] = 0;betIndex5[8] = 0; }
+	        	 if(json.i){betIndex[9] = 0;betIndex2[9] = 0;betIndex3[9] = 0;betIndex4[9] = 0;betIndex5[9] = 0; }
+	        	 if(json.j){betIndex[10]= 0;betIndex2[10] = 0;betIndex3[10] = 0;betIndex4[10] = 0;betIndex5[10] = 0; }
+
+         	 }
+	        });
+    	
+    	
+    }
     
+    function clearIndex(){
+    		betIndex = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+			betIndex2 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+			betIndex3 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+			betIndex4 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+			betIndex5 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
+    }
     function selectTypeToBet(nextPhase){
     	  const n = nextPhase - 1 ;
     	  const gid = nextPhase - 554432 ;
@@ -677,10 +759,28 @@
 		  const fourTh = obj.fourTh ;
 		  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
 			  compareByType1(b,n,fourTh,gid,betIndex3,betarray3);		  
-	 	  }
-	  
-		
-	    }
+	 	  } 
+      	 }
+    	 if(document.getElementById('c4').checked) {
+			 
+			  obj.b = nextPhase - 6 ;
+			  obj.fourTh = nextPhase - 5 ; 
+			  const b = obj.b ;
+			  const fourTh = obj.fourTh ;
+			  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
+				  compareByType2(b,n,fourTh,gid,betIndex2,betarray2);
+			  }
+		  }
+		  
+		  if(document.getElementById('c5').checked) {
+			  obj.b = nextPhase - 6 ;
+			  obj.fourTh = nextPhase - 5 ; 
+			  const b = obj.b ;
+			  const fourTh = obj.fourTh ;
+			  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
+				  compareByType3(b,n,fourTh,gid,betIndex2,betarray2);
+			  }
+		  }
 	  	  return obj; 
     }
     function clearLog(){
@@ -688,39 +788,27 @@
     	 $.ajax({ url:  u + "/clearLog?user="+document.getElementById("user").value+"bet", 
 	         async: false,
 	         success: function(data) {
-	        	 $( "div.logHtml" ).html('');
+	        	 $( "div#logHtml" ).text('');
 	        	 alert("清空成功!");
 	         	 }
 	        });
- 		
+ 	 
  	}
     
-    function isNumber(n) {
-    	  return !isNaN(parseFloat(n)) && isFinite(n);
-    	}
- 	 
-	function parse_query_string(query) {
-		  var vars = query.split("&");
-		  var query_string = {};
-		  for (var i = 0; i < vars.length; i++) {
-		    var pair = vars[i].split("=");
-		    // If first entry with this name
-		    if (typeof query_string[pair[0]] === "undefined") {
-		      query_string[pair[0]] = decodeURIComponent(pair[1]);
-		      // If second entry with this name
-		    } else if (typeof query_string[pair[0]] === "string") {
-		      var arr = [query_string[pair[0]], decodeURIComponent(pair[1])];
-		      query_string[pair[0]] = arr;
-		      // If third or later entry with this name
-		    } else {
-		      query_string[pair[0]].push(decodeURIComponent(pair[1]));
-		    }
-		  }
-		  return query_string;
+    function clearOverLog(){
+    	
+   	 $.ajax({ url:  u + "/clearLog?user="+document.getElementById("user").value+"overLOGDIS", 
+	         async: false,
+	         success: function(data) {
+	        	 $( "div#logOverHtml" ).text('');
+	        	 alert("清空成功!");
+	         	 }
+	        });
+		
 	}
+    
+   
 	
-	function logout(){
-		 window.location.href="/auto/index.html";
-	}
+	
 
 </script>
