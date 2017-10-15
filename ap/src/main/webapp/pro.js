@@ -79,8 +79,21 @@ function compareByType2(phase_before,phase_now,phase_before4, gid, bIndex, bArra
 		    		}
 		    			
 		    	}
-		    	if(writeFlag)
+		    	
+		    	
+		    	
+		    	
+		    	if(writeFlag){
+		    		if(rangeBigExist[bet_before4] =='b'){ //下大
+			    		reallyOtherBet(gid,'1OUo1',bArray[bIndex[z]%bArray.length]);
+			    	}
+			    	
+		    		if(rangeBigExist[bet_before4] =='s'){ //下小
+		    			reallyOtherBet(gid,'1OUu1',bArray[bIndex[z]%bArray.length]);
+			    	}
 		    		saveLog(document.getElementById("user").value+"bet",encodeURI(betlog)); //只寫下注成功的log
+		    	}
+		    		
 		    		
 		    		
 		    	saveLog(document.getElementById("user").value,encodeURI(log));
@@ -149,8 +162,17 @@ function compareByType3(phase_before,phase_now,phase_before4, gid, bIndex, bArra
 	    		}
 	    			
 	    	}
-	    	if(writeFlag)
+	    	if(writeFlag){
+	    		if(rangeSingExist[bet_before4] =='sin'){ //下單
+		    		reallyOtherBet(gid,'1SCs1',bArray[bIndex[z]%bArray.length]);
+		    	}
+		    	
+	    		if(rangeSingExist[bet_before4] =='dou'){ //下雙
+	    			reallyOtherBet(gid,'1SCc1',bArray[bIndex[z]%bArray.length]);
+		    	}
 	    		saveLog(document.getElementById("user").value+"bet",encodeURI(betlog)); //只寫下注成功的log
+	    	}
+	    		
 	    		
 	    		
 	    	saveLog(document.getElementById("user").value,encodeURI(log));
@@ -159,5 +181,17 @@ function compareByType3(phase_before,phase_now,phase_before4, gid, bIndex, bArra
 		
 		
 	}
+	
+}
+
+
+function reallyOtherBet(gid,betstr,amount){
+	$.ajax({ url:  u + "/betBS?user="+document.getElementById("user").value +"&gid="+gid +"&uid="+encodeURI(document.getElementById("uid").value)+"&mid="+ document.getElementById("mid").value+
+			"&betStr="+betstr+"&amount="+amount+"&ltype="+ltype,  
+     async: false,
+     success: function(data) {
+    	 
+     	 }
+    });
 	
 }

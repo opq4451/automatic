@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -75,15 +76,19 @@ public class Controller {
 			String ret = Utils.httpClientGet(url + parameter);
 			System.out.println(ret);
 			System.out.println("*****************");
-
+			DecimalFormat df = new DecimalFormat("##.00");
+			
 			JsonParser parser = new JsonParser();
 			JsonObject o = parser.parse(ret).getAsJsonObject();
 			JsonObject MemAry = o.getAsJsonObject("MemAry");
 			String todayWin = MemAry.get("todayWin").toString();
 			String ltype = MemAry.get("ltype").toString();
+			String cash = MemAry.get("cash").toString();
 
+			
 			JsonObject j = new JsonObject();
-			j.addProperty("todayWin", todayWin);
+			j.addProperty("todayWin",  Double.parseDouble(df.format(Double.valueOf(todayWin))));
+			j.addProperty("cash", Double.parseDouble(df.format(Double.valueOf(cash))));
 			j.addProperty("ltype", ltype.substring(1, 2));
 
 			FileInputStream fileIn = null;
@@ -222,7 +227,12 @@ public class Controller {
 			//JsonObject data = result.getAsJsonObject("period");
 
 			String drawIssue = result.get("period").toString();
-			return drawIssue;
+			if(drawIssue !=null && !drawIssue.equals("")){
+				return drawIssue;
+			}else {
+				return getOtherPhase();
+			}
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -232,6 +242,21 @@ public class Controller {
 		}
 		return "null";
 
+	}
+	
+	public String getOtherPhase() throws Exception{
+		String url = "http://api.1680210.com/pks/getLotteryPksInfo.do?issue=&lotCode=10001";
+		String ret = Utils.httpClientGet(url);
+		// 发送GET,并返回一个HttpResponse对象，相对于POST，省去了添加NameValuePair数组作参数
+
+		JsonParser parser = new JsonParser();
+		JsonObject o = parser.parse(ret).getAsJsonObject();
+		JsonObject result = o.getAsJsonObject("result");
+
+		JsonObject data = result.getAsJsonObject("data");
+
+		String drawIssue = data.get("drawIssue").toString();
+		return drawIssue;
 	}
 
 	@RequestMapping("/getCode")
@@ -510,6 +535,50 @@ public class Controller {
 		return "";
 	}
 	
+	
+	@RequestMapping("/betBS")
+	public String betBS(@RequestParam("user") String user, @RequestParam("uid") String uid, @RequestParam("mid") String mid, @RequestParam("gid") String gid,
+			@RequestParam("betStr") String betStr,@RequestParam("amount") String amount
+			,@RequestParam("ltype") String ltype
+			) {
+		//betStr 1OUo1
+		long unixTimestamp = Instant.now().getEpochSecond();
+        String timeStampe = Long.toString(unixTimestamp)+ getRandom()  ;
+        String rate = getBSRate(ltype);
+        
+		String url = "http://203.160.143.110/www_new/app/CA/CA_bet.php?" ; 
+	    String parameter =  "smstime=" + timeStampe + ""
+				+ "&allms=1117" + "&uid=" +  convertUid(uid)  + "&langx=zh-cn&betStr="+betStr+","+ltype+",,"+rate+","+amount+",1,"+amount+"" + "&gid=" + gid + ""
+				+ "&mid="+mid+"&gtype=CA&active=bet&usertype=a&ltype="+ltype+"&username="+user+"" + "&timestamp=" + timeStampe + "";
+		int phase = 554432 + Integer.parseInt(gid) ; 
+	    try {
+	    	//url += URLEncoder.encode(prameter, "UTF-8");
+	    	 
+			HttpGet httpget = new HttpGet(url + parameter);
+			System.out.println(url + parameter);
+			//httpget.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
+			// 建立HttpPost对象
+			HttpResponse response = new DefaultHttpClient().execute(httpget);
+			// 发送GET,并返回一个HttpResponse对象，相对于POST，省去了添加NameValuePair数组作参数
+			if (response.getStatusLine().getStatusCode() == 200) {// 如果状态码为200,就是正常返回
+				String ret = EntityUtils.toString(response.getEntity());
+				bi++;
+			 
+				Utils.WritePropertiesFile(user+"bet", fillZero(Integer.toString(bi)), "第"+phase + "期，" + getBSNAME(betStr) + "名，，金額(" + amount + ") @" + ret);
+ 
+				return ret;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+
+		}
+
+		return "";
+	}
+	
 	public String getRate(String latter){
 		if(latter.equals("A"))
 			return "9.918";
@@ -518,8 +587,31 @@ public class Controller {
 		else if(latter.equals("C"))
 			return "9.718";
 		else 
-			return "9.818";
+			return "9.618";
 	}
+	
+	public String getBSRate(String latter){
+		if(latter.equals("A"))
+			return "1.985";
+		else if(latter.equals("B"))
+			return "1.965";
+		else if(latter.equals("C"))
+			return "1.945";
+		else 
+			return "1.925";
+	}
+	
+	public String getBSNAME(String betstr){
+		if(betstr.equals("1OUo1"))
+			return "大";
+		else if(betstr.equals("1OUu1"))
+			return "小";
+		else if(betstr.equals("1SCs1"))
+			return "單號";
+		else 
+			return "雙號";
+	}
+	
 	public String getRandom() {
 		
 		int r = (int)(Math.random()*998);

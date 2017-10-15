@@ -47,6 +47,14 @@
 					 <div  class="toDayWin">loading...</div>
 			</td>
 		</tr>
+		<tr>
+			<td>
+					可用額度
+			</td>
+			<td>
+					 <div  class="cash">loading...</div>
+			</td>
+		</tr>
 		
 		<tr style="display:none">
 			<td>
@@ -127,7 +135,7 @@
 		  <ul>
 			<li><a href="#tabs-1">下注記錄</a></li>
 		    <li><a href="#tabs-2">過關記錄</a></li> 
-			<li><a href="#tabs-3">資訊查詢</a></li>
+			<!-- <li><a href="#tabs-3">資訊查詢</a></li> -->
 		  </ul>
 		  <div id="tabs-1">
 				<div id="target">清空記錄</div>
@@ -140,10 +148,10 @@
 				    <div   class="logOverHtml">loading...</div>
 					 	
 		 </div>	    
-		  <div id="tabs-3">
+		 <!-- <div id="tabs-3">
 			    <iframe name="query_frame" id="query_frame" src="about:blank" frameborder="0" scrolling="yes" width="1333" height="768"></iframe>
 
-		  </div>
+		  </div> -->
 		</div>
  </form>
 </body>
@@ -213,6 +221,7 @@
     var stoplose = "";
     var stopwin = "";
     var todayWin = "";
+    var cash = ""; 
     var ltype = "";
     var betarray = [];
     var betarray2 = [];
@@ -391,6 +400,7 @@
 	        	 const json = JSON.parse(data);
 	        	  
 		    	 	$( "div.toDayWin" ).text(json.todayWin);
+		    	 	$( "div.cash" ).text(json.cash);
 		    	 	let betType = json.type;
 		    	 	setbetType(betType);
 		    	 	
@@ -408,6 +418,7 @@
 		    	 	stoplose = json.stoplose;
 		    	 	stopwin = json.stopwin;
 		    	 	todayWin = json.todayWin;
+		    	 	cash = json.cash;
 		    	 	betarray = json.betlist.split(',');
 		    	 	betarray2 = json.betlist2.split(',');
 		    	 	betarray3 = json.betlist3.split(',');
@@ -671,22 +682,24 @@
    		
 		
 	    setTimeout(function () {
-    	        var winFlag = getWinFun();
-    	        getlogHtml();
-			    var nextPhase = getPhase();
-			    checkOver(nextPhase);
-			    if(nextPhase !=0 && winFlag){
+    	        var winFlag = getWinFun(); 
+    	        var nextPhase = "";
+			    if(winFlag){
 			    	var d = new Date();
 				    var n = d.getMinutes();
 				    var h = d.getHours();
 				    
 			        if(checkMinute.indexOf(n) != -1 && checkWin() && checkTime(h)){ //bet time每5分鐘下注一次
-						 let o = selectTypeToBet(nextPhase);  
+			        	nextPhase = getPhase(); 
+			        	let o = selectTypeToBet(nextPhase);  
 					 
 					}
 			    	
 			    }
-	   	 	    
+			    if(nextPhase){
+			    	checkOver(nextPhase);
+			    }
+			    getlogHtml();
 		        
 	        timeout();
 	    }, 60000);
@@ -784,11 +797,11 @@
 	  	  return obj; 
     }
     function clearLog(){
-	
+    	
     	 $.ajax({ url:  u + "/clearLog?user="+document.getElementById("user").value+"bet", 
 	         async: false,
 	         success: function(data) {
-	        	 $( "div#logHtml" ).text('');
+	        	 $( "div.logHtml" ).html('');
 	        	 alert("清空成功!");
 	         	 }
 	        });
@@ -800,7 +813,7 @@
    	 $.ajax({ url:  u + "/clearLog?user="+document.getElementById("user").value+"overLOGDIS", 
 	         async: false,
 	         success: function(data) {
-	        	 $( "div#logOverHtml" ).text('');
+	        	 $( "div.logOverHtml" ).html('');
 	        	 alert("清空成功!");
 	         	 }
 	        });
