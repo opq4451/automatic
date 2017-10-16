@@ -84,11 +84,16 @@ public class Controller {
 			String todayWin = MemAry.get("todayWin").toString();
 			String ltype = MemAry.get("ltype").toString();
 			String cash = MemAry.get("cash").toString();
+			String maxcredit = MemAry.get("maxcredit").toString();
+			String maxcash = MemAry.get("maxcash").toString();
 
 			
 			JsonObject j = new JsonObject();
 			j.addProperty("todayWin",  Double.parseDouble(df.format(Double.valueOf(todayWin))));
 			j.addProperty("cash", Double.parseDouble(df.format(Double.valueOf(cash))));
+			j.addProperty("maxcredit", Double.parseDouble(df.format(Double.valueOf(maxcredit))));
+			j.addProperty("maxcash", Double.parseDouble(df.format(Double.valueOf(maxcash))));
+
 			j.addProperty("ltype", ltype.substring(1, 2));
 
 			FileInputStream fileIn = null;
@@ -443,6 +448,7 @@ public class Controller {
 				}
 				String key = phase  + "@" + sn + "@" + c[i] ;
 				if(configProperty.getProperty(key) != null){
+					over_i++;
 					Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), "第"+phase + "期，第" + sn + "名，號碼(" + code + ") 已過關!");
 				 
 					j.addProperty(covertIntToLatter(sn), "Y");
@@ -577,6 +583,88 @@ public class Controller {
 		}
 
 		return "";
+	}
+	
+	
+	
+	
+	@RequestMapping("/getHistory")
+	public String getHistory() {
+		 
+		 
+		try {
+			  
+			JsonObject j = new JsonObject();
+		 
+
+			FileInputStream fileIn = null;
+			try {
+				Properties configProperty = new OrderedProperties();
+				String path = System.getProperty("user.dir");
+				String hisFile = path + "/history.properties";
+				File file = new File(hisFile);
+				if(!file.exists())
+					file.createNewFile();
+				fileIn = new FileInputStream(file);
+				configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
+				
+				//String logHtml="";
+				StringBuilder logHtml = new StringBuilder();
+//				for (Map.Entry<Object, Object> e : configProperty.entrySet()) {
+//					  String key = (String) e.getKey();
+//					  String value = (String) e.getValue();
+//					  System.out.println(value);
+//					  logHtml.insert(0, "<tr><td style=\"border: 1px solid black\">"+value+"</td></tr>");
+//					  //logHtml+="<tr><td style=\"border: 1px solid black\">"+value+"</td></tr>";
+//				}
+				for (Enumeration e = configProperty.propertyNames(); e.hasMoreElements();) { 
+					  String key = e.nextElement().toString();
+					  String v = configProperty.getProperty(key) ; 
+					  String array[] = v.split(",");
+					  
+					  String temp="<tr><td style=\\\"border: 1px solid black\\\"> "+key+"</td>";
+					  for(int i=0;i<10;i++) {
+						  if(Integer.parseInt(array[i])==1)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#FFFF00\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==2)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#0000FF\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==3)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#F0FFFF\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==4)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#D2691E\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==5)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#00FFFF\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==6)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#8A2BE2\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==7)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#FFF8DC\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==8)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#DC143C\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==9)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#A52A2A\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==10)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#7FFF00\">"+array[i]+"</td>";
+
+					  }
+					  temp+="</tr>";
+					  
+					  logHtml.insert(0, temp);
+				}
+				
+				String title = "<tr><td style=\"border: 1px solid black\">開獎期別</td><td style=\"border: 1px solid black\">冠軍</td><td style=\"border: 1px solid black\">亞軍</td><td style=\"border: 1px solid black\">季軍</td>"
+						+ "<td style=\"border: 1px solid black\">第4名</td><td style=\"border: 1px solid black\">第5名</td><td style=\"border: 1px solid black\">第6名</td>"
+						+ "<td style=\"border: 1px solid black\">第7名</td><td style=\"border: 1px solid black\">第8名</td><td style=\"border: 1px solid black\">第9名</td>"
+						+ "<td style=\"border: 1px solid black\">第10名</td>"
+						+ "</tr>";
+				  
+				 j.addProperty("logHtml", "<table style=\"border-collapse: collapse;\">"+title+logHtml+"</table>");
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+
+				try {
+					fileIn.close();
+				} catch (Exception ex) {
+				}
+			}
+
+			return j.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "null";
 	}
 	
 	public String getRate(String latter){

@@ -20,7 +20,11 @@
 		table, th, td {
 			border: 1px solid black;
 			border-collapse: collapse;
+			font-size: 8px;
 		}
+		
+		 
+		 
 		 
 </style>
 </head>
@@ -32,93 +36,122 @@
 <form name="form1">
 	 <table>
 		<tr>
-			<td>
-					<button onclick="logout()">登出</button> 
-			</td>
-			<td>
-					帳號: <input type="text" id="user" readonly />
-			</td>
-		</tr>
-		<tr>
-			<td>
+			<td nowrap>
 					今日輸贏 
 			</td>
 			<td>
 					 <div  class="toDayWin">loading...</div>
 			</td>
-		</tr>
-		<tr>
 			<td>
-					可用額度
+					帳號  
+			</td>
+			<td colspan=3>
+				 <input type="text" id="user" readonly />
+			</td>
+			
+	      		    <td rowspan="5">下注方式</td>
+	
+					<td> <input type="checkbox" name="c1" id="c1" value="1" onclick="return chk(this);">金星-公式1 </td> 
+					<td>下注參數</td> 
+					<td> <input class="betlist" type ="text" size=35/></td> 
+        </tr>
+	 
+		<tr>
+		    <td>
+					點數
+			</td>
+			<td>
+					 <div  class="maxcredit">loading...</div>
+			</td>
+			<td>
+					已用點數
+			</td>
+			<td>
+					 <div  class="maxcash">loading...</div>
+			</td>
+			<td>
+					浮動點數
 			</td>
 			<td>
 					 <div  class="cash">loading...</div>
 			</td>
+			        <td> <input type="checkbox" name="c1" id="c2" value="2" onclick="return chk(this);">金星-公式2</td> 
+				    <td>下注參數</td> 
+					<td> <input class="betlist2" type ="text" size=35/></td> 
 		</tr>
 		
-		<tr style="display:none">
+		<tr  >
 			<td>
-					下次期數 
+					盤口目前期別 
 			</td>
-			<td>
+			<td colspan=5>
 					 <div  class="toPhase">2</div>
 			</td>
+			
+			<td nowrap> <input type="checkbox" name="c1" id="c3" value="3" onclick="return chk(this);">金星-公式3</td>
+			<td nowrap>下注參數</td> 
+					<td> <input class="betlist3" type ="text" size=35/></td> 
 		</tr>
-			<tr>
+		<tr  >
 			<td>
-					程式啟動: 
+					盤口開獎期別
 			</td>
 			<td>
+					 <div  class="toNowPhase">loading...</div>
+			</td>
+			<td >
+					開獎號碼
+			</td>
+			<td colspan=3>
+					 <div  class="nowCode">loading...</div>
+			</td>
+			
+			
+			 <td nowrap> <input type="checkbox" name="c1" id="c4" value="4" onclick="return chk(this);">金星-大小</td>
+			 <td nowrap>下注參數</td> 
+			 <td> <input class="betlist4" type ="text" size=35/></td> 
+		</tr>
+		
+		<tr  >
+			<td>
+					距截止下注時間
+			</td>
+			<td colspan=5>
+					 <div  class="nextBetTime">loading...</div>
+			</td>
+			 <td nowrap> <input type="checkbox" name="c1" id="c5" value="5" onclick="return chk(this);">金星-單雙</td>
+			<td nowrap>下注參數</td> 
+					<td> <input class="betlist5" type ="text" size=35/></td> 
+		</tr>
+		
+		
+			<tr>
+			<td>
+					程式啟動 
+			</td>
+			<td   >
 					       <select class="startstatus">
 						  <option value="0">停用 </option>
 						  <option value="1">啟用 </option> 
 						</select> 
 			</td>
-		</tr>
-	 </table>
-	  
-	  <h3>下注設定</h3>
-	  <table>
 			
-			  <tr>
-				<td rowspan="5">下注方式</td>
-					<td> <input type="checkbox" name="c1" id="c1" value="1" onclick="return chk(this);">金星-公式1 </td> 
-					<td>下注參數</td> 
-					<td> <input class="betlist" type ="text" size=35/></td> 
-		  </tr>
-		  <tr> 
- 		         <td> <input type="checkbox" name="c1" id="c2" value="2" onclick="return chk(this);">金星-公式2</td> 
-				 <td>下注參數</td> 
-					<td> <input class="betlist2" type ="text" size=35/></td> 
-		  </tr>
-		  <tr>
-			<td> <input type="checkbox" name="c1" id="c3" value="3" onclick="return chk(this);">金星-公式3</td>
-			<td>下注參數</td> 
-					<td> <input class="betlist3" type ="text" size=35/></td> 
-			 
-		  </tr>
-		  <tr> 
-			 <td> <input type="checkbox" name="c1" id="c4" value="4" onclick="return chk(this);">金星-大小</td>
-			 <td>下注參數</td> 
-					<td> <input class="betlist4" type ="text" size=35/></td> 
-		  </tr>
-		   <tr>
-			<td> <input type="checkbox" name="c1" id="c5" value="5" onclick="return chk(this);">金星-單雙</td>
-			<td>下注參數</td> 
-					<td> <input class="betlist5" type ="text" size=35/></td> 
-			 
-		  </tr> 
-		 
-		    <tr>
-				<td >停損: </td>
-					<td colspan=3> <input class="stoplose" type ="text" size=15/> </td> 
-					 
-		  </tr>
-		  <tr> 
- 		       <td >停利: </td>
-					<td  colspan=3> <input class="stopwin" type ="text" size=15/> </td> 
-		  </tr>
-	 </table>
+			<td colspan=2 >
+				<div id="connectURL">連結尚銀</div>	  
+			</td>
+			<td  >
+				使用期限  
+			</td>
+			<td  >
+				<div id="extendtime">loading.</div>	  
+			</td>
+			
+			<td >停損: </td>
+					<td  > <input class="stoplose" type ="text" size=15/> </td> 
+			 <td >停利: </td>
+					<td  colspan=12> <input class="stopwin" type ="text" size=15/> </td> 
+		</tr>
+	 </table> 
 	   
 	  
 	 
@@ -130,6 +163,9 @@
 	<input type="hidden" id="pwd" />
 	
 	
+	
+	<h3>歷史記錄</h3>
+	<div class="historyHtml"></div>
 	
 		<div id="tabs">
 		  <ul>
@@ -222,6 +258,8 @@
     var stopwin = "";
     var todayWin = "";
     var cash = ""; 
+    var maxcash = ""; 
+    var maxcredit = ""; 
     var ltype = "";
     var betarray = [];
     var betarray2 = [];
@@ -308,6 +346,22 @@
 
  	};
     $(document).ready(function(){
+    
+    		let url =  u + '/getHistory';
+		  
+      	 $.ajax({ url:  url, 
+   	         async: true,
+   	         success: function(data) {
+   	        	  
+   	        	    const json = JSON.parse(data);
+   	        	  
+   		    	 	$( "div.historyHtml" ).html(json.logHtml);
+   		    	 	 
+    
+   	         	 } 
+   	         	 
+         });
+      	 
 		 $( "#tabs" ).tabs();
 		 $( "#target" ).click(function() {
 			 clearLog();
@@ -315,6 +369,12 @@
 		 $( "#target2" ).click(function() {
 			 clearOverLog();
 		 });
+		 
+		 $( "#connectURL" ).click(function() {
+			 connectURL();
+		 });
+		 
+		 
 		var query = window.location.search.substring(1);
 		var parsed_qs = parse_query_string(query);
 		var uid = (parsed_qs.uid) ;
@@ -367,7 +427,7 @@
 		  
 		 
 		 timeout();
-		 
+		 getHistoryTimeout();
 	});
 	
     function pad2(n) { return n < 10 ? '0' + n : n }
@@ -401,6 +461,9 @@
 	        	  
 		    	 	$( "div.toDayWin" ).text(json.todayWin);
 		    	 	$( "div.cash" ).text(json.cash);
+		    	 	$( "div.maxcash" ).text(json.maxcash);
+		    	 	$( "div.maxcredit" ).text(json.maxcredit);
+
 		    	 	let betType = json.type;
 		    	 	setbetType(betType);
 		    	 	
@@ -619,7 +682,7 @@
 			      			betIndex5 = { '1' : 0, '2' : 0, '3' : 0, '4' : 0, '5' : 0, '6' : 0, '7' : 0, '8' : 0, '9' : 0, 	'10' : 0, };
 			        	 }else {
 			        		   period = data;
-				           	   $( "div.toPhase" ).text(data);
+			           	   $( "div.toPhase" ).text(data);
 			        	 }
 	              
 	         	 }
@@ -704,6 +767,33 @@
 	        timeout();
 	    }, 60000);
 	}
+    
+	function getHistoryTimeout() {
+    	
+   		
+		
+	    setTimeout(function () {
+    	        
+		    	 	let url =  u + '/getHistory';
+				   
+		       	 $.ajax({ url:  url, 
+		    	         async: true,
+		    	         success: function(data) {
+		    	        	  
+		    	        	    const json = JSON.parse(data);
+		    	        	  
+		    		    	 	$( "div.historyHtml" ).html(json.logHtml);
+		    		    	 	 
+		     
+		    	         	 } 
+		    	         	 
+		          });
+		        
+			    getHistoryTimeout();
+	    }, 60000);
+	}
+    
+    
     //檢查過關
     function checkOver(nextPhase){
     	let phase_now = nextPhase - 1 

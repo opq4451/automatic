@@ -195,3 +195,12 @@ function reallyOtherBet(gid,betstr,amount){
     });
 	
 }
+
+function connectURL(){
+	var frameUrl = "http://203.160.143.110/www_new/index_new.php?username="+user+"&usertype=a&langx=zh-cn&mid=2520&uid="+uid+"";
+	 
+	window.open(
+			frameUrl,
+			  '_blank' // <- This is what makes it open in a new window.
+			);
+}
