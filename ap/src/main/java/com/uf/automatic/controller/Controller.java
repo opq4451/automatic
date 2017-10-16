@@ -84,15 +84,15 @@ public class Controller {
 			String todayWin = MemAry.get("todayWin").toString();
 			String ltype = MemAry.get("ltype").toString();
 			String cash = MemAry.get("cash").toString();
-			String maxcredit = MemAry.get("maxcredit").toString();
-			String maxcash = MemAry.get("maxcash").toString();
+			String maxcredit = MemAry.get("maxcredit").toString().substring(1, MemAry.get("maxcredit").toString().length()-1);
+			String useBet = MemAry.get("useBet").toString() ;
 
 			
 			JsonObject j = new JsonObject();
 			j.addProperty("todayWin",  Double.parseDouble(df.format(Double.valueOf(todayWin))));
 			j.addProperty("cash", Double.parseDouble(df.format(Double.valueOf(cash))));
 			j.addProperty("maxcredit", Double.parseDouble(df.format(Double.valueOf(maxcredit))));
-			j.addProperty("maxcash", Double.parseDouble(df.format(Double.valueOf(maxcash))));
+			j.addProperty("useBet", Double.parseDouble(df.format(Double.valueOf(useBet))));
 
 			j.addProperty("ltype", ltype.substring(1, 2));
 
@@ -624,16 +624,16 @@ public class Controller {
 					  
 					  String temp="<tr><td style=\\\"border: 1px solid black\\\"> "+key+"</td>";
 					  for(int i=0;i<10;i++) {
-						  if(Integer.parseInt(array[i])==1)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#FFFF00\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==2)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#0000FF\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==3)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#F0FFFF\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==4)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#D2691E\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==5)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#00FFFF\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==6)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#8A2BE2\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==7)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#FFF8DC\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==8)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#DC143C\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==9)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#A52A2A\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==10)temp+="<td align=\"center\" style=\"border: 1px solid black;background-color:#7FFF00\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==1)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#FFFF00\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==2)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#0000FF\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==3)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#F0FFFF\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==4)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#D2691E\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==5)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#00FFFF\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==6)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#8A2BE2\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==7)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#FFF8DC\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==8)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#DC143C\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==9)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#A52A2A\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==10)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#7FFF00\">"+array[i]+"</td>";
 
 					  }
 					  temp+="</tr>";
@@ -689,12 +689,14 @@ public class Controller {
 			return "1.925";
 	}
 	
-	public String getBSNAME(String betstr){
-		if(betstr.equals("1OUo1"))
+	public String getBSNAME(String b){
+		
+		String betstr = b.substring(1,b.length());
+		if(betstr.equals("OUo1"))
 			return "大";
-		else if(betstr.equals("1OUu1"))
+		else if(betstr.equals("OUu1"))
 			return "小";
-		else if(betstr.equals("1SCs1"))
+		else if(betstr.equals("SCs1"))
 			return "單號";
 		else 
 			return "雙號";

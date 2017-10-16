@@ -42,7 +42,7 @@ function compareByType2(phase_before,phase_now,phase_before4, gid, bIndex, bArra
  
 		 	var d = getYYYYMMDDSS();
 			var z = i+1;
-		    if(rangeBigExist[bet_b] == rangeBigExist[bet_n]){ //預測到、關卡歸零
+		    if(bArray[0]==0 && rangeBigExist[bet_b] == rangeBigExist[bet_n]){ //預測到、關卡歸零
 		    	 
 		    
 		    	var suclog =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," +  " 預測期數 "+phase_before + "預測("+rangeBigExist[bet_b]+") ,有預測到，下一關，此注不下注" ;
@@ -84,12 +84,13 @@ function compareByType2(phase_before,phase_now,phase_before4, gid, bIndex, bArra
 		    	
 		    	
 		    	if(writeFlag){
+		    		let ssn = i==9 ? 0 : (i+1);
 		    		if(rangeBigExist[bet_before4] =='b'){ //下大
-			    		reallyOtherBet(gid,'1OUo1',bArray[bIndex[z]%bArray.length]);
+			    		reallyOtherBet(gid,ssn+'OUo1',bArray[bIndex[z]%bArray.length]);
 			    	}
 			    	
 		    		if(rangeBigExist[bet_before4] =='s'){ //下小
-		    			reallyOtherBet(gid,'1OUu1',bArray[bIndex[z]%bArray.length]);
+		    			reallyOtherBet(gid,ssn+'OUu1',bArray[bIndex[z]%bArray.length]);
 			    	}
 		    		saveLog(document.getElementById("user").value+"bet",encodeURI(betlog)); //只寫下注成功的log
 		    	}
@@ -125,7 +126,7 @@ function compareByType3(phase_before,phase_now,phase_before4, gid, bIndex, bArra
 
 	 	var d = getYYYYMMDDSS();
 		var z = i+1;
-	    if(rangeSingExist[bet_b] == rangeSingExist[bet_n]){ //預測到、關卡歸零
+	    if(bArray[0]==0 &&  rangeSingExist[bet_b] == rangeSingExist[bet_n]){ //預測到、關卡歸零
 	    	 
 	    
 	    	var suclog =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," +  " 預測期數 "+phase_before + "預測("+rangeSingExist[bet_b]+") ,有預測到，下一關，此注不下注" ;
@@ -163,12 +164,15 @@ function compareByType3(phase_before,phase_now,phase_before4, gid, bIndex, bArra
 	    			
 	    	}
 	    	if(writeFlag){
+	    		
+	    		let ssn = i==9 ? 0 : (i+1);
+	    		
 	    		if(rangeSingExist[bet_before4] =='sin'){ //下單
-		    		reallyOtherBet(gid,'1SCs1',bArray[bIndex[z]%bArray.length]);
+		    		reallyOtherBet(gid,ssn+'SCs1',bArray[bIndex[z]%bArray.length]);
 		    	}
 		    	
 	    		if(rangeSingExist[bet_before4] =='dou'){ //下雙
-	    			reallyOtherBet(gid,'1SCc1',bArray[bIndex[z]%bArray.length]);
+	    			reallyOtherBet(gid,ssn+'SCc1',bArray[bIndex[z]%bArray.length]);
 		    	}
 	    		saveLog(document.getElementById("user").value+"bet",encodeURI(betlog)); //只寫下注成功的log
 	    	}
@@ -197,7 +201,8 @@ function reallyOtherBet(gid,betstr,amount){
 }
 
 function connectURL(){
-	var frameUrl = "http://203.160.143.110/www_new/index_new.php?username="+user+"&usertype=a&langx=zh-cn&mid=2520&uid="+uid+"";
+	var frameUrl = "http://203.160.143.110/www_new/index_new.php?username="+document.getElementById("user").value+"&usertype=a&langx=zh-cn&mid="+
+	document.getElementById("mid").value+"&uid="+document.getElementById("uid").value;
 	 
 	window.open(
 			frameUrl,

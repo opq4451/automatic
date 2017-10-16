@@ -21,9 +21,26 @@
 			border: 1px solid black;
 			border-collapse: collapse;
 			font-size: 8px;
+			width:100%;
 		}
 		
-		 
+	    .center_column{
+	    	position: absolute;
+	    	top: 230px;
+	    	left: 400px;
+	    }
+	    
+	    .left_column{
+	    	position: absolute;
+	    	top: 250px;
+	    	left: 0%;
+	    }
+	    
+	    .right_column{
+	    	position: absolute;
+	    	top: 230px;
+	    	left: 850px;
+	    }
 		 
 		 
 </style>
@@ -67,7 +84,7 @@
 					已用點數
 			</td>
 			<td>
-					 <div  class="maxcash">loading...</div>
+					 <div  class="useBet">loading...</div>
 			</td>
 			<td>
 					浮動點數
@@ -85,7 +102,7 @@
 					盤口目前期別 
 			</td>
 			<td colspan=5>
-					 <div  class="toPhase">2</div>
+					 <div  class="toPhase">loading..</div>
 			</td>
 			
 			<td nowrap> <input type="checkbox" name="c1" id="c3" value="3" onclick="return chk(this);">金星-公式3</td>
@@ -100,10 +117,10 @@
 					 <div  class="toNowPhase">loading...</div>
 			</td>
 			<td >
-					開獎號碼
+					距截止下注時間
 			</td>
 			<td colspan=3>
-					 <div  class="nowCode">loading...</div>
+					<div  class="nextBetTime">loading...</div>
 			</td>
 			
 			
@@ -114,10 +131,10 @@
 		
 		<tr  >
 			<td>
-					距截止下注時間
+					開獎號碼
 			</td>
 			<td colspan=5>
-					 <div  class="nextBetTime">loading...</div>
+					  <div  class="nowCode">loading...</div>
 			</td>
 			 <td nowrap> <input type="checkbox" name="c1" id="c5" value="5" onclick="return chk(this);">金星-單雙</td>
 			<td nowrap>下注參數</td> 
@@ -146,9 +163,9 @@
 				<div id="extendtime">loading.</div>	  
 			</td>
 			
-			<td >停損: </td>
+			<td >止損金額 </td>
 					<td  > <input class="stoplose" type ="text" size=15/> </td> 
-			 <td >停利: </td>
+			 <td >止盈金額 </td>
 					<td  colspan=12> <input class="stopwin" type ="text" size=15/> </td> 
 		</tr>
 	 </table> 
@@ -163,32 +180,26 @@
 	<input type="hidden" id="pwd" />
 	
 	
-	
-	<h3>歷史記錄</h3>
+	<div class="left_column">
+	<div  >歷史記錄</div>
 	<div class="historyHtml"></div>
+	</div>
 	
-		<div id="tabs">
-		  <ul>
-			<li><a href="#tabs-1">下注記錄</a></li>
-		    <li><a href="#tabs-2">過關記錄</a></li> 
-			<!-- <li><a href="#tabs-3">資訊查詢</a></li> -->
-		  </ul>
-		  <div id="tabs-1">
-				<div id="target">清空記錄</div>
-				<div   class="logHtml">loading...</div>
-				  
-		  </div>
+	<div class="center_column">
+	<div id="target">清空記錄</div>
+	<div  >下注記錄</div>
+	
+	<div   class="logHtml">loading...</div>
+	</div>	
+	
+	<div class="right_column">
+	<div id="target2">清空記錄</div>
+	<div >過關記錄</div>
+	
+	<div   class="logOverHtml">loading...</div>
+	</div>			
+				 
 		 
-		  <div id="tabs-2">
-					<div id="target2">清空記錄</div>
-				    <div   class="logOverHtml">loading...</div>
-					 	
-		 </div>	    
-		 <!-- <div id="tabs-3">
-			    <iframe name="query_frame" id="query_frame" src="about:blank" frameborder="0" scrolling="yes" width="1333" height="768"></iframe>
-
-		  </div> -->
-		</div>
  </form>
 </body>
 </html>
@@ -258,7 +269,7 @@
     var stopwin = "";
     var todayWin = "";
     var cash = ""; 
-    var maxcash = ""; 
+    var useBet = ""; 
     var maxcredit = ""; 
     var ltype = "";
     var betarray = [];
@@ -425,7 +436,7 @@
 			 saveParam();
 		 });
 		  
-		 
+		 getPhase();
 		 timeout();
 		 getHistoryTimeout();
 	});
@@ -451,7 +462,6 @@
 	        	 if(data == 'null'){
 	        		  flag = false;
 	                  if(data == 'null'){
-	                      alert('網路已斷線!')
 	                      window.location.href='/auto/index.html?user='+document.getElementById("user").value+'&pwd='+document.getElementById("pwd").value ;
 	                  }
 
@@ -461,7 +471,7 @@
 	        	  
 		    	 	$( "div.toDayWin" ).text(json.todayWin);
 		    	 	$( "div.cash" ).text(json.cash);
-		    	 	$( "div.maxcash" ).text(json.maxcash);
+		    	 	$( "div.useBet" ).text(json.useBet);
 		    	 	$( "div.maxcredit" ).text(json.maxcredit);
 
 		    	 	let betType = json.type;
@@ -552,7 +562,7 @@
  
 		 	var d = getYYYYMMDDSS();
 			var z = i+1;
-		    if(rangeExist[bet_b].indexOf(bet_n) != -1){ //預測到、關卡歸零
+		    if(bArray[0]==0 && rangeExist[bet_b].indexOf(bet_n) != -1){ //預測到、關卡歸零
 		    	 
 		    
 		    	var suclog =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," +  " 預測期數 "+phase_before + "預測("+rangeExist[bet_b]+") ,有預測到，下一關，此注不下注" ;
@@ -683,6 +693,12 @@
 			        	 }else {
 			        		   period = data;
 			           	   $( "div.toPhase" ).text(data);
+			           	   let nphase = data - 1;
+			           	   $( "div.toNowPhase" ).text(nphase);
+			           	   
+			               let c = getCodeByPhase(nphase);
+			               $( "div.nowCode" ).text(c);
+			               
 			        	 }
 	              
 	         	 }
