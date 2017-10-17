@@ -742,5 +742,46 @@ public class Controller {
 		
 		return "";
 	}
+	
+	
+	@RequestMapping("/getBETTIME")
+	public String getBETTIME() {
+		 
+		 
+        
+		String url = "http://www.wydesy.net/pk10/getData" ; 
+	    
+	    try {
+	    	//url += URLEncoder.encode(prameter, "UTF-8");
+	    	 
+			HttpGet httpget = new HttpGet(url  );
+			 
+			// 建立HttpPost对象
+			HttpResponse response = new DefaultHttpClient().execute(httpget);
+			// 发送GET,并返回一个HttpResponse对象，相对于POST，省去了添加NameValuePair数组作参数
+			if (response.getStatusLine().getStatusCode() == 200) {// 如果状态码为200,就是正常返回
+				String ret = EntityUtils.toString(response.getEntity());
+				JsonParser parser = new JsonParser();
+				JsonObject o = parser.parse(ret).getAsJsonObject();
+				JsonObject r = o.getAsJsonObject("next");
+				
+			    int onceTime = 300000;
+			    int addTime = Integer.parseInt(r.get("awardTimeInterval").toString());
+			    int restTime = onceTime + addTime;
+			    
+			    int sec = restTime/1000;
+			   
+				return Integer.toString(sec);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+
+		}
+
+		return "";
+	}
 
 }

@@ -20,27 +20,98 @@
 		table, th, td {
 			border: 1px solid black;
 			border-collapse: collapse;
-			font-size: 8px;
-			width:100%;
+			font-size: 14px;
+			 
 		}
 		
-	    .center_column{
+		
+		
+		
+		.title_column{
 	    	position: absolute;
-	    	top: 230px;
-	    	left: 400px;
+	    	top: 0px;
+	    	left:0%;
+	    	width: 100%;
+	    	height: 30%;
 	    }
 	    
+	  
+	    
+	    
+	    #his_str{
+	    	position: absolute;
+	    	top: 26%;
+	    	left: 0%;
+	    
+	    }
 	    .left_column{
 	    	position: absolute;
-	    	top: 250px;
+	    	top: 30%;
 	    	left: 0%;
+	    	width: 30%;
+	    	 overflow-y:scroll; 
+	    	 height:65%;
 	    }
+	    
+	    
+	    
+	     #bet_str{
+	    	position: absolute;
+	    	top: 26%;
+	    	left: 32%;
+	    
+	    }
+	    #target{
+	    	position: absolute;
+	    	top: 26%;
+	    	left: 37%;
+	    
+	    }
+	    .center_column{
+	    	position: absolute;
+	    	top: 30%;
+	    	left: 31%;
+	    	width: 30%;
+	    	overflow-y:scroll; 
+	    	 height:65%;
+	    }
+	    
+	    
+	   
+	    
 	    
 	    .right_column{
 	    	position: absolute;
-	    	top: 230px;
-	    	left: 850px;
+	    	top: 30%;
+	    	left: 63%;
+	    	width: 30%;
+	    	overflow-y:scroll; 
+	    	 height:65%;
 	    }
+	    
+	    #over_str{
+	    	position: absolute;
+	    	top: 26%;
+	    	right: 30%;
+	    
+	    }
+	    
+	    #target2{
+	    	position: absolute;
+	    	top: 26%;
+	    	right: 25%;
+	    
+	    
+	    }
+	    
+	   
+	    .red { 
+	      color: red; 
+	      font-size: 2em; 
+  		}
+	    
+		 
+		 
 		 
 		 
 </style>
@@ -51,22 +122,23 @@
 
 
 <form name="form1">
+<div class="title_column">
 	 <table>
 		<tr>
-			<td nowrap>
+			<td nowrap width="1%">
 					今日輸贏 
 			</td>
 			<td>
 					 <div  class="toDayWin">loading...</div>
 			</td>
-			<td>
+			<td nowrap>
 					帳號  
 			</td>
 			<td colspan=3>
 				 <input type="text" id="user" readonly />
 			</td>
 			
-	      		    <td rowspan="5">下注方式</td>
+	      		    <td nowrap rowspan="5">下注方式</td>
 	
 					<td> <input type="checkbox" name="c1" id="c1" value="1" onclick="return chk(this);">金星-公式1 </td> 
 					<td>下注參數</td> 
@@ -74,13 +146,13 @@
         </tr>
 	 
 		<tr>
-		    <td>
+		    <td width="1%">
 					點數
 			</td>
 			<td>
 					 <div  class="maxcredit">loading...</div>
 			</td>
-			<td>
+			<td nowrap>
 					已用點數
 			</td>
 			<td>
@@ -98,7 +170,7 @@
 		</tr>
 		
 		<tr  >
-			<td>
+			<td width="1%" nowrap>
 					盤口目前期別 
 			</td>
 			<td colspan=5>
@@ -110,17 +182,17 @@
 					<td> <input class="betlist3" type ="text" size=35/></td> 
 		</tr>
 		<tr  >
-			<td>
+			<td width="1%"nowrap>
 					盤口開獎期別
 			</td>
 			<td>
 					 <div  class="toNowPhase">loading...</div>
 			</td>
-			<td >
+			<td nowrap>
 					距截止下注時間
 			</td>
 			<td colspan=3>
-					<div  class="nextBetTime">loading...</div>
+					<div  class="extendtime">loading...</div>
 			</td>
 			
 			
@@ -130,46 +202,42 @@
 		</tr>
 		
 		<tr  >
-			<td>
-					開獎號碼
-			</td>
+			<td width="1%">開獎號碼</td>
 			<td colspan=5>
 					  <div  class="nowCode">loading...</div>
 			</td>
 			 <td nowrap> <input type="checkbox" name="c1" id="c5" value="5" onclick="return chk(this);">金星-單雙</td>
-			<td nowrap>下注參數</td> 
-					<td> <input class="betlist5" type ="text" size=35/></td> 
+			<td nowrap >下注參數</td> 
+					<td width="99%" > <input class="betlist5" type ="text" size=35/></td> 
 		</tr>
 		
 		
 			<tr>
-			<td>
-					程式啟動 
-			</td>
+			<td width="1%">程式啟動</td>
 			<td   >
 					       <select class="startstatus">
-						  <option value="0">停用 </option>
-						  <option value="1">啟用 </option> 
+						  <option value="0" class="red">已停止 </option>
+						  <option value="1" >下注中 </option> 
 						</select> 
 			</td>
 			
 			<td colspan=2 >
 				<div id="connectURL">連結尚銀</div>	  
 			</td>
-			<td  >
+			<td  nowrap>
 				使用期限  
 			</td>
-			<td  >
-				<div id="extendtime">loading.</div>	  
+			<td nowrap width="100px;">
+				<div class="limittime">loading.</div>	  
 			</td>
 			
-			<td >止損金額 </td>
+			<td nowrap>止損金額 </td>
 					<td  > <input class="stoplose" type ="text" size=15/> </td> 
-			 <td >止盈金額 </td>
+			 <td nowrap>止盈金額 </td>
 					<td  colspan=12> <input class="stopwin" type ="text" size=15/> </td> 
 		</tr>
 	 </table> 
-	   
+	   </div>
 	  
 	 
 	     
@@ -179,22 +247,24 @@
 	<input type="hidden" id="mid" />
 	<input type="hidden" id="pwd" />
 	
-	
+	<div  id="his_str" >歷史記錄</div>
 	<div class="left_column">
-	<div  >歷史記錄</div>
+	
 	<div class="historyHtml"></div>
 	</div>
 	
-	<div class="center_column">
 	<div id="target">清空記錄</div>
-	<div  >下注記錄</div>
+	<div id="bet_str" >下注記錄</div>
+	<div class="center_column">
+	
 	
 	<div   class="logHtml">loading...</div>
 	</div>	
 	
-	<div class="right_column">
 	<div id="target2">清空記錄</div>
-	<div >過關記錄</div>
+	<div id="over_str">過關記錄</div>
+	<div class="right_column">
+	
 	
 	<div   class="logOverHtml">loading...</div>
 	</div>			
@@ -358,6 +428,8 @@
  	};
     $(document).ready(function(){
     
+       	setExtendTimeTimeout();
+       
     		let url =  u + '/getHistory';
 		  
       	 $.ajax({ url:  url, 
@@ -808,6 +880,35 @@
 			    getHistoryTimeout();
 	    }, 60000);
 	}
+	
+	
+	function setExtendTimeTimeout() {
+    	
+   		
+		
+	    setTimeout(function () {
+    	        
+	    		let url =  u + '/getBETTIME';
+			   
+	      	 $.ajax({ url:  url, 
+	   	         async: true,
+	   	         success: function(data) {
+	   	        	  
+	   	        	    
+	   	        	  
+	   		    	 	$( "div.extendtime" ).html("剩餘 "+data+" 秒");
+	   		    	 	 
+	    
+	   	         	 } 
+	   	         	 
+	         });
+		        
+	      	setExtendTimeTimeout();
+	    }, 1000);
+	}
+	
+	
+	 
     
     
     //檢查過關
