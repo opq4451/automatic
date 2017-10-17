@@ -241,10 +241,14 @@ public class Controller {
 				for (Enumeration e = configProperty.propertyNames(); e.hasMoreElements();) { 
 					  
 					  String v = configProperty.getProperty(e.nextElement().toString()) ; 
-					  if(m.get(v)==null) {
+					  String phase = v.substring(1,7);
+					  
+					  if(m.get(phase)==null) {
+						  m.put(phase, "put");
 						  i++; 
 					  }else {
-						  m.put(v, "has");
+						   
+						  
 					  }
 					  if(i%2 ==0) {
 						  logHtml.insert(0, "<tr><td bgcolor=\"E0FFFF\"  style=\"border: 1px solid black\">"+v+"</td></tr>");

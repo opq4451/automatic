@@ -61,7 +61,7 @@ function compareByType2(phase_before,phase_now,phase_before4, gid, bIndex, bArra
 		    	log+= ",下注金額:"+bArray[bIndex[z]%bArray.length];
 		    	var c = bArray[bIndex[z]%bArray.length] == 0 ? '0' : computeCase(bArray,bArray[bIndex[z]%bArray.length]);
 		    	var suc = bArray[bIndex[z]%bArray.length] > 1 ? "成功" : "失敗" ;
-		    	var betlog =  "預測第"+ (phase_now+1) +"期"+ "，第"+z+"名，號碼("+bsCode[rangeBigExist[bet_before4]]+")"+ "，第"+c+"關"+"下注金額("+bArray[bIndex[z]%bArray.length]+")"+"("+suc+")";
+		    	var betlog =  "第"+ (phase_now+1) +"期"+ "，第"+z+"名，號碼("+bsCode[rangeBigExist[bet_before4]]+")"+ "，第"+c+"關"+"下注金額("+bArray[bIndex[z]%bArray.length]+")"+"("+suc+")";
 		    	
 		    	var betList =   bsCode[rangeBigExist[bet_before4]].toString().split(',');
 		    	
@@ -145,7 +145,7 @@ function compareByType3(phase_before,phase_now,phase_before4, gid, bIndex, bArra
 	    	log+= ",下注金額:"+bArray[bIndex[z]%bArray.length];
 	    	var c = bArray[bIndex[z]%bArray.length] == 0 ? '0' : computeCase(bArray,bArray[bIndex[z]%bArray.length]);
 	    	var suc = bArray[bIndex[z]%bArray.length] > 1 ? "成功" : "失敗" ;
-	    	var betlog =  "預測第"+ (phase_now+1) +"期"+ "，第"+z+"名，號碼("+sdCode[rangeSingExist[bet_before4]]+")"+ "，第"+c+"關"+"下注金額("+bArray[bIndex[z]%bArray.length]+")"+"("+suc+")";
+	    	var betlog =  "第"+ (phase_now+1) +"期"+ "，第"+z+"名，號碼("+sdCode[rangeSingExist[bet_before4]]+")"+ "，第"+c+"關"+"下注金額("+bArray[bIndex[z]%bArray.length]+")"+"("+suc+")";
 	    	
 	    	var betList =   sdCode[rangeSingExist[bet_before4]].toString().split(',');
 	    	
