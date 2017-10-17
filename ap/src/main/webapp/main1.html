@@ -807,9 +807,14 @@
  			const url =  u + "/saveParam?" + "user="+document.getElementById("user").value+"&type="+ type+
  			betParam
  			+"&stoplose="+$( ".stoplose" ).val()+"&stopwin="+$( ".stopwin" ).val()+"&startstatus="+$( ".startstatus" ).val()  ;
- 			$.get(url, function( data ) {
-	    	 	 	alert("設定完成!")
-		 	}); 
+ 			 
+ 			
+ 			$.ajax({ url:url, 
+		         async: false,
+		         success: function(data) {
+		        	 alert("設定完成!")
+	         	 }
+	        }); 
  		}
  		
  	}

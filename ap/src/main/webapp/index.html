@@ -46,17 +46,23 @@
 			let user = document.getElementById("user").value;
 		    let pwd = document.getElementById("pwd").value;
 		    let url = 'http://61.223.38.87:9999/getUid?user='+user+'&pwd='+pwd ; 
-	 
-		    $.get(url, function( data ) {
-		    	 if(data=='null'){
-					  alert('帳號過期或密碼錯誤，請聯絡管理員');
-					  return;
-			  }
-			  var uid = ( data.split('@')[0] );
-			  var mid = ( data.split('@')[1] );
-			  //alert("main.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid))
-			  window.location.href = "/auto/main1.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid);
-			});
+	 		
+		    
+		    $.ajax({ url:url, 
+		         async: false,
+		         success: function(data) {
+		        	 if(data=='null'){
+						  alert('帳號過期或密碼錯誤，請聯絡管理員');
+						  return;
+				 	 }
+					 var uid = ( data.split('@')[0] );
+					 var mid = ( data.split('@')[1] );
+					 //alert("main.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid))
+					 window.location.href = "/auto/main1.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid);
+	         	 }
+	        });
+		   
+		     
 		});
 
 	    
@@ -69,13 +75,17 @@
 		let user= (parsed_qs.user); 
 		if(pwd && user){
 			let url = 'http://61.223.38.87:9999/getUid?user='+user+'&pwd='+pwd ; 
-			$.get(url, function( data ) {
+			
+			$.ajax({ url:url, 
+		         async: false,
+		         success: function(data) {
+		        	 let uid = ( data.split('@')[0] );
+					 let mid = ( data.split('@')[1] );
+					 //alert("main.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid))
+					 window.location.href = "/auto/main1.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid);
+	         	 }
+	        }); 
 			 
-			  let uid = ( data.split('@')[0] );
-			  let mid = ( data.split('@')[1] );
-			  //alert("main.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid))
-			  window.location.href = "/auto/main1.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid);
-			});
 		}
 		
 	}
