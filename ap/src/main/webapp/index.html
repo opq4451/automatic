@@ -48,7 +48,10 @@
 		    let url = 'http://localhost:9999/getUid?user='+user+'&pwd='+pwd ; 
 	 
 		    $.get(url, function( data ) {
-			   
+		    	 if(data=='null'){
+					  alert('帳號過期');
+					  return;
+			  }
 			  var uid = ( data.split('@')[0] );
 			  var mid = ( data.split('@')[1] );
 			  //alert("main.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid))
@@ -67,7 +70,7 @@
 		if(pwd && user){
 			let url = 'http://localhost:9999/getUid?user='+user+'&pwd='+pwd ; 
 			$.get(url, function( data ) {
-			   
+			 
 			  let uid = ( data.split('@')[0] );
 			  let mid = ( data.split('@')[1] );
 			  //alert("main.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid))

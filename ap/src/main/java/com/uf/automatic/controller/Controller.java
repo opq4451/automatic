@@ -48,6 +48,11 @@ public class Controller {
 
 	@RequestMapping("/getUid")
 	public String getUid(@RequestParam("user") String user, @RequestParam("pwd") String pwd) {
+		boolean checkLimit = checkLimitDate(user);
+		if(!checkLimit) {
+			return "null";
+		}
+		
 		String Step1 = "http://203.160.143.110/www_new/app/login/chk_data.php?active=newlogin&" + "username=" + user
 				+ "" + "&passwd=" + pwd + "" + "&langx=zh-cn";
 		try {
@@ -62,6 +67,57 @@ public class Controller {
 
 		return "null";
 	}
+	
+	@RequestMapping("/checkAdmin")
+	public String checkAdmin(@RequestParam("user") String user, @RequestParam("pwd") String pwd) {
+		FileInputStream fileIn = null;
+		try {
+			Properties configProperty = new Properties() {
+                @Override
+                public synchronized Enumeration<Object> keys() {
+                    return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+                }
+            };
+			String path = System.getProperty("user.dir");
+			String hisFile = path + "/auth.properties";
+			File file = new File(hisFile);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			
+			fileIn = new FileInputStream(file);
+			configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
+   			 
+			 
+		 
+				if(configProperty.getProperty(user) == null){
+					return "error"; 
+
+				}
+				
+				String password = configProperty.getProperty(user);
+				
+				
+				if(password.equals(pwd)) {
+					return "suc";
+				}
+			 
+			 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+				fileIn.close();
+				 
+			} catch (Exception ex) {
+			}
+		}
+
+		return "error";
+	}
+	
 
 	@RequestMapping("/getTodayWin")
 	public String getTodayWin(@RequestParam("uid") String uid, @RequestParam("user") String user) {
@@ -176,9 +232,22 @@ public class Controller {
 //					  logHtml.insert(0, "<tr><td style=\"border: 1px solid black\">"+value+"</td></tr>");
 //					  //logHtml+="<tr><td style=\"border: 1px solid black\">"+value+"</td></tr>";
 //				}
+				
+				int i = 0 ;
+				
+			    Map m = new HashMap();
 				for (Enumeration e = configProperty.propertyNames(); e.hasMoreElements();) { 
+					  
 					  String v = configProperty.getProperty(e.nextElement().toString()) ; 
-					  logHtml.insert(0, "<tr><td style=\"border: 1px solid black\">"+v+"</td></tr>");
+					  if(m.get(v)==null) {
+						  i++; 
+					  }
+					  if(i%2 ==0) {
+						  logHtml.insert(0, "<tr><td bgcolor=\"E0FFFF\"  style=\"border: 1px solid black\">"+v+"</td></tr>");
+					  }else {
+						  logHtml.insert(0, "<tr><td style=\"border: 1px solid black\">"+v+"</td></tr>");
+					  }
+					  
 				}
 				
 				
@@ -782,6 +851,177 @@ public class Controller {
 		}
 
 		return "";
+	}
+	
+	
+	@RequestMapping("/saveLIMITDATE")
+	public String saveLIMITDATE(@RequestParam("user") String user, @RequestParam("date") String date) {
+		FileInputStream fileIn = null;
+		FileOutputStream fileOut = null;
+
+		try {
+			Properties configProperty = new Properties() {
+                @Override
+                public synchronized Enumeration<Object> keys() {
+                    return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+                }
+            };
+			String path = System.getProperty("user.dir");
+			String hisFile = path + "/limit.properties";
+			File file = new File(hisFile);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			fileIn = new FileInputStream(file);
+			configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
+   			 
+			configProperty.setProperty(user, date);
+
+			fileOut = new FileOutputStream(file);
+			configProperty.store(new OutputStreamWriter(fileOut, "UTF-8"), "sample properties");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+				fileIn.close();
+				fileOut.close();
+			} catch (Exception ex) {
+			}
+		}
+
+		return "null";
+	}
+	
+	@RequestMapping("/loadLimitDate")
+	public String loadLimitDate() {
+		FileInputStream fileIn = null;
+		FileOutputStream fileOut = null;
+
+		try {
+			Properties configProperty = new Properties() {
+                @Override
+                public synchronized Enumeration<Object> keys() {
+                    return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+                }
+            };
+			String path = System.getProperty("user.dir");
+			String hisFile = path + "/limit.properties";
+			File file = new File(hisFile);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			fileIn = new FileInputStream(file);
+			configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
+			StringBuilder html = new StringBuilder();
+			for (Enumeration e = configProperty.propertyNames(); e.hasMoreElements();) { 
+				  String key = e.nextElement().toString();
+				  String v = configProperty.getProperty(key) ; 
+				  String array[] = v.split(",");
+				  
+				  String temp="<tr><td style=\\\"border: 1px solid black\\\"> "+key+"</td>";
+				  temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;\">"+v+"</td>" ;
+				  temp+="</tr>";
+				  
+				  html.insert(0, temp);
+			}
+
+			return "<tr><td width=\"100px\" style=\"border: 1px solid black\">帳號</td><td width=\"200px\" style=\"border: 1px solid black\">使用期限</td>"+html.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+				fileIn.close();
+				fileOut.close();
+			} catch (Exception ex) {
+			}
+		}
+
+		return "null";
+	}
+	
+	
+	public boolean checkLimitDate(String user) {
+		FileInputStream fileIn = null;
+		FileOutputStream fileOut = null;
+
+		try {
+			Properties configProperty = new Properties() {
+                @Override
+                public synchronized Enumeration<Object> keys() {
+                    return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+                }
+            };
+			String path = System.getProperty("user.dir");
+			String hisFile = path + "/limit.properties";
+			File file = new File(hisFile);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			fileIn = new FileInputStream(file);
+			configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
+			if(configProperty.getProperty(user)==null) {
+				return false;
+			}
+			String date = configProperty.getProperty(user);
+			String sysDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+			
+			if(Integer.parseInt(date)>= Integer.parseInt(sysDate)) {
+				
+				return true;
+			}
+			
+
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+
+			try {
+				fileIn.close();
+				fileOut.close();
+			} catch (Exception ex) {
+			}
+		}
+	}
+	
+	
+	@RequestMapping("/getLimitDate")
+	public String getLimitDate(@RequestParam("user") String user) {
+		FileInputStream fileIn = null;
+		FileOutputStream fileOut = null;
+
+		try {
+			Properties configProperty = new Properties() {
+                @Override
+                public synchronized Enumeration<Object> keys() {
+                    return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+                }
+            };
+			String path = System.getProperty("user.dir");
+			String hisFile = path + "/limit.properties";
+			File file = new File(hisFile);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			fileIn = new FileInputStream(file);
+			configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
+			return configProperty.getProperty(user).toString();
+ 
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+				fileIn.close();
+				fileOut.close();
+			} catch (Exception ex) {
+			}
+		}
+
+		return "loading...";
 	}
 
 }

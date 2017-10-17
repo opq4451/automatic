@@ -45,12 +45,13 @@
 	    
 	    }
 	    .left_column{
+	    border: 1px solid #ccc!important;
 	    	position: absolute;
 	    	top: 30%;
 	    	left: 0%;
 	    	width: 30%;
-	    	 overflow-y:scroll; 
-	    	 height:65%;
+	    	overflow-y:scroll; 
+	    	height:65%;
 	    }
 	    
 	    
@@ -68,6 +69,7 @@
 	    
 	    }
 	    .center_column{
+	    border: 1px solid #ccc!important;
 	    	position: absolute;
 	    	top: 30%;
 	    	left: 31%;
@@ -81,6 +83,7 @@
 	    
 	    
 	    .right_column{
+	    border: 1px solid #ccc!important;
 	    	position: absolute;
 	    	top: 30%;
 	    	left: 63%;
@@ -103,6 +106,9 @@
 	    
 	    
 	    }
+	    #target2:hover ,#target:hover {
+		   background-color:gray;
+		}
 	    
 	   
 	    .red { 
@@ -215,7 +221,7 @@
 			<tr>
 			<td width="1%">程式啟動</td>
 			<td   >
-					       <select class="startstatus">
+					       <select class="startstatus"  >
 						  <option value="0" class="red">已停止 </option>
 						  <option value="1" >下注中 </option> 
 						</select> 
@@ -275,6 +281,17 @@
 </html>
 
 <script>
+
+	function setColor()
+	{
+	   let v =  $('select.startstatus').find('option:selected').attr('value');
+	   let color="";
+	   if(v==1)
+		  $('select.startstatus').css('background', 'green'); 
+	   else
+		  $('select.startstatus').css('background', 'red');  
+	}
+	
   function chk(input){
 
     for(var i=0;i<document.form1.c1.length;i++)
@@ -427,7 +444,13 @@
 
  	};
     $(document).ready(function(){
-    
+    		
+   	 	getLimitDate();
+  	  	setColor();
+        $('select.startstatus').change(function(){
+             setColor();       
+        });
+        
        	setExtendTimeTimeout();
        
     		let url =  u + '/getHistory';
@@ -884,7 +907,11 @@
 	
 	function setExtendTimeTimeout() {
     	
-   		
+   		if(todayWin>0){ //贏的顏色
+   			$( "div.toDayWin" ).css('color', 'blue');  
+   		}else{
+   			$( "div.toDayWin" ).css('color', 'red');  
+   		}
 		
 	    setTimeout(function () {
     	        
@@ -1029,6 +1056,13 @@
     
    
 	
-	
-
+    function getLimitDate(){
+   
+    	$.ajax({ url:  u + "/getLimitDate?user="+document.getElementById("user").value,  
+    	 async: false,
+    	 success: function(data) {
+    		 $( "div.limittime" ).html(data);
+    	 	 }
+    	});
+    }
 </script>
