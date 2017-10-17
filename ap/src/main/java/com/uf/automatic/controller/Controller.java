@@ -527,7 +527,7 @@ public class Controller {
 				if(configProperty.getProperty(key) != null){
 					over_i++;
 					//Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), "第"+phase + "期，第" + sn + "名，號碼(" + code + ") 已過關!(第"+c+"關)");
-					Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), "第"+phase + "期，第" + sn + "名，已過關!(第"+c+"關)");
+					Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), "第"+phase + "期，第" + sn + "名，已過關!(第"+configProperty.getProperty(key)+"關)");
 
 					j.addProperty(covertIntToLatter(sn), "Y");
 
@@ -719,7 +719,7 @@ public class Controller {
 					  logHtml.insert(0, temp);
 				}
 				
-				String title = "<tr><td nowrap style=\"border: 1px solid black\">開獎期別</td><td nowrap style=\"border: 1px solid black\">冠軍</td><td nowrap style=\"border: 1px solid black\">亞軍</td><td  nowrap style=\"border: 1px solid black\">季軍</td>"
+				String title = "<tr><td nowrap style=\"border: 1px solid black\">開獎期別</td><td nowrap style=\"border: 1px solid black\">冠 軍</td><td nowrap style=\"border: 1px solid black\">亞 軍</td><td  nowrap style=\"border: 1px solid black\">季 軍</td>"
 						+ "<td nowrap style=\"border: 1px solid black\">第4名</td><td  nowrap style=\"border: 1px solid black\">第5名</td><td  nowrap style=\"border: 1px solid black\">第6名</td>"
 						+ "<td  nowrap style=\"border: 1px solid black\">第7名</td><td  nowrap style=\"border: 1px solid black\">第8名</td><td  nowrap style=\"border: 1px solid black\">第9名</td>"
 						+ "<td  nowrap style=\"border: 1px solid black\">第10名</td>"
