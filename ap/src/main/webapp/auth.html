@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+     
+
+    <title>Login </title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+ 
+
+  <body onload="autoLogin()">
+
+    <div class="container">
+
+      <table class="form-signin">
+        <h2 class="form-signin-heading">登入</h2>
+        <label class="sr-only">帳號</label>
+        <input id="user" class="form-control" placeholder="帳號" required autofocus>
+        <label class="sr-only">密碼</label>
+        <input type="password" id="pwd" class="form-control" placeholder="密碼" required>
+         
+        <button class="btn btn-lg btn-primary btn-block" id="btn" >確認</button>
+      </table>
+
+    </div> <!-- /container -->
+
+
+    
+  </body>
+</html>
+
+<script src="jquery.js" > </script>
+<script src="utils.js"> </script>
+<script>
+	 
+
+	$(document).ready(function(){
+		$( "#btn" ).click(function() {
+			let user = document.getElementById("user").value;
+		    let pwd = document.getElementById("pwd").value;
+		    let url = 'http://localhost:9999/checkAdmin?user='+user+'&pwd='+pwd ; 
+	 
+		    $.get(url, function( data ) {
+			    if(data=='suc'){
+			    		 window.location.href = "backend.html" ;
+			    }
+			        
+			});
+		});
+
+	    
+	});
+	 
+	 
+
+</script>

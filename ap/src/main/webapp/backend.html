@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+
+
+<title>Login</title>
+
+<!-- Bootstrap core CSS -->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="dashboard.css" rel="stylesheet">
+<link rel="stylesheet" href="jquery-ui-1.11.4/jquery-ui.css">
+  
+<style>
+		table, th, td {
+			border: 1px solid black;
+			border-collapse: collapse;
+			font-size: 14px;
+			 
+		}
+		
+		
+		  .user_block{
+	     overflow-y:scroll; 
+	    	 height:65%;
+		 
+		 }
+		 
+		 
+</style>
+</head>
+
+
+   
+<div class="save_block">
+			<table>
+			    <tr>
+					<td nowrap width="1%">
+						會員帳號 
+					</td>
+					<td>
+							 <input id="id" type ="text" size=35/>
+					</td>
+					
+				</tr>
+				 
+				   <tr>
+				 <td nowrap width="1%">
+						系統密碼  
+					</td>
+					<td>
+							 <input id="pwd" type ="text" size=35/>
+					</td>
+		        	</tr>
+		        	 <tr>
+				 <td nowrap width="1%">
+						尚銀密碼  
+					</td>
+					<td>
+							 <input id="pwd_in" type ="text" size=35/>
+					</td>
+		        	</tr>
+			    <tr>
+							<td nowrap>
+								會員到期時間(YYYYMMDD) 
+							</td>
+							<td >
+								  <input id="extendTime" type ="text" size=35/>
+							</td>
+		        </tr>
+		         <tr>
+							 
+							<td colspan=2>
+								  <button type="button" onclick="save()">存檔</button>
+							</td>
+		        </tr>
+			</table>	 
+</div>
+
+<div class="title">
+		 帳號期限管理
+</div>
+
+   
+
+<div class="user_block">
+		 	 
+</div>
+<script src="jquery.js"> </script>
+<script src="utils.js"> </script>	  
+<script>
+	$(document).ready(function(){
+		load();
+	})
+	
+	 function save(){
+		let u = getUrl();
+		 $.ajax({ url:  u + "/saveLIMITDATE?user="+document.getElementById("id").value+"&date="+document.getElementById("extendTime").value
+			 +"&pwd="+document.getElementById("pwd").value+"&pwd_in="+document.getElementById("pwd_in").value, 
+	         async: false,
+	         success: function(data) {
+	        	 document.getElementById("id").value='';
+	        	 document.getElementById("extendTime").value='';
+	        	 document.getElementById("pwd").value='';
+	        	 document.getElementById("pwd_in").value='';
+	        	 alert("存檔成功!");
+	        	 load();
+	         	 }
+	        });
+	 }
+	
+	function load(){
+		let u = getUrl();
+		 $.ajax({ url:  u + "/loadLimitDate", 
+	         async: false,
+	         success: function(data) {
+	        		$( "div.user_block" ).html(data);
+	         	 }
+	        });
+		
+	}
+
+</script>
+	   
