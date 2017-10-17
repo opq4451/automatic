@@ -49,7 +49,7 @@
 	 
 		    $.get(url, function( data ) {
 		    	 if(data=='null'){
-					  alert('帳號過期');
+					  alert('帳號過期或密碼錯誤，請聯絡管理員');
 					  return;
 			  }
 			  var uid = ( data.split('@')[0] );
