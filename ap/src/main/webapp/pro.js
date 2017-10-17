@@ -75,7 +75,7 @@ function compareByType2(phase_before,phase_now,phase_before4, gid, bIndex, bArra
 		    			writeFlag = true;
 		    			//處理過關的log
 		    			let overLog = (phase_now+1) + "@" + sn + "@" + code ; 
-		    			saveOverLog(document.getElementById("user").value,encodeURI(overLog));
+		    			saveOverLog(document.getElementById("user").value,encodeURI(overLog),c);
 		    		}
 		    			
 		    	}
@@ -159,7 +159,7 @@ function compareByType3(phase_before,phase_now,phase_before4, gid, bIndex, bArra
 	    			writeFlag = true;
 	    			//處理過關的log
 	    			let overLog = (phase_now+1) + "@" + sn + "@" + code ; 
-	    			saveOverLog(document.getElementById("user").value,encodeURI(overLog));
+	    			saveOverLog(document.getElementById("user").value,encodeURI(overLog),c);
 	    		}
 	    			
 	    	}

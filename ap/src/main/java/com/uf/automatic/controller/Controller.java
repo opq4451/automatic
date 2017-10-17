@@ -48,13 +48,15 @@ public class Controller {
 
 	@RequestMapping("/getUid")
 	public String getUid(@RequestParam("user") String user, @RequestParam("pwd") String pwd) {
-		boolean checkLimit = checkLimitDate(user);
-		if(!checkLimit) {
+		Map checkLimit = checkLimitDate(user,pwd);
+		if(!checkLimit.get("OK").toString().equals("Y")) {
 			return "null";
 		}
 		
+		String pwd_in = checkLimit.get("pwd_in").toString();
+		
 		String Step1 = "http://203.160.143.110/www_new/app/login/chk_data.php?active=newlogin&" + "username=" + user
-				+ "" + "&passwd=" + pwd + "" + "&langx=zh-cn";
+				+ "" + "&passwd=" + pwd_in + "" + "&langx=zh-cn";
 		try {
 			String ret = Utils.httpClientGet(Step1);
 			String uid = ret.substring(ret.indexOf("uid") + 4, ret.indexOf("uid") + 37);
@@ -241,6 +243,8 @@ public class Controller {
 					  String v = configProperty.getProperty(e.nextElement().toString()) ; 
 					  if(m.get(v)==null) {
 						  i++; 
+					  }else {
+						  m.put(v, "has");
 					  }
 					  if(i%2 ==0) {
 						  logHtml.insert(0, "<tr><td bgcolor=\"E0FFFF\"  style=\"border: 1px solid black\">"+v+"</td></tr>");
@@ -444,7 +448,7 @@ public class Controller {
 	
 	
 	@RequestMapping("/saveOverLog")
-	public String saveOverLog(@RequestParam("user") String user, @RequestParam("log") String log) {
+	public String saveOverLog(@RequestParam("user") String user, @RequestParam("log") String log, @RequestParam("c") String c) {
 		FileInputStream fileIn = null;
 		FileOutputStream fileOut = null;
 
@@ -465,7 +469,7 @@ public class Controller {
 			configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
    			String result = java.net.URLDecoder.decode(log, "UTF-8");
   			 
-			configProperty.setProperty(log, "YES");
+			configProperty.setProperty(log, c);
 
 			fileOut = new FileOutputStream(file);
 			configProperty.store(new OutputStreamWriter(fileOut, "UTF-8"), "sample properties");
@@ -518,7 +522,7 @@ public class Controller {
 				String key = phase  + "@" + sn + "@" + c[i] ;
 				if(configProperty.getProperty(key) != null){
 					over_i++;
-					Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), "第"+phase + "期，第" + sn + "名，號碼(" + code + ") 已過關!");
+					Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), "第"+phase + "期，第" + sn + "名，號碼(" + code + ") 已過關!(第"+c+"關)");
 				 
 					j.addProperty(covertIntToLatter(sn), "Y");
 
@@ -693,16 +697,16 @@ public class Controller {
 					  
 					  String temp="<tr><td style=\\\"border: 1px solid black\\\"> "+key+"</td>";
 					  for(int i=0;i<10;i++) {
-						  if(Integer.parseInt(array[i])==1)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#FFFF00\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==2)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#0000FF\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==3)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#F0FFFF\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==4)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#D2691E\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==5)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#00FFFF\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==6)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#8A2BE2\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==7)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#FFF8DC\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==8)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#DC143C\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==9)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#A52A2A\">"+array[i]+"</td>";
-						  if(Integer.parseInt(array[i])==10)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#7FFF00\">"+array[i]+"</td>";
+						  if(Integer.parseInt(array[i])==1)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#FFFF00\">"+Integer.parseInt(array[i])+"</td>";
+						  if(Integer.parseInt(array[i])==2)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#0000FF\">"+Integer.parseInt(array[i])+"</td>";
+						  if(Integer.parseInt(array[i])==3)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#F0FFFF\">"+Integer.parseInt(array[i])+"</td>";
+						  if(Integer.parseInt(array[i])==4)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#D2691E\">"+Integer.parseInt(array[i])+"</td>";
+						  if(Integer.parseInt(array[i])==5)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#00FFFF\">"+Integer.parseInt(array[i])+"</td>";
+						  if(Integer.parseInt(array[i])==6)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#8A2BE2\">"+Integer.parseInt(array[i])+"</td>";
+						  if(Integer.parseInt(array[i])==7)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#FFF8DC\">"+Integer.parseInt(array[i])+"</td>";
+						  if(Integer.parseInt(array[i])==8)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#DC143C\">"+Integer.parseInt(array[i])+"</td>";
+						  if(Integer.parseInt(array[i])==9)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#A52A2A\">"+Integer.parseInt(array[i])+"</td>";
+						  if(Integer.parseInt(array[i])==10)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#7FFF00\">"+Integer.parseInt(array[i])+"</td>";
 
 					  }
 					  temp+="</tr>";
@@ -710,10 +714,10 @@ public class Controller {
 					  logHtml.insert(0, temp);
 				}
 				
-				String title = "<tr><td style=\"border: 1px solid black\">開獎期別</td><td style=\"border: 1px solid black\">冠軍</td><td style=\"border: 1px solid black\">亞軍</td><td style=\"border: 1px solid black\">季軍</td>"
-						+ "<td style=\"border: 1px solid black\">第4名</td><td style=\"border: 1px solid black\">第5名</td><td style=\"border: 1px solid black\">第6名</td>"
-						+ "<td style=\"border: 1px solid black\">第7名</td><td style=\"border: 1px solid black\">第8名</td><td style=\"border: 1px solid black\">第9名</td>"
-						+ "<td style=\"border: 1px solid black\">第10名</td>"
+				String title = "<tr><td nowrap style=\"border: 1px solid black\">開獎期別</td><td nowrap style=\"border: 1px solid black\">冠軍</td><td nowrap style=\"border: 1px solid black\">亞軍</td><td  nowrap style=\"border: 1px solid black\">季軍</td>"
+						+ "<td nowrap style=\"border: 1px solid black\">第4名</td><td  nowrap style=\"border: 1px solid black\">第5名</td><td  nowrap style=\"border: 1px solid black\">第6名</td>"
+						+ "<td  nowrap style=\"border: 1px solid black\">第7名</td><td  nowrap style=\"border: 1px solid black\">第8名</td><td  nowrap style=\"border: 1px solid black\">第9名</td>"
+						+ "<td  nowrap style=\"border: 1px solid black\">第10名</td>"
 						+ "</tr>";
 				  
 				 j.addProperty("logHtml", "<table style=\"border-collapse: collapse;\">"+title+logHtml+"</table>");
@@ -855,7 +859,7 @@ public class Controller {
 	
 	
 	@RequestMapping("/saveLIMITDATE")
-	public String saveLIMITDATE(@RequestParam("user") String user, @RequestParam("date") String date) {
+	public String saveLIMITDATE(@RequestParam("user") String user, @RequestParam("date") String date, @RequestParam("pwd") String pwd, @RequestParam("pwd_in") String pwd_in) {
 		FileInputStream fileIn = null;
 		FileOutputStream fileOut = null;
 
@@ -874,8 +878,28 @@ public class Controller {
 			}
 			fileIn = new FileInputStream(file);
 			configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
+   			String v =  configProperty.getProperty(user);
+   			String d = "";
+   			String sysDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+   			if(v!=null) {
+   				String[] a = v.split(",");
+   				if(a.length==4) {
+   	   				d=a[2];
+   	   			}else
+   	   				d=sysDate;
+   			}else {
+   					d=sysDate;
+   			}
+   			
+   			
+			
+			
+			
    			 
-			configProperty.setProperty(user, date);
+   		 
+   				
+			
+			configProperty.setProperty(user, date+","+pwd+","+d+","+pwd_in);
 
 			fileOut = new FileOutputStream(file);
 			configProperty.store(new OutputStreamWriter(fileOut, "UTF-8"), "sample properties");
@@ -920,13 +944,19 @@ public class Controller {
 				  String array[] = v.split(",");
 				  
 				  String temp="<tr><td style=\\\"border: 1px solid black\\\"> "+key+"</td>";
-				  temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;\">"+v+"</td>" ;
+				  temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;\">"+array[0]+"</td>" ;
+				  temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;\">"+array[1]+"</td>" ;
+				  temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;\">"+array[2]+"</td>" ;
+				  temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;\">"+array[3]+"</td>" ;
 				  temp+="</tr>";
 				  
 				  html.insert(0, temp);
 			}
 
-			return "<tr><td width=\"100px\" style=\"border: 1px solid black\">帳號</td><td width=\"200px\" style=\"border: 1px solid black\">使用期限</td>"+html.toString();
+			return "<tr><td width=\"200px\" align=center style=\"border: 1px solid black\">帳號</td><td width=\"200px\" align=center style=\"border: 1px solid black\">使用期限</td>"
+					+ "<td width=\"200px\"  align=center style=\"border: 1px solid black\">系統密碼</td>"
+					+ "<td width=\"200px\"  align=center style=\"border: 1px solid black\">初次設定時間</td>" 
+					+ "<td width=\"200px\"  align=center style=\"border: 1px solid black\">尚銀密碼</td>"+ html.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -942,10 +972,10 @@ public class Controller {
 	}
 	
 	
-	public boolean checkLimitDate(String user) {
+	public Map checkLimitDate(String user, String pwd) {
 		FileInputStream fileIn = null;
 		FileOutputStream fileOut = null;
-
+		Map mp = new HashMap();
 		try {
 			Properties configProperty = new Properties() {
                 @Override
@@ -962,21 +992,34 @@ public class Controller {
 			fileIn = new FileInputStream(file);
 			configProperty.load(new InputStreamReader(fileIn , "UTF-8"));
 			if(configProperty.getProperty(user)==null) {
-				return false;
+				mp.put("OK", "N");
+				return mp;
 			}
-			String date = configProperty.getProperty(user);
+			String authString = configProperty.getProperty(user);
+			String date = authString.split(",")[0];
+			String sysPwd = authString.split(",")[1];
+			String pwd_in = authString.split(",")[3];
+
 			String sysDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
 			
-			if(Integer.parseInt(date)>= Integer.parseInt(sysDate)) {
+			if(Integer.parseInt(date)>= Integer.parseInt(sysDate) && pwd.equals(sysPwd)) {
 				
-				return true;
+				mp.put("OK", "Y");
+				mp.put("pwd_in", pwd_in);	
+			}else {
+				mp.put("OK", "N");
 			}
 			
+			 
+			
+			
+			
 
-			return false;
+			return mp;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			mp.put("OK", "N");
+			return mp;
 		} finally {
 
 			try {

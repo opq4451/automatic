@@ -49,7 +49,7 @@
 	    	position: absolute;
 	    	top: 30%;
 	    	left: 0%;
-	    	width: 30%;
+	    	width: 32%;
 	    	overflow-y:scroll; 
 	    	height:65%;
 	    }
@@ -59,20 +59,20 @@
 	     #bet_str{
 	    	position: absolute;
 	    	top: 26%;
-	    	left: 32%;
+	    	left: 35%;
 	    
 	    }
 	    #target{
 	    	position: absolute;
 	    	top: 26%;
-	    	left: 37%;
+	    	left: 40%;
 	    
 	    }
 	    .center_column{
 	    border: 1px solid #ccc!important;
 	    	position: absolute;
 	    	top: 30%;
-	    	left: 31%;
+	    	left: 33%;
 	    	width: 30%;
 	    	overflow-y:scroll; 
 	    	 height:65%;
@@ -86,7 +86,7 @@
 	    border: 1px solid #ccc!important;
 	    	position: absolute;
 	    	top: 30%;
-	    	left: 63%;
+	    	left: 66%;
 	    	width: 30%;
 	    	overflow-y:scroll; 
 	    	 height:65%;
@@ -95,14 +95,14 @@
 	    #over_str{
 	    	position: absolute;
 	    	top: 26%;
-	    	right: 30%;
+	    	left: 70%;
 	    
 	    }
 	    
 	    #target2{
 	    	position: absolute;
 	    	top: 26%;
-	    	right: 25%;
+	    	left: 75%;
 	    
 	    
 	    }
@@ -260,7 +260,7 @@
 	</div>
 	
 	<div id="target">清空記錄</div>
-	<div id="bet_str" >下注記錄</div>
+	<div id="bet_str" >系統記錄</div>
 	<div class="center_column">
 	
 	
@@ -445,7 +445,7 @@
  	};
     $(document).ready(function(){
     		
-   	 	getLimitDate();
+   	 	
   	  	setColor();
         $('select.startstatus').change(function(){
              setColor();       
@@ -492,7 +492,7 @@
 		document.getElementById("user").value = user;
 		document.getElementById("mid").value = mid;
 		document.getElementById("pwd").value = pwd;
-
+		getLimitDate();
 	 
 		//var frameUrl = "http://203.160.143.110/www_new/index_new.php?username="+user+"&usertype=a&langx=zh-cn&mid=2520&uid="+uid+"";
 	    // $('#query_frame').attr('src', frameUrl)
@@ -690,7 +690,7 @@
 		    			writeFlag = true;
 		    			//處理過關的log
 		    			let overLog = (phase_now+1) + "@" + sn + "@" + code ; 
-		    			saveOverLog(document.getElementById("user").value,encodeURI(overLog));
+		    			saveOverLog(document.getElementById("user").value,encodeURI(overLog),c);
 		    		}
 		    			
 		    	}
@@ -738,8 +738,8 @@
 	        });
 		
 	}
-	function saveOverLog(user,log){
-		 $.ajax({ url:  u + "/saveOverLog?user="+user +"&log="+log, 
+	function saveOverLog(user,log,c){
+		 $.ajax({ url:  u + "/saveOverLog?user="+user +"&log="+log+"&c="+c, 
 	         async: false,
 	         success: function(data) {
 	        	 
