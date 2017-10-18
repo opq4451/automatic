@@ -351,7 +351,7 @@
 <script src="jquery-ui-1.11.4/jquery-ui.js"> </script>
 <script>
 	 
- 	const checkMinute = [4,9,14,19,24,29,34,39,44,49,54,59];
+ 	const checkMinute = [5,10,15,20,25,30,35,40,45,50,55,59];
  	var u = getUrl();
     var stoplose = "";
     var stopwin = "";
@@ -365,7 +365,7 @@
     var betarray3 = [];
     var betarray4 = [];
     var betarray5 = [];
-    
+    var dynamic_phase="";
     var betIndex  = {
  			'1' : 0,
  			'2' : 0,
@@ -533,8 +533,9 @@
 		 });
 		  
 		 getPhase();
-		 timeout();
-		 getHistoryTimeout();
+		 timeout();//下注timeout
+		 overTimeout();//檢查過關
+		 getHistoryTimeout();//取得歷史記錄
 	});
 	
     function pad2(n) { return n < 10 ? '0' + n : n }
@@ -863,26 +864,35 @@
 		
 	    setTimeout(function () {
     	        var winFlag = getWinFun(); 
-    	        var nextPhase = "";
+    	        
 			    if(winFlag){
-			    	var d = new Date();
+			    	    var d = new Date();
 				    var n = d.getMinutes();
 				    var h = d.getHours();
-				    
-			        if(checkMinute.indexOf(n) != -1 && checkWin() && checkTime(h)){ //bet time每5分鐘下注一次
-			        	nextPhase = getPhase(); 
-			        	let o = selectTypeToBet(nextPhase);  
+				    //let nextPhase =  getPhase();
+			        if(dynamic_phase && checkMinute.indexOf(n) != -1 && checkWin() && checkTime(h)){ //bet time每5分鐘下注一次
+			        	//nextPhase = getPhase(); 
+			        	let o = selectTypeToBet(dynamic_phase);  
 					 
 					}
 			    	
 			    }
-			    if(nextPhase){
-			    	checkOver(nextPhase);
-			    }
-			    getlogHtml();
+			    
+			   
 		        
 	        timeout();
 	    }, 60000);
+	}
+    
+    function overTimeout() { 
+	    setTimeout(function () { 
+	    			dynamic_phase =  getPhase(); 
+			    if(dynamic_phase){
+			    	checkOver(dynamic_phase);
+			    } 
+			    getlogHtml();
+			    overTimeout();
+	    }, 20000);
 	}
     
 	function getHistoryTimeout() {
@@ -924,7 +934,7 @@
 	    		let url =  u + '/getBETTIME';
 			   
 	      	 $.ajax({ url:  url, 
-	   	         async: true,
+	   	         async: false,
 	   	         success: function(data) {
 	   	        	  
 	   	        	    
@@ -995,6 +1005,7 @@
 				 	compareByType1(b,n,fourTh,gid,betIndex,betarray);
 			  }
 	    	  }
+	    	  
 		  if(document.getElementById('c2').checked) {
 			  obj.b = nextPhase - 6 ;
 			  obj.fourTh = nextPhase - 5 ; 
@@ -1005,23 +1016,24 @@
 			  }
 		  }
 		  
-	  	 if(document.getElementById('c3').checked) {
-		  obj.b = nextPhase - 7 ;
-		  obj.fourTh = nextPhase - 6 ;
-		  const b = obj.b ;
-		  const fourTh = obj.fourTh ;
-		  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
-			  compareByType1(b,n,fourTh,gid,betIndex3,betarray3);		  
-	 	  } 
-      	 }
-    	 if(document.getElementById('c4').checked) {
+	  	  if(document.getElementById('c3').checked) {
+			  obj.b = nextPhase - 7 ;
+			  obj.fourTh = nextPhase - 6 ;
+			  const b = obj.b ;
+			  const fourTh = obj.fourTh ;
+			  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
+				  compareByType1(b,n,fourTh,gid,betIndex3,betarray3);		  
+		 	  } 
+      	  }
+	  	  
+    	      if(document.getElementById('c4').checked) {
 			 
 			  obj.b = nextPhase - 6 ;
 			  obj.fourTh = nextPhase - 5 ; 
 			  const b = obj.b ;
 			  const fourTh = obj.fourTh ;
 			  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
-				  compareByType2(b,n,fourTh,gid,betIndex2,betarray2);
+				  compareByType2(b,n,fourTh,gid,betIndex4,betarray4);
 			  }
 		  }
 		  
@@ -1031,9 +1043,10 @@
 			  const b = obj.b ;
 			  const fourTh = obj.fourTh ;
 			  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
-				  compareByType3(b,n,fourTh,gid,betIndex2,betarray2);
+				  compareByType3(b,n,fourTh,gid,betIndex5,betarray5);
 			  }
 		  }
+		  
 	  	  return obj; 
     }
     function clearLog(){

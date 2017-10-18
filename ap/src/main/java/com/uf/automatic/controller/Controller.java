@@ -129,11 +129,11 @@ public class Controller {
 		String parameter = "smstime=" + timestamp + "" + "&allms=1117" + "&uid=" + convertUid(uid)
 				+ "&langx=zh-cn&gtype=CA";
 		try {
-			System.out.println(url + parameter);
-			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			//System.out.println(url + parameter);
+			//System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			String ret = Utils.httpClientGet(url + parameter);
-			System.out.println(ret);
-			System.out.println("*****************");
+			//System.out.println(ret);
+			//System.out.println("*****************");
 			DecimalFormat df = new DecimalFormat("##.00");
 			
 			JsonParser parser = new JsonParser();
@@ -246,10 +246,8 @@ public class Controller {
 					  if(m.get(phase)==null) {
 						  m.put(phase, "put");
 						  i++; 
-					  }else {
-						   
-						  
 					  }
+
 					  if(i%2 ==0) {
 						  logHtml.insert(0, "<tr><td bgcolor=\"E0FFFF\"  style=\"border: 1px solid black\">"+v+"</td></tr>");
 					  }else {
@@ -491,7 +489,7 @@ public class Controller {
 		return "null";
 	}
 	
-	
+	Map overmp = new HashMap();
 	@RequestMapping("/checkOver")
 	public String checkOver(@RequestParam("user") String user,
 			@RequestParam("phase") String phase,
@@ -518,6 +516,7 @@ public class Controller {
 			String c[] = code.split(",");
 			
 			JsonObject j = new JsonObject();
+			
 			for(int i = 0 ;i <10 ;i++){
 				int sn = i+1 ;
 				if( i == 9) {
@@ -525,11 +524,15 @@ public class Controller {
 				}
 				String key = phase  + "@" + sn + "@" + c[i] ;
 				if(configProperty.getProperty(key) != null){
-					over_i++;
-					//Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), "第"+phase + "期，第" + sn + "名，號碼(" + code + ") 已過關!(第"+c+"關)");
-					Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), "第"+phase + "期，第" + sn + "名，已過關!(第"+configProperty.getProperty(key)+"關)");
+					if(overmp.get(key) == null) {
+						overmp.put(key, "put");
+						over_i++;
+						//Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), "第"+phase + "期，第" + sn + "名，號碼(" + code + ") 已過關!(第"+c+"關)");
+						String t = new SimpleDateFormat("HH:mm:ss").format(new Date()) ; 
+						Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), t+ ":第"+phase + "期，第" + sn + "名，已過關!(第"+configProperty.getProperty(key)+"關)");
 
-					j.addProperty(covertIntToLatter(sn), "Y");
+						j.addProperty(covertIntToLatter(sn), "Y");
+					} 
 
 				}	
 			}
@@ -559,8 +562,8 @@ public class Controller {
 			String path = System.getProperty("user.dir");
 			String hisFile = path + "/" + user + "_log.properties";
 			File file = new File(hisFile);
-			System.out.println(hisFile);
-			System.out.println(file.exists());
+			//System.out.println(hisFile);
+			//System.out.println(file.exists());
 
 			if(file.exists()){
 				file.delete();
@@ -595,7 +598,7 @@ public class Controller {
 	    	//url += URLEncoder.encode(prameter, "UTF-8");
 	    	 
 			HttpGet httpget = new HttpGet(url + parameter);
-			System.out.println(url + parameter);
+			//System.out.println(url + parameter);
 			//httpget.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
 			// 建立HttpPost对象
 			HttpResponse response = new DefaultHttpClient().execute(httpget);
@@ -639,7 +642,7 @@ public class Controller {
 	    	//url += URLEncoder.encode(prameter, "UTF-8");
 	    	 
 			HttpGet httpget = new HttpGet(url + parameter);
-			System.out.println(url + parameter);
+			//System.out.println(url + parameter);
 			//httpget.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
 			// 建立HttpPost对象
 			HttpResponse response = new DefaultHttpClient().execute(httpget);
