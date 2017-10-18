@@ -529,7 +529,7 @@ public class Controller {
 						over_i++;
 						//Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), "第"+phase + "期，第" + sn + "名，號碼(" + code + ") 已過關!(第"+c+"關)");
 						String t = new SimpleDateFormat("HH:mm:ss").format(new Date()) ; 
-						Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), t+ ":第"+phase + "期，第" + sn + "名，已過關!(第"+configProperty.getProperty(key)+"關)");
+						Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), "第"+phase + "期，第" + sn + "名，已過關!(第"+configProperty.getProperty(key)+"關)" + t);
 
 						j.addProperty(covertIntToLatter(sn), "Y");
 					} 

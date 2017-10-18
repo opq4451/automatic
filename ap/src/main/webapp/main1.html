@@ -3,24 +3,18 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="">
-
+ 
+ 
 
 <title>Login</title>
 
-<!-- Bootstrap core CSS -->
-<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="dashboard.css" rel="stylesheet"> 
   
 <style>
 		table, th, td {
 			border: 1px solid black;
 			border-collapse: collapse;
 			font-size: 14px;
-			 
+			height:100%;
 		}
 		
 		
@@ -31,7 +25,7 @@
 	    	top: 0px;
 	    	left:0%;
 	    	width: 100%;
-	    	height: 30%;
+	    	height: 20%;
 	    }
 	    
 	  
@@ -48,9 +42,9 @@
 	    	position: absolute;
 	    	top: 30%;
 	    	left: 0%;
-	    	width: 32%;
+	    	width: 33%;
 	    	overflow-y:scroll; 
-	    	height:65%;
+	    	height:68%;
 	    }
 	    
 	    
@@ -73,9 +67,9 @@
 	    	position: absolute;
 	    	top: 30%;
 	    	left: 33%;
-	    	width: 30%;
+	    	width: 33%;
 	    	overflow-y:scroll; 
-	    	 height:65%;
+	    	height:68%;
 	    }
 	    
 	    
@@ -87,9 +81,9 @@
 	    	position: absolute;
 	    	top: 30%;
 	    	left: 66%;
-	    	width: 30%;
+	    	width: 33%;
 	    	overflow-y:scroll; 
-	    	 height:65%;
+	    	 height:68%;
 	    }
 	    
 	    #over_str{
@@ -117,8 +111,7 @@
 	    }
 	    
 	    .red { 
-	      color: red; 
-	      font-size: 2em; 
+	      color: red;  
   		}
 	    
 		 
@@ -132,7 +125,7 @@
 <body>
 
 
-<form name="form1">
+<form  >
 <div class="title_column">
 	 <table>
 		<tr>
@@ -145,10 +138,10 @@
 			<td nowrap>
 					帳號  
 			</td>
-			<td colspan=3>
+			<td colspan=2>
 				 <input type="text" id="user" readonly />
 			</td>
-			
+			<td  align=center valign=middle bgcolor="#00FF00"> <div id="logoutDiv">登出</div></td>
 	      		    <td nowrap rowspan="5">下注方式</td>
 	
 					<td> <input type="checkbox" name="c1" id="c1" value="1" onclick="return chk(this);">金星-公式1 </td> 
@@ -225,8 +218,8 @@
 		
 			<tr>
 			<td width="1%">程式啟動</td>
-			<td   >
-					    <select class="startstatus"  >
+			<td  >
+					    <select class="startstatus"   style="  width:120px;">
 						  <option value="0" class="red">已停止 </option>
 						  <option value="1" >下注中 </option> 
 						</select> 
@@ -244,8 +237,10 @@
 			
 			<td nowrap class="s_lose">止損金額 </td>
 					<td  > <input class="stoplose" type ="text" size=15/> </td> 
-			 <td nowrap class="s_win">止盈金額 </td>
-					<td  colspan=12> <input class="stopwin" type ="text" size=15/> </td> 
+		    <td nowrap class="s_win">止盈金額 </td>
+					<td   > <input class="stopwin" type ="text" size=15/> </td> 
+		 
+			 
 		</tr>
 	 </table> 
 	   </div>
@@ -477,6 +472,10 @@
 		 });
 		 $( "#target2" ).click(function() {
 			 clearOverLog();
+		 });
+		 
+		 $( "#logoutDiv" ).click(function() {
+			 logout();
 		 });
 		 
 		 $( "#connectURL" ).click(function() {
