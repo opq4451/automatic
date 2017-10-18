@@ -722,7 +722,7 @@ public class Controller {
 					  logHtml.insert(0, temp);
 				}
 				
-				String title = "<tr><td nowrap style=\"border: 1px solid black\">開獎期別</td><td nowrap style=\"border: 1px solid black\">冠 軍</td><td nowrap style=\"border: 1px solid black\">亞 軍</td><td  nowrap style=\"border: 1px solid black\">季 軍</td>"
+				String title = "<tr><td nowrap style=\"border: 1px solid black\">開獎期別</td><td nowrap style=\"border: 1px solid black\">第1名</td><td nowrap style=\"border: 1px solid black\">第2名</td><td  nowrap style=\"border: 1px solid black\">第3名</td>"
 						+ "<td nowrap style=\"border: 1px solid black\">第4名</td><td  nowrap style=\"border: 1px solid black\">第5名</td><td  nowrap style=\"border: 1px solid black\">第6名</td>"
 						+ "<td  nowrap style=\"border: 1px solid black\">第7名</td><td  nowrap style=\"border: 1px solid black\">第8名</td><td  nowrap style=\"border: 1px solid black\">第9名</td>"
 						+ "<td  nowrap style=\"border: 1px solid black\">第10名</td>"

@@ -1,6 +1,6 @@
 function getUrl(){
-
-	return "http://61.223.38.87:9999";
+	
+	return "http://localhost:9999";
 }
 
 

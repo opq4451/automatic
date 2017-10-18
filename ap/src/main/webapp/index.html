@@ -8,19 +8,34 @@
     <meta name="author" content="">
      
 
-    <title>Login </title>
+    <title>金星PK10自動投注系統 </title>
+  	<style>
+  	
+  		html,
+		body{
+		    height: 100%;
+		}
 
+	  	body{
+		    background-size: cover;
+		    background-repeat: no-repeat;
+		    background-position: center center;
+		    background-image: url("/img/1.jpg");
+		    
+		}
+
+  	</style>
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
   </head>
  
 
-  <body onload="autoLogin()">
+  <body onload="autoLogin()" background="/img/1.jpg">
 
     <div class="container">
 
       <table class="form-signin">
-        <h2 class="form-signin-heading">登入</h2>
+        <h2 class="form-signin-heading"><font color="white">登入</font></h2>
         <label class="sr-only">帳號</label>
         <input id="user" class="form-control" placeholder="帳號" required autofocus>
         <label class="sr-only">密碼</label>
@@ -39,28 +54,34 @@
 <script src="jquery.js" > </script>
 <script src="utils.js"> </script>
 <script>
-	 
+	var global_url = getUrl(); 
 
 	$(document).ready(function(){
 		$( "#btn" ).click(function() {
-			let user = document.getElementById("user").value;
-		    let pwd = document.getElementById("pwd").value;
-		    let url = 'http://61.223.38.87:9999/getUid?user='+user+'&pwd='+pwd ; 
-	 		
-		    
-		    $.ajax({ url:url, 
-		         async: false,
-		         success: function(data) {
-		        	 if(data=='null'){
-						  alert('帳號過期或密碼錯誤，請聯絡管理員');
-						  return;
-				 	 }
-					 var uid = ( data.split('@')[0] );
-					 var mid = ( data.split('@')[1] );
-					 //alert("main.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid))
-					 window.location.href = "/auto/main1.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid);
-	         	 }
-	        });
+			var r = confirm("免責聲明:貴用戶使用本軟件下載的任何資料.或因外來不可抗拒的因素.而導致損失 疏漏 錯誤.本軟件均不負任何責任與賠償.特此聲明。");
+		    if (r == true) {
+		    	let user = document.getElementById("user").value;
+			    let pwd = document.getElementById("pwd").value;
+			    let url = global_url + '/getUid?user='+user+'&pwd='+pwd ; 
+		 		
+			    
+			    $.ajax({ url:url, 
+			         async: false,
+			         success: function(data) {
+			        	 if(data=='null'){
+							  alert('帳號過期或密碼錯誤，請聯絡管理員');
+							  return;
+					 	 }
+						 var uid = ( data.split('@')[0] );
+						 var mid = ( data.split('@')[1] );
+						 //alert("main.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid))
+						 window.location.href = "/auto/main1.html?user="+user+"&pwd="+pwd+"&mid="+mid+"&uid="+encodeURI(uid);
+		         	 }
+		        });
+		    } else {
+		        
+		    }
+			
 		   
 		     
 		});
@@ -74,7 +95,7 @@
 		let pwd = (parsed_qs.pwd) ;
 		let user= (parsed_qs.user); 
 		if(pwd && user){
-			let url = 'http://61.223.38.87:9999/getUid?user='+user+'&pwd='+pwd ; 
+			let url = global_url + '/getUid?user='+user+'&pwd='+pwd ; 
 			
 			$.ajax({ url:url, 
 		         async: false,

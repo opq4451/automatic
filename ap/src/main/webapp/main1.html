@@ -13,8 +13,7 @@
 
 <!-- Bootstrap core CSS -->
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="dashboard.css" rel="stylesheet">
-<link rel="stylesheet" href="jquery-ui-1.11.4/jquery-ui.css">
+<link href="dashboard.css" rel="stylesheet"> 
   
 <style>
 		table, th, td {
@@ -104,14 +103,19 @@
 	    	position: absolute;
 	    	top: 26%;
 	    	left: 75%;
-	    border: 1px solid #ccc!important;
+	   	    border: 1px solid #ccc!important;
 	    
 	    }
 	    #target2:hover ,#target:hover {
 		   background-color:gray;
 		}
 	    
-	   
+	    
+	    
+	    #connectURL:hover {
+	       background-color:yellow;
+	    }
+	    
 	    .red { 
 	      color: red; 
 	      font-size: 2em; 
@@ -199,7 +203,7 @@
 					距截止下注時間
 			</td>
 			<td colspan=3>
-					<div  class="extendtime">loading...</div>
+					<div  class="extendtime"><font color="red">loading...</font></div>
 			</td>
 			
 			
@@ -222,7 +226,7 @@
 			<tr>
 			<td width="1%">程式啟動</td>
 			<td   >
-					       <select class="startstatus"  >
+					    <select class="startstatus"  >
 						  <option value="0" class="red">已停止 </option>
 						  <option value="1" >下注中 </option> 
 						</select> 
@@ -238,9 +242,9 @@
 				<div class="limittime">loading.</div>	  
 			</td>
 			
-			<td nowrap>止損金額 </td>
+			<td nowrap class="s_lose">止損金額 </td>
 					<td  > <input class="stoplose" type ="text" size=15/> </td> 
-			 <td nowrap>止盈金額 </td>
+			 <td nowrap class="s_win">止盈金額 </td>
 					<td  colspan=12> <input class="stopwin" type ="text" size=15/> </td> 
 		</tr>
 	 </table> 
@@ -347,8 +351,7 @@
   
 <script src="jquery.js"> </script>
 <script src="utils.js"> </script>
-<script src="pro.js"> </script>
-<script src="jquery-ui-1.11.4/jquery-ui.js"> </script>
+<script src="pro.js"> </script> 
 <script>
 	 
  	const checkMinute = [5,10,15,20,25,30,35,40,45,50,55,59];
@@ -446,8 +449,7 @@
  	};
     $(document).ready(function(){
     		
-   	 	
-  	  	
+    	 
         $('select.startstatus').change(function(){
              setColor();       
         });
@@ -469,7 +471,7 @@
    	         	 
          });
       	 
-		 $( "#tabs" ).tabs();
+		  
 		 $( "#target" ).click(function() {
 			 clearLog();
 		 });
@@ -838,6 +840,20 @@
  			$( ".startstatus" ).val(0) ;
  		}
  		
+ 		if(stoplose*-1> todayWin*1){ //停損
+ 			$('td.s_lose').css('background-color', 'red');
+ 		}else{
+ 			$('td.s_lose').css('background-color', 'white');
+
+ 		}
+ 		
+		if(stopwin*1> todayWin*1){ //停利
+			$('td.s_win').css('background-color', 'blue');
+ 		}else{
+ 			$('td.s_win').css('background-color', 'white');
+
+ 		}
+ 		
  		
  		return false;
  	}
@@ -940,7 +956,8 @@
 	   	        	    
 	   	        	  
 	   		    	 	$( "div.extendtime" ).html("剩餘 "+data+" 秒");
-	   		    	 	 
+	   		    	    $( "div.extendtime" ).css({ 'color': 'red'  });
+	   		    	 
 	    
 	   	         	 } 
 	   	         	 
