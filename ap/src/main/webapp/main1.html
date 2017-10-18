@@ -66,6 +66,7 @@
 	    	position: absolute;
 	    	top: 26%;
 	    	left: 40%;
+	    	border: 1px solid #ccc!important;
 	    
 	    }
 	    .center_column{
@@ -96,14 +97,14 @@
 	    	position: absolute;
 	    	top: 26%;
 	    	left: 70%;
-	    
+	   
 	    }
 	    
 	    #target2{
 	    	position: absolute;
 	    	top: 26%;
 	    	left: 75%;
-	    
+	    border: 1px solid #ccc!important;
 	    
 	    }
 	    #target2:hover ,#target:hover {
@@ -446,7 +447,7 @@
     $(document).ready(function(){
     		
    	 	
-  	  	setColor();
+  	  	
         $('select.startstatus').change(function(){
              setColor();       
         });
@@ -499,7 +500,7 @@
 
 		getWinFun();
 		getlogHtml();
-		 
+		setColor();
 	    //return;
 		
 		 $( ".startstatus" ).change(function() {

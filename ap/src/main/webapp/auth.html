@@ -15,7 +15,7 @@
   </head>
  
 
-  <body onload="autoLogin()">
+  <body  >
 
     <div class="container">
 
@@ -45,11 +45,11 @@
 		$( "#btn" ).click(function() {
 			let user = document.getElementById("user").value;
 		    let pwd = document.getElementById("pwd").value;
-		    let url = 'http://localhost:9999/checkAdmin?user='+user+'&pwd='+pwd ; 
+		    let url = 'http://61.223.38.87:9999/checkAdmin?user='+user+'&pwd='+pwd ; 
 	 
 		    $.get(url, function( data ) {
 			    if(data=='suc'){
-			    		 window.location.href = "backend.html" ;
+			    		 window.location.href = "/auto/backend.html" ;
 			    }
 			        
 			});
