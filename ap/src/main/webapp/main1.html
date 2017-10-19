@@ -448,7 +448,7 @@
         $('select.startstatus').change(function(){
              setColor();       
         });
-        
+        $( ".startstatus" ).val(0);
        	setExtendTimeTimeout();
        
     		let url =  u + '/getHistory';
@@ -500,6 +500,7 @@
 	    // $('#query_frame').attr('src', frameUrl)
 
 		getWinFun();
+		checkWin();
 		getlogHtml();
 		setColor();
 	    //return;
@@ -583,7 +584,7 @@
 
 		    	 	$( ".stoplose" ).val(json.stoplose) ;
 		    	 	$( ".stopwin" ).val(json.stopwin);
-		    	 	$( ".startstatus" ).val(json.startstatus);
+		    	 	
 
 		    	  
 		    	 	stoplose = json.stoplose;
@@ -846,7 +847,7 @@
 
  		}
  		
-		if(stopwin*1> todayWin*1){ //停利
+		if(stopwin*1 < todayWin*1){ //停利
 			$('td.s_win').css('background-color', 'blue');
  		}else{
  			$('td.s_win').css('background-color', 'white');
