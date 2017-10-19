@@ -55,12 +55,12 @@
 <script src="utils.js"> </script>
 <script>
 	 
-
+    var global_url = getUrl(); 
 	$(document).ready(function(){
 		$( "#btn" ).click(function() {
 			let user = document.getElementById("user").value;
 		    let pwd = document.getElementById("pwd").value;
-		    let url = 'http://61.223.38.87:9999/checkAdmin?user='+user+'&pwd='+pwd ; 
+		    let url = global_url + '/checkAdmin?user='+user+'&pwd='+pwd ; 
 	 
 		    $.get(url, function( data ) {
 			    if(data=='suc'){

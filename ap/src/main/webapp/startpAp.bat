@@ -1,0 +1,1 @@
+start java -XX:+PrintGCDetails -Xms2048m -Xmx2048m -Xmn1024m -XX:MaxDirectMemorySize=1024m -XX:MaxMetaspaceSize=512m -jar ap.jar
