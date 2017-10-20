@@ -711,7 +711,7 @@ public class Controller {
 					  String temp="<tr><td style=\\\"border: 1px solid black\\\"> "+key+"</td>";
 					  for(int i=0;i<10;i++) {
 						  if(Integer.parseInt(array[i])==1)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#FFFF00\">"+Integer.parseInt(array[i])+"</td>";
-						  if(Integer.parseInt(array[i])==2)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#0000FF\">"+Integer.parseInt(array[i])+"</td>";
+						  if(Integer.parseInt(array[i])==2)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#77DDFF\">"+Integer.parseInt(array[i])+"</td>";
 						  if(Integer.parseInt(array[i])==3)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#F0FFFF\">"+Integer.parseInt(array[i])+"</td>";
 						  if(Integer.parseInt(array[i])==4)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#D2691E\">"+Integer.parseInt(array[i])+"</td>";
 						  if(Integer.parseInt(array[i])==5)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#00FFFF\">"+Integer.parseInt(array[i])+"</td>";
@@ -727,10 +727,10 @@ public class Controller {
 					  logHtml.insert(0, temp);
 				}
 				
-				String title = "<tr><td nowrap style=\"border: 1px solid black\">開獎期別</td><td nowrap style=\"border: 1px solid black\">第1名</td><td nowrap style=\"border: 1px solid black\">第2名</td><td  nowrap style=\"border: 1px solid black\">第3名</td>"
-						+ "<td nowrap style=\"border: 1px solid black\">第4名</td><td  nowrap style=\"border: 1px solid black\">第5名</td><td  nowrap style=\"border: 1px solid black\">第6名</td>"
-						+ "<td  nowrap style=\"border: 1px solid black\">第7名</td><td  nowrap style=\"border: 1px solid black\">第8名</td><td  nowrap style=\"border: 1px solid black\">第9名</td>"
-						+ "<td  nowrap style=\"border: 1px solid black\">第10名</td>"
+				String title = "<tr><td nowrap style=\"border: 1px solid black\">開獎期別</td><td nowrap style=\"border: 1px solid black\">第一名</td><td nowrap style=\"border: 1px solid black\">第二名</td><td  nowrap style=\"border: 1px solid black\">第三名</td>"
+						+ "<td nowrap style=\"border: 1px solid black\">第四名</td><td  nowrap style=\"border: 1px solid black\">第五名</td><td  nowrap style=\"border: 1px solid black\">第六名</td>"
+						+ "<td  nowrap style=\"border: 1px solid black\">第七名</td><td  nowrap style=\"border: 1px solid black\">第八名</td><td  nowrap style=\"border: 1px solid black\">第九名</td>"
+						+ "<td  nowrap style=\"border: 1px solid black\">第十名</td>"
 						+ "</tr>";
 				  
 				 j.addProperty("logHtml", "<table style=\"border-collapse: collapse;\">"+title+logHtml+"</table>");
