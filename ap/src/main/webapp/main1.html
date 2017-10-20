@@ -349,7 +349,7 @@
 <script src="pro.js"> </script> 
 <script>
 	 
- 	const checkMinute = [5,10,15,20,25,30,35,40,45,50,55,59];
+ 	const checkMinute = [6,11,16,21,26,31,36,41,46,51,56,1];
  	var u = getUrl();
     var stoplose = "";
     var stopwin = "";
@@ -933,7 +933,7 @@
 		          });
 		        
 			    getHistoryTimeout();
-	    }, 60000);
+	    }, 30000);
 	}
 	
 	
@@ -982,7 +982,7 @@
 		} 
 	   	 $.ajax({ url:  u + "/checkOver?user="+document.getElementById("user").value+"&phase="+phase_now+"&code="+code_n, 
 	         async: false,
-	         success: function(data) {
+	         success: function(data) { 
 	        	 const json = JSON.parse(data);
 	        	 if(json.a){betIndex[1] = 0;betIndex2[1] = 0;betIndex3[1] = 0;betIndex4[1] = 0;betIndex5[1] = 0; }
 	        	 if(json.b){betIndex[2] = 0;betIndex2[2] = 0;betIndex3[2] = 0;betIndex4[2] = 0;betIndex5[2] = 0; }

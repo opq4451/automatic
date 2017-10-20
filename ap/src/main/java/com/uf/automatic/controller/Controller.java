@@ -517,6 +517,9 @@ public class Controller {
 			
 			JsonObject j = new JsonObject();
 			
+			if(c.length != 10)
+				return "null";
+			
 			for(int i = 0 ;i <10 ;i++){
 				int sn = i+1 ;
 				if( i == 9) {
@@ -540,6 +543,8 @@ public class Controller {
 			 
 			
 		} catch (Exception e) {
+			System.out.println(phase);
+			System.out.println(code);
 			e.printStackTrace();
 		} finally {
 
