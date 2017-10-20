@@ -953,9 +953,10 @@
 	   	         async: false,
 	   	         success: function(data) {
 	   	        	  
-	   	        	    
+	   	        	    let m = Math.floor(data /60);
+	   	        	    let s = data%60 ; 
 	   	        	  
-	   		    	 	$( "div.extendtime" ).html("剩餘 "+data+" 秒");
+	   		    	 	$( "div.extendtime" ).html("剩餘 "+ m +" 分 "+ s + "  秒");
 	   		    	    $( "div.extendtime" ).css({ 'color': 'red'  });
 	   		    	 
 	    
@@ -1098,7 +1099,8 @@
     	 async: false,
     	 success: function(data) {
     		 let date = data.split(',')[0];
-    		 $( "div.limittime" ).html(date);
+    		 let convrt_date = date.substring(0,4) + '/' + date.substring(4,6)+ '/' + date.substring(6,8)
+    		 $( "div.limittime" ).html(convrt_date);
     	 	 }
     	});
     }

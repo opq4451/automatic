@@ -711,7 +711,7 @@ public class Controller {
 					  String temp="<tr><td style=\\\"border: 1px solid black\\\"> "+key+"</td>";
 					  for(int i=0;i<10;i++) {
 						  if(Integer.parseInt(array[i])==1)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#FFFF00\">"+Integer.parseInt(array[i])+"</td>";
-						  if(Integer.parseInt(array[i])==2)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#77DDFF\">"+Integer.parseInt(array[i])+"</td>";
+						  if(Integer.parseInt(array[i])==2)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#ADD8E6\">"+Integer.parseInt(array[i])+"</td>";
 						  if(Integer.parseInt(array[i])==3)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#F0FFFF\">"+Integer.parseInt(array[i])+"</td>";
 						  if(Integer.parseInt(array[i])==4)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#D2691E\">"+Integer.parseInt(array[i])+"</td>";
 						  if(Integer.parseInt(array[i])==5)temp+="<td align=\"center\" style=\"font-size: 20px;font-weight:bold;border: 1px solid black;background-color:#00FFFF\">"+Integer.parseInt(array[i])+"</td>";
