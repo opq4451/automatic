@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -851,13 +853,17 @@ public class Controller {
 				JsonObject o = parser.parse(ret).getAsJsonObject();
 				JsonObject r = o.getAsJsonObject("next");
 				
-			    int onceTime = 300000;
-			    int addTime = Integer.parseInt(r.get("awardTimeInterval").toString());
-			    int restTime = onceTime + addTime;
+			  
+			    String nextTime = r.get("awardTime").toString().substring(1, r.get("awardTime").toString().length()-1);
+			    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//2017-10-22 23:27:00
+		        Date dateStr = formatter.parse(nextTime);
 			    
-			    int sec = restTime/1000;
-			   
-				return Integer.toString(sec);
+			    Date n = new Date();
+			    long diff = dateStr.getTime() - n.getTime();//as given
+
+			    long seconds = TimeUnit.MILLISECONDS.toSeconds(diff);
+			    
+				return Long.toString(seconds);
 			}
 
 		} catch (Exception e) {
@@ -868,6 +874,11 @@ public class Controller {
 		}
 
 		return "";
+	}
+	
+	@RequestMapping("/getMin")
+	public int getMin() { 
+		return LocalDateTime.now().getMinute();
 	}
 	
 	

@@ -882,11 +882,12 @@
     	        var winFlag = getWinFun(); 
     	        
 			    if(winFlag){
-			    	    var d = new Date();
-				    var n = d.getMinutes();
+		    	    var d = new Date();
+				    //var n = d.getMinutes();
 				    var h = d.getHours();
 				    //let nextPhase =  getPhase();
-			        if(dynamic_phase && checkMinute.indexOf(n) != -1 && checkWin() && checkTime(h)){ //bet time每5分鐘下注一次
+				    var min = getBetMin();
+			        if(dynamic_phase && checkMinute.indexOf(min) != -1 && checkWin() && checkTime(h)){ //bet time每5分鐘下注一次
 			        	//nextPhase = getPhase(); 
 			        	let o = selectTypeToBet(dynamic_phase);  
 					 
@@ -965,7 +966,7 @@
 	         });
 		        
 	      	setExtendTimeTimeout();
-	    }, 1000);
+	    }, 1000); 
 	}
 	
 	

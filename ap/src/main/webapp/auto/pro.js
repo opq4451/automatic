@@ -200,6 +200,19 @@ function reallyOtherBet(gid,betstr,amount){
 	
 }
 
+function getBetMin(){
+	let min = 0;
+	$.ajax({ url:  u + "/getMin",  
+	 async: false,
+	 success: function(data) {
+		 min=data;
+ 	}
+	
+	});
+	return min;
+}
+
+
 function connectURL(){
 	var frameUrl = "http://203.160.143.110/www_new/index_new.php?username="+document.getElementById("user").value+"&usertype=a&langx=zh-cn&mid="+
 	document.getElementById("mid").value+"&uid="+document.getElementById("uid").value;
