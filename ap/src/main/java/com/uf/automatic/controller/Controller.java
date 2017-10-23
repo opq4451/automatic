@@ -529,8 +529,8 @@ public class Controller {
 				}
 				String key = phase  + "@" + sn + "@" + c[i] ;
 				if(configProperty.getProperty(key) != null){
-					if(overmp.get(key) == null) {
-						overmp.put(key, "put");
+					if(overmp.get(user+key) == null) {
+						overmp.put(user+key, "put");
 						over_i++;
 						//Utils.WritePropertiesFile(user+"overLOGDIS_log", fillZero(Integer.toString(over_i)), "第"+phase + "期，第" + sn + "名，號碼(" + code + ") 已過關!(第"+c+"關)");
 						String t = new SimpleDateFormat("HH:mm:ss").format(new Date()) ; 
