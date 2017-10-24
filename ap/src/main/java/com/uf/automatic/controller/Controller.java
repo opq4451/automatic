@@ -411,7 +411,7 @@ public class Controller {
 	}
 
 	@RequestMapping("/saveLog")
-	public String saveParam(@RequestParam("user") String user, @RequestParam("log") String log) {
+	public String saveLog(String user,String log) {
 		FileInputStream fileIn = null;
 		FileOutputStream fileOut = null;
 
@@ -451,8 +451,8 @@ public class Controller {
 	}
 	
 	
-	@RequestMapping("/saveOverLog")
-	public String saveOverLog(@RequestParam("user") String user, @RequestParam("log") String log, @RequestParam("c") String c) {
+	 
+	public String saveOverLog(String user,String log, String c) {
 		FileInputStream fileIn = null;
 		FileOutputStream fileOut = null;
 
@@ -589,17 +589,20 @@ public class Controller {
 	//sn : 1~ 0 , code : 01~10
 	@RequestMapping("/bet")
 	public String bet(@RequestParam("user") String user, @RequestParam("uid") String uid, @RequestParam("mid") String mid, @RequestParam("gid") String gid,
-			@RequestParam("sn") String sn,@RequestParam("code") String code,@RequestParam("amount") String amount
-			,@RequestParam("ltype") String ltype
+			@RequestParam("sn") String sn,@RequestParam("betStr") String betStr,@RequestParam("amount") String amount
+			,@RequestParam("ltype") String ltype,@RequestParam("betphase") String betphase,@RequestParam("c") String c,@RequestParam("codeList") String codeList
 			) {
-		
+	     
+
 		long unixTimestamp = Instant.now().getEpochSecond();
         String timeStampe = Long.toString(unixTimestamp)+ getRandom()  ;
         String rate = getRate(ltype);
 		String url = "http://203.160.143.110/www_new/app/CA/CA_bet.php?" ; 
 	    String parameter =  "smstime=" + timeStampe + ""
-				+ "&allms=1117" + "&uid=" +  convertUid(uid)  + "&langx=zh-cn&betStr="+sn+"SN"+code+","+ltype+",,"+rate+","+amount+",1,"+amount+"" + "&gid=" + gid + ""
+				+ "&allms=1117" + "&uid=" +  convertUid(uid)  + "&langx=zh-cn&betStr="+betStr+"" + "&gid=" + gid + ""
 				+ "&mid="+mid+"&gtype=CA&active=bet&usertype=a&ltype="+ltype+"&username="+user+"" + "&timestamp=" + timeStampe + "";
+	    
+	    
 		int phase = 554432 + Integer.parseInt(gid) ; 
 	    try {
 	    	//url += URLEncoder.encode(prameter, "UTF-8");
@@ -613,8 +616,24 @@ public class Controller {
 			if (response.getStatusLine().getStatusCode() == 200) {// 如果状态码为200,就是正常返回
 				String ret = EntityUtils.toString(response.getEntity());
 				bi++;
-			 
-				Utils.WritePropertiesFile(user+"bet", fillZero(Integer.toString(bi)), "第"+phase + "期，第" + sn + "名，號碼(" + code + ")，金額(" + amount + ") @" + ret);
+				
+				if(ret.indexOf(user) > -1) {
+					String code[] = codeList.split(",");
+					for(String str : code) {
+						String overLog =  betphase + "@" + sn + "@" + str ; 
+						saveOverLog(user,overLog,c);
+					}
+					
+					String betlog =  "第"+ betphase +"期"+ "，第"+sn+"名，號碼("+codeList+")"+ "，第"+c+"關"+"下注金額("+ amount +")"+"(成功)";
+					saveLog(user+"bet",betlog);
+					//String overLog =  betphase + "@" + sn + "@" + code ; 
+					//saveOverLog(user,overLog,c);
+	    				//saveOverLog(document.getElementById("user").value,encodeURI(overLog),c);
+					//Utils.WritePropertiesFile(user+"bet", fillZero(Integer.toString(bi)), "第"+phase + "期，第" + sn + "名，號碼(" + code + ")，金額(" + amount + ") @" + ret);
+				}else {
+					saveLog(user+"ERROR",ret);
+				}
+				
  
 				return ret;
 			}
@@ -633,7 +652,7 @@ public class Controller {
 	@RequestMapping("/betBS")
 	public String betBS(@RequestParam("user") String user, @RequestParam("uid") String uid, @RequestParam("mid") String mid, @RequestParam("gid") String gid,
 			@RequestParam("betStr") String betStr,@RequestParam("amount") String amount
-			,@RequestParam("ltype") String ltype
+			,@RequestParam("ltype") String ltype,@RequestParam("betphase") String betphase,@RequestParam("c") String c,@RequestParam("codeList") String codeList
 			) {
 		//betStr 1OUo1
 		long unixTimestamp = Instant.now().getEpochSecond();
@@ -657,8 +676,25 @@ public class Controller {
 			if (response.getStatusLine().getStatusCode() == 200) {// 如果状态码为200,就是正常返回
 				String ret = EntityUtils.toString(response.getEntity());
 				bi++;
-			 
-				Utils.WritePropertiesFile(user+"bet", fillZero(Integer.toString(bi)), "第"+phase + "期，" + getBSNAME(betStr) + "名，，金額(" + amount + ") @" + ret);
+				String sn = betStr.substring(0,1);
+				if(ret.indexOf(user) > -1) {
+					String code[] = codeList.split(",");
+					for(String str : code) {
+						String overLog =  betphase + "@" + sn + "@" + str ; 
+						saveOverLog(user,overLog,c);
+					}
+					
+					String betlog =  "第"+ betphase +"期"+ "，第"+sn+"名，號碼("+codeList+")"+ "，第"+c+"關"+"下注金額("+ amount +")"+"(成功)";
+					saveLog(user+"bet",betlog);
+					//String overLog =  betphase + "@" + sn + "@" + code ; 
+					//saveOverLog(user,overLog,c);
+	    				//saveOverLog(document.getElementById("user").value,encodeURI(overLog),c);
+					//Utils.WritePropertiesFile(user+"bet", fillZero(Integer.toString(bi)), "第"+phase + "期，第" + sn + "名，號碼(" + code + ")，金額(" + amount + ") @" + ret);
+				}else {
+					saveLog(user+"ERROR",ret);
+				}
+				
+				//Utils.WritePropertiesFile(user+"bet", fillZero(Integer.toString(bi)), "第"+phase + "期，" + getBSNAME(betStr) + "名，，金額(" + amount + ") @" + ret);
  
 				return ret;
 			}

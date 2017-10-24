@@ -349,7 +349,10 @@
 <script src="pro.js"> </script> 
 <script>
 	 
- 	const checkMinute = [6,11,16,21,26,31,36,41,46,51,56,1];
+ 	const checkMinute = [5,6,10,11,15,16,20,21,25,26,30,31,35,36,40,41,45,46,50,51,55,56,0,1];
+ 	
+ 	const falseMinute = [2,3,7,8,12,13,17,18,22,23,27,28,32,33,37,38,42,43,47,48,52,53,57,58];
+
  	var u = getUrl();
     var stoplose = "";
     var stopwin = "";
@@ -659,14 +662,14 @@
 			const bet_n = array_n[i];
 			const bet_before4 = array_before4[i];
  
-		 	var d = getYYYYMMDDSS();
+		 	//var d = getYYYYMMDDSS();
 			var z = i+1;
 		    if(bArray[0]==0 && rangeExist[bet_b].indexOf(bet_n) != -1){ //預測到、關卡歸零
 		    	 
 		    
-		    	var suclog =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," +  " 預測期數 "+phase_before + "預測("+rangeExist[bet_b]+") ,有預測到，下一關，此注不下注" ;
+		    	//var suclog =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," +  " 預測期數 "+phase_before + "預測("+rangeExist[bet_b]+") ,有預測到，下一關，此注不下注" ;
 	 
-		    	saveLog(document.getElementById("user").value,encodeURI(suclog));
+		    	//saveLog(document.getElementById("user").value,encodeURI(suclog));
 
 		    	bIndex[z] = 0;
 			}
@@ -674,35 +677,48 @@
 		    	//未預測到、投注
 				//取前四期的號碼來預測投注
 			 
-		    	var log =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," + " 預測期數 "+phase_before + "預測("+rangeExist[bet_b]+") ,沒有預測到 ,下注" ;
-		    	log+= "， 參考期數"+  phase_before4 + "("+code_before4+"), 下注號碼"+ rangeExist[bet_before4];
+		    //	var log =  d + "第"+z+"名"+ " 此期" + phase_now  + "(開獎:"+code_n+")," + " 預測期數 "+phase_before + "預測("+rangeExist[bet_b]+") ,沒有預測到 ,下注" ;
+		    //	log+= "， 參考期數"+  phase_before4 + "("+code_before4+"), 下注號碼"+ rangeExist[bet_before4];
 				
-		    	log+= ",下注金額:"+bArray[bIndex[z]%bArray.length];
-		    	var c = bArray[bIndex[z]%bArray.length] == 0 ? '0' : computeCase(bArray,bArray[bIndex[z]%bArray.length]);
-		    	var suc = bArray[bIndex[z]%bArray.length] > 1 ? "成功" : "失敗" ;
-		    	var betlog =  "第"+ (phase_now+1) +"期"+ "，第"+z+"名，號碼("+rangeExist[bet_before4]+")"+ "，第"+c+"關"+"下注金額("+bArray[bIndex[z]%bArray.length]+")"+"("+suc+")";
+		   // 	log+= ",下注金額:"+bArray[bIndex[z]%bArray.length];
+		    	var c = bArray[bIndex[z]%bArray.length] == 0 ? '0' : computeCase(bArray, bIndex[z]%bArray.length );
+		    //	var suc = bArray[bIndex[z]%bArray.length] > 1 ? "成功" : "失敗" ;
+		    	//var betlog =  "第"+ (phase_now+1) +"期"+ "，第"+z+"名，號碼("+rangeExist[bet_before4]+")"+ "，第"+c+"關"+"下注金額("+bArray[bIndex[z]%bArray.length]+")"+"("+suc+")";
 		    	
 		    	var betList =  rangeExist[bet_before4].toString().split(',');
 		    	
 		    	
 		    	var writeFlag = false;
+		    	var betStr="";
+		    	var rate = getRate(ltype);
+		    	var amount = bArray[bIndex[z]%bArray.length] ;
+		     
 		    	for(var b=0;b<betList.length;b++){
 		    		var code = betList[b];
 		    		var sn = i==9 ? 0 : (i+1);
-		    		if(bArray[bIndex[z]%bArray.length]  > 0 ){
-		    			reallyBet(gid,sn,code,bArray[bIndex[z]%bArray.length]);
-		    			writeFlag = true;
+		    		if(amount  > 1 ){
+		    			
+		    			betStr += sn +"SN" + code + "," + ltype + ",," + rate + ","+amount + ",1," + amount +"@" ;
+		    			//reallyBet(gid,sn,code,bArray[bIndex[z]%bArray.length], (phase_now+1) , c);
+		    			//writeFlag = true;
 		    			//處理過關的log
-		    			let overLog = (phase_now+1) + "@" + sn + "@" + code ; 
-		    			saveOverLog(document.getElementById("user").value,encodeURI(overLog),c);
+		    			//let overLog = (phase_now+1) + "@" + sn + "@" + code ; 
+		    			//saveOverLog(document.getElementById("user").value,encodeURI(overLog),c);
 		    		}
 		    			
 		    	}
-		    	if(writeFlag)
-		    		saveLog(document.getElementById("user").value+"bet",encodeURI(betlog)); //只寫下注成功的log
+		    
+		    if(amount  > 1 ){
+		    		//alert(betStr.substring(0,betStr.length-1))
+		   		reallyBet(gid,sn,betStr.substring(0,betStr.length-1),amount, (phase_now+1) , c , rangeExist[bet_before4].toString());
+		    }
+		   // }
+		   // 	
+		   // 	if(writeFlag)
+		   // 		saveLog(document.getElementById("user").value+"bet",encodeURI(betlog)); //只寫下注成功的log
 		    		
 		    		
-		    	saveLog(document.getElementById("user").value,encodeURI(log));
+		    //saveLog(document.getElementById("user").value,encodeURI(log));
 		    	bIndex[z]++;
 		 
 			
@@ -710,20 +726,22 @@
 		}
 		
 	}
-	function computeCase(f_barray,f_bIndex){
-		var index = f_barray.indexOf(f_bIndex);
+	function computeCase( f_barray , cc ){
+		 
 		var c = 0;
-		for(var i=0;i<index;i++){
-			if(f_barray[i]>0){
-				c++;
+		var c_temp = cc * 1 ;
+		for(var i=0;i<cc;i++){
+			
+			if(f_barray[i] ==0 ){
+				c_temp--;
 			}
 		}
 		
-		return c + 1 ;
+		return c_temp + 1 ;
 	}
-	function reallyBet(gid,sn,code,amount){
+	function reallyBet(gid,sn,betStr,amount,betphase,c,codeList){
 		$.ajax({ url:  u + "/bet?user="+document.getElementById("user").value +"&gid="+gid +"&uid="+encodeURI(document.getElementById("uid").value)+"&mid="+ document.getElementById("mid").value+
-				"&sn="+sn+"&code="+code+"&amount="+amount+"&ltype="+ltype,  
+				"&sn="+sn+"&betStr="+betStr+"&amount="+amount+"&ltype="+ltype+"&betphase="+betphase+"&c="+c+"&codeList="+codeList,  
          async: false,
          success: function(data) {
         	 
@@ -874,6 +892,8 @@
  		return flag;
  	    
  	}
+ 	
+ 	var betflag=false;
     function timeout() {
     	
    		
@@ -882,16 +902,22 @@
     	        var winFlag = getWinFun(); 
     	        
 			    if(winFlag){
-		    	    var d = new Date();
+		    	        var d = new Date();
 				    //var n = d.getMinutes();
 				    var h = d.getHours();
 				    //let nextPhase =  getPhase();
 				    var min = getBetMin();
-			        if(dynamic_phase && checkMinute.indexOf(min) != -1 && checkWin() && checkTime(h)){ //bet time每5分鐘下注一次
+				    
+				    if(falseMinute.indexOf(min) != -1){
+				    	betflag = false; 
+				    }
+			        if(!betflag && dynamic_phase && checkMinute.indexOf(min) != -1 && checkWin() && checkTime(h)){ //bet time每5分鐘下注一次
 			        	//nextPhase = getPhase(); 
 			        	let o = selectTypeToBet(dynamic_phase);  
-					 
+			        	betflag = true;  
 					}
+			        
+			        
 			    	
 			    }
 			    
@@ -1023,6 +1049,7 @@
 			  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
 				 	compareByType1(b,n,fourTh,gid,betIndex,betarray);
 			  }
+			  return;
 	    	  }
 	    	  
 		  if(document.getElementById('c2').checked) {
@@ -1033,6 +1060,7 @@
 			  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
 				  compareByType1(b,n,fourTh,gid,betIndex2,betarray2);
 			  }
+			  return;
 		  }
 		  
 	  	  if(document.getElementById('c3').checked) {
@@ -1043,6 +1071,7 @@
 			  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
 				  compareByType1(b,n,fourTh,gid,betIndex3,betarray3);		  
 		 	  } 
+			  return;
       	  }
 	  	  
     	      if(document.getElementById('c4').checked) {
@@ -1054,6 +1083,7 @@
 			  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
 				  compareByType2(b,n,fourTh,gid,betIndex4,betarray4);
 			  }
+			  return;
 		  }
 		  
 		  if(document.getElementById('c5').checked) {
@@ -1064,6 +1094,7 @@
 			  if(isNumber(nextPhase) && isNumber(n)&& isNumber(b)&& isNumber(fourTh)&& isNumber(gid)){
 				  compareByType3(b,n,fourTh,gid,betIndex5,betarray5);
 			  }
+			  return;
 		  }
 		  
 	  	  return obj; 

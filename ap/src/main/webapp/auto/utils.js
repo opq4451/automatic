@@ -32,3 +32,15 @@ function parse_query_string(query) {
 	  }
 	  return query_string;
 }
+
+
+function getRate(latter){
+	if(latter == "A")
+		return "9.918";
+	else if(latter == "B")
+		return "9.818";
+	else if(latter == "C")
+		return "9.718";
+	else 
+		return "9.618";
+}
